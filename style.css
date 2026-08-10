@@ -20,6 +20,7 @@ body {
 .player-container {
     background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     padding: 40px 30px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -46,7 +47,7 @@ body {
     margin-bottom: 30px;
 }
 
-/* Ek simple aesthetic chakra/mandala animation */
+/* Chakra / Mandala Animation */
 .mandala-circle {
     width: 150px;
     height: 150px;
@@ -102,7 +103,7 @@ body {
     margin-bottom: 20px;
 }
 
-/* Buttons */
+/* Controls */
 .controls {
     display: flex;
     justify-content: center;
@@ -125,4 +126,15 @@ body {
 
 .play-btn {
     font-size: 28px;
+}
+
+/* Hidden YouTube Player (Audio keeps playing off-screen) */
+.hidden-player {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
 }
