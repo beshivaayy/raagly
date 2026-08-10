@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@300;400&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+    transition: background 1.5s ease; /* Smooth background change */
+    background: #FFDAB9; /* Default background */
+    color: #333;
+}
+
+.player-container {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(15px);
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 350px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.title {
+    font-family: 'Cinzel', serif;
+    font-size: 24px;
+    margin-bottom: 5px;
+    color: #4a3b2c;
+}
+
+.subtitle {
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+.art-container {
+    margin-bottom: 30px;
+}
+
+/* Ek simple aesthetic chakra/mandala animation */
+.mandala-circle {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: conic-gradient(#4a3b2c 10%, transparent 10%, transparent 20%, #8b5a2b 20%, #8b5a2b 30%, transparent 30%);
+    animation: spin 20s linear infinite;
+    animation-play-state: paused;
+}
+
+.player-container.play .mandala-circle {
+    animation-play-state: running;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+#raag-name {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+#raag-time {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-bottom: 20px;
+}
+
+/* Custom Seek Bar */
+.progress-container {
+    background: #e0d4c3;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px 0;
+    height: 6px;
+    width: 100%;
+}
+
+.progress {
+    background: #8b5a2b;
+    border-radius: 5px;
+    height: 100%;
+    width: 0%;
+    transition: width 0.1s linear;
+}
+
+.time-display {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #4a3b2c;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.action-btn:hover {
+    transform: scale(1.2);
+}
+
+.play-btn {
+    font-size: 28px;
+}

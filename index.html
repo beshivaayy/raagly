@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vedic Raag Remedies</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Icons ke liye FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body id="app-body">
+    <div class="player-container">
+        <h1 class="title">Vedic Raags</h1>
+        <p class="subtitle">Heal through frequencies</p>
+
+        <!-- Player Art / Mandala -->
+        <div class="art-container">
+            <div class="mandala-circle"></div>
+        </div>
+
+        <h2 id="raag-name">Raag Bhairav</h2>
+        <p id="raag-time">Morning Time / Sun Energy</p>
+
+        <!-- Custom Audio Controls -->
+        <div class="progress-container" id="progress-container">
+            <div class="progress" id="progress"></div>
+        </div>
+        <div class="time-display">
+            <span id="current-time">0:00</span>
+            <span id="duration">0:00</span>
+        </div>
+
+        <div class="controls">
+            <button id="prev" class="action-btn"><i class="fas fa-backward"></i></button>
+            <button id="play" class="action-btn play-btn"><i class="fas fa-play"></i></button>
+            <button id="next" class="action-btn"><i class="fas fa-forward"></i></button>
+        </div>
+    </div>
+
+    <!-- Hidden Audio Tag -->
+    <audio id="audio" src="raag-bhairav.mp3"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
