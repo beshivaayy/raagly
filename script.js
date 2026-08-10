@@ -1,7 +1,7 @@
 ```js
 /* =========================================================
    RAAGLY — SCRIPT.JS
-   Complete Player + Search + Library + Filters
+   Stable Player + Library + Search + Filters
    HTML/CSS compatible
    YouTube Playlist: PLJRipbfj__b0
    ========================================================= */
@@ -14,10 +14,13 @@
 
 const PLAYLIST_ID = "PLJRipbfj__b0";
 const DEFAULT_VOLUME = 80;
+const TOTAL_TRACKS = 27;
 
-/*
- * EXACT YOUTUBE PLAYLIST ORDER
- */
+
+/* =========================================================
+   EXACT PLAYLIST ORDER
+   ========================================================= */
+
 const raagData = [
     {
         name: "Raag Bhimpalasi",
@@ -226,12 +229,14 @@ let activeFilter = "All";
 
 
 /* =========================================================
-   DOM HELPERS
+   DOM
    ========================================================= */
 
 const $ = (id) => document.getElementById(id);
 
-const body = $("app-body") || document.body;
+const body =
+    $("app-body") ||
+    document.body;
 
 const raagName = $("raag-name");
 const raagTime = $("raag-time");
@@ -241,63 +246,106 @@ const playBtn = $("play");
 const prevBtn = $("prev");
 const nextBtn = $("next");
 
-const progressContainer = $("progress-container");
-const progressBar = $("progress");
+const progressContainer =
+    $("progress-container");
 
-const currentTimeEl = $("current-time");
-const durationEl = $("duration");
+const progressBar =
+    $("progress");
 
-const volumeSlider = $("volume-slider");
-const muteBtn = $("mute-btn");
+const currentTimeEl =
+    $("current-time");
 
-const searchInput = $("search-input");
-const searchResults = $("search-results");
+const durationEl =
+    $("duration");
+
+const volumeSlider =
+    $("volume-slider");
+
+const muteBtn =
+    $("mute-btn");
+
+const searchInput =
+    $("search-input");
+
+const searchResults =
+    $("search-results");
 
 const playerContainer =
     document.querySelector(".player-container");
 
 
 /* =========================================================
-   RAAG UI
+   SAFE HTML ESCAPE
+   ========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================================================
+   SHOW RAAG
    ========================================================= */
 
 function showRaag(index, animate = true) {
 
-    if (!raagData[index]) return;
+    if (!raagData[index])
+        return;
 
     currentIndex = index;
 
-    const data = raagData[index];
+    const data =
+        raagData[index];
 
     if (raagName)
-        raagName.textContent = data.name;
+        raagName.textContent =
+            data.name;
 
     if (raagTime)
-        raagTime.textContent = data.time;
+        raagTime.textContent =
+            data.time;
 
     if (raagDesc)
-        raagDesc.textContent = data.desc;
+        raagDesc.textContent =
+            data.desc;
 
     if (body)
-        body.style.background = data.bg;
+        body.style.background =
+            data.bg;
 
     if (animate) {
 
-        [raagName, raagTime, raagDesc].forEach((el) => {
+        [
+            raagName,
+            raagTime,
+            raagDesc
+        ].forEach((element) => {
 
-            if (!el) return;
+            if (!element)
+                return;
 
-            el.classList.remove("fade-in");
+            element.classList.remove(
+                "fade-in"
+            );
 
-            void el.offsetWidth;
+            void element.offsetWidth;
 
-            el.classList.add("fade-in");
+            element.classList.add(
+                "fade-in"
+            );
 
         });
 
     }
 
     updateTrackCounter(index);
+    updateLibraryActiveState(index);
 }
 
 
@@ -307,59 +355,57 @@ function showRaag(index, animate = true) {
 
 function updateTrackCounter(index) {
 
-    /*
-     * Supports several possible counter IDs/classes
-     * without changing HTML.
-     */
+    const text =
+        `${String(index + 1).padStart(2, "0")} / ${TOTAL_TRACKS}`;
 
-    const possibleCounters = [
+    [
         "track-counter",
         "raag-counter",
         "track-number",
         "current-track",
         "playlist-count"
-    ];
-
-    possibleCounters.forEach((id) => {
+    ].forEach((id) => {
 
         const el = $(id);
 
         if (el)
-            el.textContent =
-                `${String(index + 1).padStart(2, "0")} / ${raagData.length}`;
+            el.textContent = text;
 
     });
 
-    document.querySelectorAll(
-        "[data-track-counter]"
-    ).forEach((el) => {
+    document
+        .querySelectorAll(
+            "[data-track-counter]"
+        )
+        .forEach((el) => {
 
-        el.textContent =
-            `${String(index + 1).padStart(2, "0")} / ${raagData.length}`;
+            el.textContent = text;
 
-    });
+        });
 }
 
 
 /* =========================================================
-   SYNC YOUTUBE INDEX
+   YOUTUBE INDEX
    ========================================================= */
 
 function getYouTubeIndex() {
 
     if (
         !player ||
-        typeof player.getPlaylistIndex !== "function"
+        typeof player.getPlaylistIndex !==
+        "function"
     ) {
         return currentIndex;
     }
 
-    const index = player.getPlaylistIndex();
+    const index =
+        player.getPlaylistIndex();
 
     if (
         typeof index === "number" &&
         index >= 0 &&
-        index < raagData.length
+        index < TOTAL_TRACKS
     ) {
         return index;
     }
@@ -368,18 +414,21 @@ function getYouTubeIndex() {
 }
 
 
+/* =========================================================
+   SYNC TRACK
+   ========================================================= */
+
 function syncTrack() {
 
-    const index = getYouTubeIndex();
+    const index =
+        getYouTubeIndex();
 
     showRaag(index);
-
-    updateLibraryActiveState(index);
 }
 
 
 /* =========================================================
-   PLAYLIST LIBRARY
+   LIBRARY CONTAINER
    ========================================================= */
 
 function findLibraryContainer() {
@@ -397,7 +446,9 @@ function findLibraryContainer() {
     for (const selector of selectors) {
 
         const element =
-            document.querySelector(selector);
+            document.querySelector(
+                selector
+            );
 
         if (element)
             return element;
@@ -408,7 +459,11 @@ function findLibraryContainer() {
 }
 
 
-function createLibraryIfPossible() {
+/* =========================================================
+   BUILD LIBRARY
+   ========================================================= */
+
+function createLibrary() {
 
     const container =
         findLibraryContainer();
@@ -417,44 +472,104 @@ function createLibraryIfPossible() {
         return;
 
     /*
-     * Only populate an empty container.
-     * This prevents destroying existing HTML.
+     * Do not destroy existing HTML.
      */
 
-    if (container.children.length > 0)
+    if (container.children.length > 0) {
+
+        /*
+         * Existing library items may already
+         * be present in the HTML.
+         * Attach click handlers to them.
+         */
+
+        attachExistingLibraryItems();
+
         return;
+    }
 
-    raagData.forEach((raag, index) => {
+    raagData.forEach(
+        (raag, index) => {
 
-        const item =
-            document.createElement("button");
+            const item =
+                document.createElement(
+                    "button"
+                );
 
-        item.type = "button";
+            item.type = "button";
 
-        item.className =
-            "raag-library-item";
+            item.className =
+                "raag-library-item";
 
-        item.dataset.index = index;
+            item.dataset.index =
+                index;
 
-        item.innerHTML = `
-            <span class="raag-library-number">
-                ${String(index + 1).padStart(2, "0")}
-            </span>
-            <span class="raag-library-info">
-                <strong>${escapeHTML(raag.name)}</strong>
-                <small>${escapeHTML(raag.time)}</small>
-            </span>
-        `;
+            item.innerHTML = `
+                <span class="raag-library-number">
+                    ${String(index + 1).padStart(2, "0")}
+                </span>
 
-        item.addEventListener(
-            "click",
-            () => playRaag(index)
-        );
+                <span class="raag-library-info">
+                    <strong>
+                        ${escapeHTML(raag.name)}
+                    </strong>
 
-        container.appendChild(item);
+                    <small>
+                        ${escapeHTML(raag.time)}
+                    </small>
+                </span>
+            `;
 
-    });
+            item.addEventListener(
+                "click",
+                () => playRaag(index)
+            );
 
+            container.appendChild(item);
+
+        }
+    );
+}
+
+
+/* =========================================================
+   EXISTING LIBRARY ITEMS
+   ========================================================= */
+
+function attachExistingLibraryItems() {
+
+    document
+        .querySelectorAll(
+            "[data-index]"
+        )
+        .forEach((item) => {
+
+            if (
+                item.dataset.raaglyBound ===
+                "true"
+            ) {
+                return;
+            }
+
+            const index =
+                Number(item.dataset.index);
+
+            if (
+                !Number.isInteger(index) ||
+                !raagData[index]
+            ) {
+                return;
+            }
+
+            item.dataset.raaglyBound =
+                "true";
+
+            item.addEventListener(
+                "click",
+                () => playRaag(index)
+            );
+
+        });
 }
 
 
@@ -464,20 +579,21 @@ function createLibraryIfPossible() {
 
 function updateLibraryActiveState(index) {
 
-    document.querySelectorAll(
-        "[data-index]"
-    ).forEach((el) => {
+    document
+        .querySelectorAll(
+            "[data-index]"
+        )
+        .forEach((item) => {
 
-        const value =
-            Number(el.dataset.index);
+            const itemIndex =
+                Number(item.dataset.index);
 
-        if (value === index)
-            el.classList.add("active");
-        else
-            el.classList.remove("active");
+            item.classList.toggle(
+                "active",
+                itemIndex === index
+            );
 
-    });
-
+        });
 }
 
 
@@ -487,71 +603,83 @@ function updateLibraryActiveState(index) {
 
 function setupFilters() {
 
-    const filterElements =
-        document.querySelectorAll(
+    document
+        .querySelectorAll(
             "[data-filter]"
-        );
+        )
+        .forEach((button) => {
 
-    filterElements.forEach((button) => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                const filter =
-                    button.dataset.filter;
-
-                activeFilter =
-                    filter || "All";
-
-                filterElements.forEach(
-                    (item) =>
-                        item.classList.remove("active")
-                );
-
-                button.classList.add("active");
-
-                applyFilter(activeFilter);
-
+            if (
+                button.dataset.raaglyFilterBound ===
+                "true"
+            ) {
+                return;
             }
-        );
 
-    });
+            button.dataset.raaglyFilterBound =
+                "true";
 
+            button.addEventListener(
+                "click",
+                () => {
+
+                    activeFilter =
+                        button.dataset.filter ||
+                        "All";
+
+                    document
+                        .querySelectorAll(
+                            "[data-filter]"
+                        )
+                        .forEach(
+                            (item) =>
+                                item.classList.remove(
+                                    "active"
+                                )
+                        );
+
+                    button.classList.add(
+                        "active"
+                    );
+
+                    applyFilter(
+                        activeFilter
+                    );
+
+                }
+            );
+
+        });
 }
 
 
 function applyFilter(filter) {
 
-    const items =
-        document.querySelectorAll(
+    document
+        .querySelectorAll(
             "[data-index]"
-        );
+        )
+        .forEach((item) => {
 
-    if (!items.length)
-        return;
+            const index =
+                Number(item.dataset.index);
 
-    items.forEach((item) => {
+            const raag =
+                raagData[index];
 
-        const index =
-            Number(item.dataset.index);
+            if (!raag)
+                return;
 
-        const raag =
-            raagData[index];
+            const visible =
+                filter === "All" ||
+                raag.category
+                    .toLowerCase() ===
+                filter.toLowerCase();
 
-        if (!raag)
-            return;
+            item.style.display =
+                visible ? "" : "none";
 
-        const visible =
-            filter === "All" ||
-            raag.category.toLowerCase() ===
-            filter.toLowerCase();
-
-        item.style.display =
-            visible ? "" : "none";
-
-    });
-
+        });
 }
 
 
@@ -563,7 +691,7 @@ function playRaag(index) {
 
     if (
         index < 0 ||
-        index >= raagData.length
+        index >= TOTAL_TRACKS
     ) {
         return;
     }
@@ -574,26 +702,37 @@ function playRaag(index) {
 
     if (
         !youtubeReady ||
-        !player ||
-        typeof player.playVideoAt !== "function"
+        !player
     ) {
+        console.warn(
+            "RAAGLY: YouTube player not ready."
+        );
+
         return;
     }
 
     try {
 
+        /*
+         * This is the important part:
+         * playVideoAt() selects the corresponding
+         * item from the YouTube playlist.
+         */
+
         player.playVideoAt(index);
+
+        isPlaying = true;
+
+        updatePlayIcon(true);
 
     } catch (error) {
 
         console.error(
-            "RAAGLY: Unable to play selected Raag.",
+            "RAAGLY: Unable to play track.",
             error
         );
 
     }
-
-    updateLibraryActiveState(index);
 }
 
 
@@ -607,24 +746,37 @@ function togglePlay() {
         !youtubeReady ||
         !player
     ) {
+
         console.warn(
-            "RAAGLY: Player is still loading."
+            "RAAGLY: Player still loading."
         );
+
         return;
     }
 
     try {
 
         if (isPlaying) {
+
             player.pauseVideo();
+
         } else {
-            player.playVideo();
+
+            /*
+             * Explicitly select current track
+             * before playing.
+             */
+
+            player.playVideoAt(
+                currentIndex
+            );
+
         }
 
     } catch (error) {
 
         console.error(
-            "RAAGLY: Play failed.",
+            "RAAGLY: Play/pause failed.",
             error
         );
 
@@ -648,12 +800,14 @@ if (playBtn) {
 
 function updatePlayIcon(playing) {
 
-    if (!playBtn) return;
+    if (!playBtn)
+        return;
 
     const icon =
         playBtn.querySelector("i");
 
-    if (!icon) return;
+    if (!icon)
+        return;
 
     icon.className =
         playing
@@ -663,58 +817,89 @@ function updatePlayIcon(playing) {
 
 
 /* =========================================================
-   NEXT / PREVIOUS
+   NEXT
    ========================================================= */
 
 function nextTrack() {
 
     if (
-        !player ||
-        !youtubeReady
-    ) return;
+        !youtubeReady ||
+        !player
+    ) {
+        return;
+    }
 
     try {
 
         player.nextVideo();
 
-        setTimeout(syncTrack, 500);
+        setTimeout(
+            syncTrack,
+            600
+        );
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "RAAGLY: Next failed.",
+            error
+        );
 
     }
+}
+
+
+if (nextBtn) {
+
+    nextBtn.addEventListener(
+        "click",
+        nextTrack
+    );
 
 }
 
 
+/* =========================================================
+   PREVIOUS
+   ========================================================= */
+
 function previousTrack() {
 
     if (
-        !player ||
-        !youtubeReady
-    ) return;
+        !youtubeReady ||
+        !player
+    ) {
+        return;
+    }
 
     try {
 
         player.previousVideo();
 
-        setTimeout(syncTrack, 500);
+        setTimeout(
+            syncTrack,
+            600
+        );
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "RAAGLY: Previous failed.",
+            error
+        );
 
     }
-
 }
 
 
-if (nextBtn)
-    nextBtn.addEventListener("click", nextTrack);
+if (prevBtn) {
 
-if (prevBtn)
-    prevBtn.addEventListener("click", previousTrack);
+    prevBtn.addEventListener(
+        "click",
+        previousTrack
+    );
+
+}
 
 
 /* =========================================================
@@ -726,32 +911,57 @@ function seek(event) {
     if (
         !player ||
         !progressContainer
-    ) return;
+    ) {
+        return;
+    }
 
     const duration =
-        Number(player.getDuration()) || 0;
+        Number(
+            player.getDuration()
+        ) || 0;
 
     if (!duration)
         return;
 
     const rect =
-        progressContainer.getBoundingClientRect();
+        progressContainer
+            .getBoundingClientRect();
+
+    if (!rect.width)
+        return;
 
     const position =
-        (event.clientX - rect.left) /
-        rect.width;
+        (
+            event.clientX -
+            rect.left
+        ) / rect.width;
 
     const percentage =
         Math.max(
             0,
-            Math.min(1, position)
+            Math.min(
+                1,
+                position
+            )
         );
 
-    player.seekTo(
-        duration * percentage,
-        true
-    );
+    try {
 
+        player.seekTo(
+            duration * percentage,
+            true
+        );
+
+        updateProgress();
+
+    } catch (error) {
+
+        console.error(
+            "RAAGLY: Seek failed.",
+            error
+        );
+
+    }
 }
 
 
@@ -766,7 +976,7 @@ if (progressContainer) {
 
 
 /* =========================================================
-   PROGRESS
+   TIME FORMAT
    ========================================================= */
 
 function formatTime(seconds) {
@@ -774,58 +984,86 @@ function formatTime(seconds) {
     if (
         !Number.isFinite(seconds) ||
         seconds < 0
-    )
+    ) {
         return "0:00";
+    }
 
     const minutes =
-        Math.floor(seconds / 60);
+        Math.floor(
+            seconds / 60
+        );
 
     const secs =
-        Math.floor(seconds % 60);
+        Math.floor(
+            seconds % 60
+        );
 
-    return `${minutes}:${secs
-        .toString()
-        .padStart(2, "0")}`;
+    return (
+        `${minutes}:` +
+        `${String(secs).padStart(2, "0")}`
+    );
 }
 
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
 
 function updateProgress() {
 
     if (
         !player ||
         typeof player.getCurrentTime !==
+        "function" ||
+        typeof player.getDuration !==
         "function"
-    ) return;
+    ) {
+        return;
+    }
 
     const current =
-        Number(player.getCurrentTime()) || 0;
+        Number(
+            player.getCurrentTime()
+        ) || 0;
 
     const duration =
-        Number(player.getDuration()) || 0;
+        Number(
+            player.getDuration()
+        ) || 0;
 
     if (duration <= 0)
         return;
 
     const percentage =
-        Math.min(
-            100,
-            Math.max(
-                0,
-                current / duration * 100
+        Math.max(
+            0,
+            Math.min(
+                100,
+                (current / duration) *
+                100
             )
         );
 
-    if (progressBar)
+    if (progressBar) {
+
         progressBar.style.width =
             `${percentage}%`;
 
-    if (currentTimeEl)
+    }
+
+    if (currentTimeEl) {
+
         currentTimeEl.textContent =
             formatTime(current);
 
-    if (durationEl)
+    }
+
+    if (durationEl) {
+
         durationEl.textContent =
             formatTime(duration);
+
+    }
 }
 
 
@@ -838,25 +1076,24 @@ function startProgress() {
             updateProgress,
             250
         );
-
 }
 
 
 function stopProgress() {
 
-    if (progressTimer) {
+    if (!progressTimer)
+        return;
 
-        clearInterval(progressTimer);
+    clearInterval(
+        progressTimer
+    );
 
-        progressTimer = null;
-
-    }
-
+    progressTimer = null;
 }
 
 
 /* =========================================================
-   VOLUME
+   VOLUME ICON
    ========================================================= */
 
 function setVolumeIcon(value) {
@@ -870,52 +1107,95 @@ function setVolumeIcon(value) {
     if (!icon)
         return;
 
-    if (value === 0)
+    if (value <= 0) {
+
         icon.className =
             "fas fa-volume-mute";
 
-    else if (value < 50)
+    } else if (value < 50) {
+
         icon.className =
             "fas fa-volume-down";
 
-    else
+    } else {
+
         icon.className =
             "fas fa-volume-up";
+
+    }
 }
 
 
+/* =========================================================
+   VOLUME SLIDER
+   ========================================================= */
+
 if (volumeSlider) {
+
+    volumeSlider.value =
+        DEFAULT_VOLUME;
 
     volumeSlider.addEventListener(
         "input",
         (event) => {
 
             const volume =
-                Number(event.target.value);
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        Number(
+                            event.target.value
+                        )
+                    )
+                );
 
             if (player) {
 
-                player.unMute();
+                try {
 
-                player.setVolume(
-                    volume
-                );
+                    player.unMute();
+
+                    player.setVolume(
+                        volume
+                    );
+
+                } catch (error) {
+
+                    console.warn(
+                        "RAAGLY: Volume error.",
+                        error
+                    );
+
+                }
 
             }
 
-            if (volume > 0)
-                preMuteVolume = volume;
+            if (volume > 0) {
 
-            isMuted =
-                volume === 0;
+                preMuteVolume =
+                    volume;
 
-            setVolumeIcon(volume);
+                isMuted = false;
+
+            } else {
+
+                isMuted = true;
+
+            }
+
+            setVolumeIcon(
+                volume
+            );
 
         }
     );
-
 }
 
+
+/* =========================================================
+   MUTE BUTTON
+   ========================================================= */
 
 if (muteBtn) {
 
@@ -926,45 +1206,67 @@ if (muteBtn) {
             if (!player)
                 return;
 
-            if (isMuted) {
+            try {
 
-                const volume =
-                    preMuteVolume ||
-                    DEFAULT_VOLUME;
+                if (isMuted) {
 
-                player.unMute();
-                player.setVolume(volume);
+                    const volume =
+                        preMuteVolume ||
+                        DEFAULT_VOLUME;
 
-                if (volumeSlider)
-                    volumeSlider.value =
-                        volume;
+                    player.unMute();
 
-                isMuted = false;
+                    player.setVolume(
+                        volume
+                    );
 
-                setVolumeIcon(volume);
+                    if (volumeSlider) {
 
-            } else {
+                        volumeSlider.value =
+                            volume;
 
-                if (volumeSlider)
-                    preMuteVolume =
-                        Number(
-                            volumeSlider.value
-                        ) || DEFAULT_VOLUME;
+                    }
 
-                player.mute();
+                    isMuted = false;
 
-                if (volumeSlider)
-                    volumeSlider.value = 0;
+                    setVolumeIcon(
+                        volume
+                    );
 
-                isMuted = true;
+                } else {
 
-                setVolumeIcon(0);
+                    if (volumeSlider) {
+
+                        preMuteVolume =
+                            Number(
+                                volumeSlider.value
+                            ) ||
+                            DEFAULT_VOLUME;
+
+                        volumeSlider.value =
+                            0;
+
+                    }
+
+                    player.mute();
+
+                    isMuted = true;
+
+                    setVolumeIcon(0);
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "RAAGLY: Mute failed.",
+                    error
+                );
 
             }
 
         }
     );
-
 }
 
 
@@ -985,86 +1287,127 @@ function searchRaags(query) {
             "none";
 
         return;
-
     }
 
     const results =
         raagData
-            .map((raag, index) => ({
-                ...raag,
-                index
-            }))
-            .filter((raag) => {
+            .map(
+                (raag, index) => ({
+                    ...raag,
+                    index
+                })
+            )
+            .filter(
+                (raag) => {
 
-                const searchable =
-                    `${raag.name}
-                     ${raag.time}
-                     ${raag.category}
-                     ${raag.desc}`
-                    .toLowerCase();
+                    const text =
+                        [
+                            raag.name,
+                            raag.time,
+                            raag.category,
+                            raag.desc
+                        ]
+                            .join(" ")
+                            .toLowerCase();
 
-                return searchable.includes(query);
-
-            });
-
-
-    if (!results.length) {
-
-        const item =
-            document.createElement("li");
-
-        item.textContent =
-            "No matching Raag found";
-
-        item.style.cursor =
-            "default";
-
-        searchResults.appendChild(item);
-
-    } else {
-
-        results.forEach((raag) => {
-
-            const item =
-                document.createElement("li");
-
-            const title =
-                document.createElement("strong");
-
-            title.textContent =
-                raag.name;
-
-            const info =
-                document.createElement("span");
-
-            info.textContent =
-                `${raag.time} • ${raag.category}`;
-
-            info.style.display =
-                "block";
-
-            item.appendChild(title);
-            item.appendChild(info);
-
-            item.addEventListener(
-                "click",
-                () => {
-
-                    playRaag(
-                        raag.index
+                    return text.includes(
+                        query
                     );
-
-                    searchInput.value = "";
-
-                    searchResults.style.display =
-                        "none";
 
                 }
             );
 
-            searchResults.appendChild(item);
 
-        });
+    if (!results.length) {
+
+        const li =
+            document.createElement(
+                "li"
+            );
+
+        li.textContent =
+            "No matching Raag found";
+
+        li.style.cursor =
+            "default";
+
+        li.style.opacity =
+            "0.65";
+
+        searchResults.appendChild(
+            li
+        );
+
+    } else {
+
+        results.forEach(
+            (raag) => {
+
+                const li =
+                    document.createElement(
+                        "li"
+                    );
+
+                const strong =
+                    document.createElement(
+                        "strong"
+                    );
+
+                strong.textContent =
+                    raag.name;
+
+                const info =
+                    document.createElement(
+                        "span"
+                    );
+
+                info.textContent =
+                    `${raag.time} • ${raag.category}`;
+
+                info.style.display =
+                    "block";
+
+                info.style.fontSize =
+                    "11px";
+
+                info.style.opacity =
+                    "0.7";
+
+                li.appendChild(
+                    strong
+                );
+
+                li.appendChild(
+                    info
+                );
+
+                li.addEventListener(
+                    "click",
+                    () => {
+
+                        playRaag(
+                            raag.index
+                        );
+
+                        if (searchInput) {
+
+                            searchInput.value =
+                                "";
+
+                        }
+
+                        searchResults.style.display =
+                            "none";
+
+                    }
+                );
+
+                searchResults.appendChild(
+                    li
+                );
+
+            }
+        );
 
     }
 
@@ -1079,11 +1422,12 @@ if (searchInput) {
         "input",
         (event) => {
 
-            searchRaags(
+            const query =
                 event.target.value
                     .toLowerCase()
-                    .trim()
-            );
+                    .trim();
+
+            searchRaags(query);
 
         }
     );
@@ -1092,7 +1436,7 @@ if (searchInput) {
 
 
 /* =========================================================
-   CLOSE SEARCH
+   SEARCH CLOSE
    ========================================================= */
 
 document.addEventListener(
@@ -1102,8 +1446,12 @@ document.addEventListener(
         if (
             searchInput &&
             searchResults &&
-            !searchInput.contains(event.target) &&
-            !searchResults.contains(event.target)
+            !searchInput.contains(
+                event.target
+            ) &&
+            !searchResults.contains(
+                event.target
+            )
         ) {
 
             searchResults.style.display =
@@ -1119,7 +1467,7 @@ document.addEventListener(
    YOUTUBE PLAYER
    ========================================================= */
 
-function createYouTubePlayer() {
+function createPlayer() {
 
     if (player)
         return;
@@ -1129,8 +1477,14 @@ function createYouTubePlayer() {
             "youtube-player"
         );
 
-    if (!target)
+    if (!target) {
+
+        console.error(
+            "RAAGLY: #youtube-player not found."
+        );
+
         return;
+    }
 
     try {
 
@@ -1139,14 +1493,16 @@ function createYouTubePlayer() {
                 "youtube-player",
                 {
 
-                    height: "1",
                     width: "1",
+                    height: "1",
 
                     playerVars: {
 
-                        listType: "playlist",
+                        listType:
+                            "playlist",
 
-                        list: PLAYLIST_ID,
+                        list:
+                            PLAYLIST_ID,
 
                         autoplay: 0,
 
@@ -1154,7 +1510,11 @@ function createYouTubePlayer() {
 
                         rel: 0,
 
-                        playsinline: 1
+                        modestbranding: 1,
+
+                        playsinline: 1,
+
+                        enablejsapi: 1
 
                     },
 
@@ -1177,7 +1537,7 @@ function createYouTubePlayer() {
     } catch (error) {
 
         console.error(
-            "RAAGLY player error:",
+            "RAAGLY: Player creation failed.",
             error
         );
 
@@ -1193,32 +1553,117 @@ function onPlayerReady() {
 
     youtubeReady = true;
 
-    if (player) {
+    try {
 
         player.setVolume(
             DEFAULT_VOLUME
         );
 
+        if (volumeSlider) {
+
+            volumeSlider.value =
+                DEFAULT_VOLUME;
+
+        }
+
+        setVolumeIcon(
+            DEFAULT_VOLUME
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "RAAGLY: Initial volume failed.",
+            error
+        );
+
     }
 
-    if (volumeSlider)
-        volumeSlider.value =
-            DEFAULT_VOLUME;
-
     /*
-     * Let YouTube populate playlist first.
+     * Start with first Raag.
      */
 
-    setTimeout(
-        syncTrack,
-        1000
+    showRaag(
+        currentIndex,
+        false
     );
 
+    /*
+     * Give YouTube a little time to
+     * populate its playlist.
+     */
+
+    waitForPlaylist();
 }
 
 
 /* =========================================================
-   YOUTUBE STATE
+   WAIT FOR YOUTUBE PLAYLIST
+   ========================================================= */
+
+function waitForPlaylist() {
+
+    let attempts = 0;
+
+    const timer =
+        setInterval(
+            () => {
+
+                attempts++;
+
+                if (
+                    player &&
+                    typeof player.getPlaylist ===
+                    "function"
+                ) {
+
+                    const list =
+                        player.getPlaylist();
+
+                    if (
+                        Array.isArray(list) &&
+                        list.length > 0
+                    ) {
+
+                        clearInterval(
+                            timer
+                        );
+
+                        syncTrack();
+
+                        return;
+
+                    }
+
+                }
+
+                if (attempts >= 40) {
+
+                    clearInterval(
+                        timer
+                    );
+
+                    /*
+                     * UI still works even if
+                     * YouTube blocks playlist
+                     * metadata temporarily.
+                     */
+
+                    showRaag(
+                        currentIndex,
+                        false
+                    );
+
+                }
+
+            },
+            300
+        );
+}
+
+
+/* =========================================================
+   PLAYER STATE
    ========================================================= */
 
 function onPlayerStateChange(event) {
@@ -1226,83 +1671,93 @@ function onPlayerStateChange(event) {
     if (!window.YT)
         return;
 
-    if (
-        event.data ===
-        YT.PlayerState.PLAYING
-    ) {
+    switch (event.data) {
 
-        isPlaying = true;
+        case YT.PlayerState.UNSTARTED:
 
-        updatePlayIcon(true);
+            break;
 
-        if (playerContainer)
-            playerContainer.classList.add(
-                "play"
+
+        case YT.PlayerState.BUFFERING:
+
+            syncTrack();
+
+            break;
+
+
+        case YT.PlayerState.PLAYING:
+
+            isPlaying = true;
+
+            syncTrack();
+
+            updatePlayIcon(true);
+
+            if (playerContainer) {
+
+                playerContainer.classList.add(
+                    "play"
+                );
+
+            }
+
+            startProgress();
+
+            break;
+
+
+        case YT.PlayerState.PAUSED:
+
+            isPlaying = false;
+
+            updatePlayIcon(false);
+
+            if (playerContainer) {
+
+                playerContainer.classList.remove(
+                    "play"
+                );
+
+            }
+
+            stopProgress();
+
+            updateProgress();
+
+            break;
+
+
+        case YT.PlayerState.ENDED:
+
+            isPlaying = false;
+
+            updatePlayIcon(false);
+
+            if (playerContainer) {
+
+                playerContainer.classList.remove(
+                    "play"
+                );
+
+            }
+
+            stopProgress();
+
+            updateProgress();
+
+            /*
+             * Let YouTube handle playlist
+             * advancement naturally.
+             */
+
+            setTimeout(
+                syncTrack,
+                700
             );
 
-        syncTrack();
-
-        startProgress();
+            break;
 
     }
-
-    else if (
-        event.data ===
-        YT.PlayerState.PAUSED
-    ) {
-
-        isPlaying = false;
-
-        updatePlayIcon(false);
-
-        if (playerContainer)
-            playerContainer.classList.remove(
-                "play"
-            );
-
-        stopProgress();
-
-        updateProgress();
-
-    }
-
-    else if (
-        event.data ===
-        YT.PlayerState.BUFFERING
-    ) {
-
-        syncTrack();
-
-    }
-
-    else if (
-        event.data ===
-        YT.PlayerState.ENDED
-    ) {
-
-        isPlaying = false;
-
-        updatePlayIcon(false);
-
-        if (playerContainer)
-            playerContainer.classList.remove(
-                "play"
-            );
-
-        stopProgress();
-
-        /*
-         * Do NOT manually call nextVideo().
-         * YouTube playlist handles progression.
-         */
-
-        setTimeout(
-            syncTrack,
-            700
-        );
-
-    }
-
 }
 
 
@@ -1321,6 +1776,7 @@ function onPlayerError(event) {
 
     updatePlayIcon(false);
 
+    stopProgress();
 }
 
 
@@ -1330,48 +1786,73 @@ function onPlayerError(event) {
 
 function loadYouTubeAPI() {
 
+    /*
+     * Already available.
+     */
+
     if (
         window.YT &&
         window.YT.Player
     ) {
 
-        createYouTubePlayer();
+        createPlayer();
 
         return;
-
     }
+
+
+    /*
+     * YouTube calls this after loading.
+     */
 
     window.onYouTubeIframeAPIReady =
-        createYouTubePlayer;
+        function () {
 
-    if (
+            createPlayer();
+
+        };
+
+
+    /*
+     * Avoid duplicate API scripts.
+     */
+
+    const existing =
         document.querySelector(
             'script[src="https://www.youtube.com/iframe_api"]'
-        )
-    ) {
+        );
+
+    if (existing)
         return;
-    }
+
 
     const script =
-        document.createElement("script");
+        document.createElement(
+            "script"
+        );
 
     script.src =
         "https://www.youtube.com/iframe_api";
 
     script.async = true;
 
-    document.head.appendChild(script);
-
+    document.head.appendChild(
+        script
+    );
 }
 
 
 /* =========================================================
-   KEYBOARD SHORTCUTS
+   KEYBOARD CONTROLS
    ========================================================= */
 
 document.addEventListener(
     "keydown",
     (event) => {
+
+        /*
+         * Don't hijack typing.
+         */
 
         if (
             event.target &&
@@ -1385,8 +1866,14 @@ document.addEventListener(
             return;
         }
 
+
+        /*
+         * SPACE
+         */
+
         if (
-            event.code === "Space"
+            event.code ===
+            "Space"
         ) {
 
             event.preventDefault();
@@ -1395,51 +1882,87 @@ document.addEventListener(
 
         }
 
+
+        /*
+         * RIGHT = +5 SEC
+         */
+
         if (
-            event.code === "ArrowRight" &&
-            player
+            event.code ===
+            "ArrowRight"
         ) {
 
-            const current =
-                player.getCurrentTime();
+            if (
+                player &&
+                typeof player.getCurrentTime ===
+                "function"
+            ) {
 
-            player.seekTo(
-                current + 5,
-                true
-            );
+                const current =
+                    player.getCurrentTime();
+
+                player.seekTo(
+                    current + 5,
+                    true
+                );
+
+            }
 
         }
 
+
+        /*
+         * LEFT = -5 SEC
+         */
+
         if (
-            event.code === "ArrowLeft" &&
-            player
+            event.code ===
+            "ArrowLeft"
         ) {
 
-            const current =
-                player.getCurrentTime();
+            if (
+                player &&
+                typeof player.getCurrentTime ===
+                "function"
+            ) {
 
-            player.seekTo(
-                Math.max(
-                    0,
-                    current - 5
-                ),
-                true
-            );
+                const current =
+                    player.getCurrentTime();
+
+                player.seekTo(
+                    Math.max(
+                        0,
+                        current - 5
+                    ),
+                    true
+                );
+
+            }
 
         }
 
+
+        /*
+         * N = NEXT
+         */
+
         if (
-            event.code === "ArrowDown" &&
-            player
+            event.key.toLowerCase() ===
+            "n"
         ) {
 
             nextTrack();
 
         }
 
+
+        /*
+         * P = PREVIOUS
+         */
+
         if (
-            event.code === "ArrowUp" &&
-            player
+            event.key.toLowerCase() ===
+            "p"
         ) {
 
             previousTrack();
@@ -1451,45 +1974,70 @@ document.addEventListener(
 
 
 /* =========================================================
-   SAFE HTML
+   INITIALISE UI
    ========================================================= */
 
-function escapeHTML(value) {
+function initialiseRaagly() {
 
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    /*
+     * Always render the first Raag
+     * independently of YouTube.
+     */
+
+    showRaag(
+        0,
+        false
+    );
+
+    /*
+     * Build / connect library.
+     */
+
+    createLibrary();
+
+    attachExistingLibraryItems();
+
+    /*
+     * Filters.
+     */
+
+    setupFilters();
+
+    /*
+     * Start YouTube.
+     */
+
+    loadYouTubeAPI();
+
+    console.log(
+        `RAAGLY loaded — ${raagData.length} tracks mapped.`
+    );
+
+    console.log(
+        `Playlist ID: ${PLAYLIST_ID}`
+    );
 
 }
 
 
 /* =========================================================
-   INITIALIZE
+   DOM READY
    ========================================================= */
 
-showRaag(0, false);
+if (
+    document.readyState ===
+    "loading"
+) {
 
-setupFilters();
+    document.addEventListener(
+        "DOMContentLoaded",
+        initialiseRaagly
+    );
 
-createLibraryIfPossible();
+} else {
 
-updateTrackCounter(0);
+    initialiseRaagly();
 
-loadYouTubeAPI();
-
-
-/* =========================================================
-   DEBUG
-   ========================================================= */
-
-console.log(
-    `RAAGLY loaded — ${raagData.length} tracks`
-);
-
-console.log(
-    `Playlist: ${PLAYLIST_ID}`
-);
+}
 ```
+
