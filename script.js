@@ -1,455 +1,831 @@
 ```js
 /* =========================================================
    RAAGLY — SCRIPT.JS
-   YouTube Playlist ↔ Raag metadata fixed
+   Fixed YouTube Playlist Player
    Playlist: PLJRipbfj__b0
+   Playlist order = 27 Raags supplied by user
    ========================================================= */
 
-let player = null;
-let isPlaying = false;
-let progressTimer = null;
-let isMuted = false;
-let preMuteVolume = 80;
-
-const playlistId = "PLJRipbfj__b0";
+"use strict";
 
 /* =========================================================
-   RAAG DATA
-   IMPORTANT:
-   This order MUST match the YouTube playlist order.
+   CONFIG
    ========================================================= */
 
+const PLAYLIST_ID = "PLJRipbfj__b0";
+const DEFAULT_VOLUME = 80;
+
+/*
+ * IMPORTANT:
+ * This array follows the exact playlist order.
+ */
 const raagData = [
-
-  {
-    name: "Raag Bhimpalasi",
-    time: "Afternoon",
-    bgColor: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-    desc: "🌿 Mood: Brings emotional balance and calmness.\n🧘 Mind: Encourages introspection, relaxation and inner peace."
-  },
-
-  {
-    name: "Raag Darbari",
-    time: "Late Night",
-    bgColor: "linear-gradient(135deg, #09203f 0%, #537895 100%)",
-    desc: "🌿 Mind: Deeply calming and introspective.\n🧘 Vibe: Creates a dignified, peaceful atmosphere."
-  },
-
-  {
-    name: "Raag Shuddh Sarang",
-    time: "Afternoon",
-    bgColor: "linear-gradient(135deg, #56ccf2 0%, #2f80ed 100%)",
-    desc: "☀️ Vibe: Bright, refreshing and uplifting.\n🧘 Mind: Helps create clarity and emotional freshness."
-  },
-
-  {
-    name: "Raag Komal Asavari",
-    time: "Morning",
-    bgColor: "linear-gradient(135deg, #8360c3 0%, #2ebf91 100%)",
-    desc: "🌿 Vibe: Gentle and contemplative.\n🧘 Mind: Encourages emotional release and quiet reflection."
-  },
-
-  {
-    name: "Raag Yaman",
-    time: "Evening",
-    bgColor: "linear-gradient(135deg, #141e30 0%, #243b55 100%)",
-    desc: "🧘 Mind: Soothes emotional grief and encourages peace.\n✨ Vibe: Graceful, serene and deeply calming."
-  },
-
-  {
-    name: "Raag Hansdhawani",
-    time: "Evening",
-    bgColor: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)",
-    desc: "🧘 Mind: Restores inner stillness and emotional joy.\n✨ Vibe: Light, bright and uplifting."
-  },
-
-  {
-    name: "Raag Bhairavi",
-    time: "Morning / Closing Raag",
-    bgColor: "linear-gradient(135deg, #30cfd0 0%, #330867 100%)",
-    desc: "🌿 Vibe: Deeply emotional and devotional.\n🧘 Mind: Encourages acceptance, reflection and peaceful closure."
-  },
-
-  {
-    name: "Raag Asavari",
-    time: "Late Morning",
-    bgColor: "linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)",
-    desc: "🌿 Vibe: Soft, introspective and soothing.\n🧘 Mind: Supports relaxation and emotional balance."
-  },
-
-  {
-    name: "Raag Todi",
-    time: "Late Morning",
-    bgColor: "linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)",
-    desc: "🧘 Mind: Deeply contemplative and introspective.\n✨ Vibe: Encourages stillness and focused listening."
-  },
-
-  {
-    name: "Raag Kalyan",
-    time: "Evening",
-    bgColor: "linear-gradient(135deg, #ff0844 0%, #ffb199 100%)",
-    desc: "✨ Vibe: Expansive, graceful and uplifting.\n🧘 Mind: Creates optimism, calmness and emotional openness."
-  },
-
-  {
-    name: "Raag Poorvi",
-    time: "Evening",
-    bgColor: "linear-gradient(135deg, #f12711 0%, #f5af19 100%)",
-    desc: "🌅 Vibe: Serious, rich and contemplative.\n🧘 Mind: Encourages concentration and inner awareness."
-  },
-
-  {
-    name: "Raag Nat Bhairav",
-    time: "Morning",
-    bgColor: "linear-gradient(135deg, #f12711 0%, #f5af19 100%)",
-    desc: "🌅 Vibe: Strong morning energy.\n🧘 Mind: Encourages confidence, clarity and emotional stability."
-  },
-
-  {
-    name: "Raag Brindabani Sarang",
-    time: "Afternoon",
-    bgColor: "linear-gradient(135deg, #13547a 0%, #80d0c7 100%)",
-    desc: "🌿 Vibe: Refreshing and peaceful.\n🧘 Mind: Creates a light, affectionate and joyful atmosphere."
-  },
-
-  {
-    name: "Raag Shuddh Kalyan",
-    time: "Evening",
-    bgColor: "linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)",
-    desc: "✨ Vibe: Serene and luminous.\n🧘 Mind: Encourages peace, clarity and gentle positivity."
-  },
-
-  {
-    name: "Raag Jaunpuri",
-    time: "Late Morning",
-    bgColor: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
-    desc: "🌿 Vibe: Reflective and expressive.\n🧘 Mind: Supports emotional release and calm concentration."
-  },
-
-  {
-    name: "Raag Kirwani",
-    time: "Evening",
-    bgColor: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
-    desc: "🧘 Mind: Emotional, peaceful and meditative.\n✨ Vibe: Helps create a soothing atmosphere for deep listening."
-  },
-
-  {
-    name: "Raag Neelambri",
-    time: "Night",
-    bgColor: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
-    desc: "🌙 Vibe: Gentle and lullaby-like.\n🧘 Mind: Encourages relaxation and peaceful nighttime listening."
-  },
-
-  {
-    name: "Raag Malkauns",
-    time: "Late Night",
-    bgColor: "linear-gradient(135deg, #200122 0%, #6f0000 100%)",
-    desc: "🧘 Mind: Deep meditative focus and inner strength.\n🌙 Vibe: Powerful, mysterious and contemplative."
-  },
-
-  {
-    name: "Raag Bhairav",
-    time: "Early Morning",
-    bgColor: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)",
-    desc: "🌅 Vibe: Powerful morning awakening energy.\n🧘 Mind: Encourages focus, discipline and inner stillness."
-  },
-
-  {
-    name: "Raag Lalit",
-    time: "Early Dawn",
-    bgColor: "linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)",
-    desc: "🌅 Vibe: Dawn-like, delicate and contemplative.\n🧘 Mind: Creates a peaceful transition into the morning."
-  },
-
-  {
-    name: "Raag Bhoop",
-    time: "Evening",
-    bgColor: "linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)",
-    desc: "🧘 Mind: Instills tranquility and mental composure.\n✨ Vibe: Simple, pure and uplifting."
-  },
-
-  {
-    name: "Raag Madhuwanti",
-    time: "Afternoon / Evening",
-    bgColor: "linear-gradient(135deg, #37ecba 0%, #72aff3 100%)",
-    desc: "🧘 Mind: Gentle, romantic and soothing.\n✨ Vibe: Soft emotional warmth with a peaceful dusk feeling."
-  },
-
-  {
-    name: "Raag Pilu",
-    time: "Flexible",
-    bgColor: "linear-gradient(135deg, #f6d365 0%, #fda085 100%)",
-    desc: "🧘 Mind: Brings gentle joy and lightheartedness.\n✨ Vibe: Expressive, sweet and emotionally warm."
-  },
-
-  {
-    name: "Raag Shivranjani",
-    time: "Evening / Night",
-    bgColor: "linear-gradient(135deg, #ff0844 0%, #ffb199 100%)",
-    desc: "🧘 Mind: Deeply emotional and introspective.\n✨ Vibe: Melancholic yet soothing and expressive."
-  },
-
-  {
-    name: "Raag Jay Jaywanti",
-    time: "Evening",
-    bgColor: "linear-gradient(135deg, #b92b27 0%, #1565c0 100%)",
-    desc: "✨ Vibe: Expressive, graceful and uplifting.\n🧘 Mind: Encourages emotional freshness and renewed energy."
-  },
-
-  {
-    name: "Raag Khamaj",
-    time: "Late Evening",
-    bgColor: "linear-gradient(135deg, #a8ff78 0%, #78ffd6 100%)",
-    desc: "🌿 Vibe: Sweet, romantic and relaxed.\n🧘 Mind: Induces soothing emotional ease."
-  },
-
-  {
-    name: "Tanpura",
-    time: "Continuous Drone",
-    bgColor: "linear-gradient(135deg, #2b5876 0%, #4e4376 100%)",
-    desc: "🎵 Vibe: Pure sustained tonal foundation.\n🧘 Mind: Ideal for meditation, riyaaz, deep listening and creating a calm sonic space."
-  }
-
+    {
+        name: "Raag Bhimpalasi",
+        time: "Afternoon",
+        bg: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        desc: "🌿 Vibe: Warm, emotional and soothing.\n🧘 Mind: Encourages relaxation, introspection and emotional balance."
+    },
+    {
+        name: "Raag Darbari",
+        time: "Late Night",
+        bg: "linear-gradient(135deg, #09203f 0%, #537895 100%)",
+        desc: "🌙 Vibe: Deep, majestic and contemplative.\n🧘 Mind: Creates a calm and introspective atmosphere."
+    },
+    {
+        name: "Raag Shuddh Sarang",
+        time: "Afternoon",
+        bg: "linear-gradient(135deg, #56ccf2 0%, #2f80ed 100%)",
+        desc: "☀️ Vibe: Bright, refreshing and graceful.\n🧘 Mind: Encourages clarity and emotional freshness."
+    },
+    {
+        name: "Raag Komal Asavari",
+        time: "Morning",
+        bg: "linear-gradient(135deg, #8360c3 0%, #2ebf91 100%)",
+        desc: "🌿 Vibe: Gentle and reflective.\n🧘 Mind: Supports quiet contemplation and emotional release."
+    },
+    {
+        name: "Raag Yaman",
+        time: "Evening",
+        bg: "linear-gradient(135deg, #141e30 0%, #243b55 100%)",
+        desc: "✨ Vibe: Serene, graceful and expansive.\n🧘 Mind: Encourages peace, openness and relaxation."
+    },
+    {
+        name: "Raag Hansdhawani",
+        time: "Evening",
+        bg: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)",
+        desc: "✨ Vibe: Bright, joyful and uplifting.\n🧘 Mind: Creates a feeling of inner stillness and lightness."
+    },
+    {
+        name: "Raag Bhairavi",
+        time: "Morning / Closing",
+        bg: "linear-gradient(135deg, #30cfd0 0%, #330867 100%)",
+        desc: "🌿 Vibe: Devotional, emotional and deeply expressive.\n🧘 Mind: Encourages reflection, acceptance and peaceful closure."
+    },
+    {
+        name: "Raag Asavari",
+        time: "Late Morning",
+        bg: "linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)",
+        desc: "🌿 Vibe: Soft and introspective.\n🧘 Mind: Encourages relaxation and emotional balance."
+    },
+    {
+        name: "Raag Todi",
+        time: "Late Morning",
+        bg: "linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)",
+        desc: "🧘 Vibe: Deeply contemplative and expressive.\n✨ Mind: Encourages stillness and focused listening."
+    },
+    {
+        name: "Raag Kalyan",
+        time: "Evening",
+        bg: "linear-gradient(135deg, #ff0844 0%, #ffb199 100%)",
+        desc: "✨ Vibe: Expansive, graceful and uplifting.\n🧘 Mind: Creates optimism and emotional openness."
+    },
+    {
+        name: "Raag Poorvi",
+        time: "Evening",
+        bg: "linear-gradient(135deg, #f12711 0%, #f5af19 100%)",
+        desc: "🌅 Vibe: Rich, serious and contemplative.\n🧘 Mind: Encourages concentration and inner awareness."
+    },
+    {
+        name: "Raag Nat Bhairav",
+        time: "Morning",
+        bg: "linear-gradient(135deg, #f12711 0%, #f5af19 100%)",
+        desc: "🌅 Vibe: Strong and grounded morning energy.\n🧘 Mind: Encourages clarity and emotional stability."
+    },
+    {
+        name: "Raag Brindabani Sarang",
+        time: "Afternoon",
+        bg: "linear-gradient(135deg, #13547a 0%, #80d0c7 100%)",
+        desc: "🌿 Vibe: Refreshing, peaceful and affectionate.\n🧘 Mind: Creates a light and joyful atmosphere."
+    },
+    {
+        name: "Raag Shuddh Kalyan",
+        time: "Evening",
+        bg: "linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)",
+        desc: "✨ Vibe: Serene and luminous.\n🧘 Mind: Encourages peace, clarity and gentle positivity."
+    },
+    {
+        name: "Raag Jaunpuri",
+        time: "Late Morning",
+        bg: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+        desc: "🌿 Vibe: Reflective and expressive.\n🧘 Mind: Supports emotional release and calm concentration."
+    },
+    {
+        name: "Raag Kirwani",
+        time: "Evening",
+        bg: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
+        desc: "🧘 Vibe: Emotional, peaceful and meditative.\n✨ Mind: Creates a soothing space for deep listening."
+    },
+    {
+        name: "Raag Neelambri",
+        time: "Night",
+        bg: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
+        desc: "🌙 Vibe: Gentle and lullaby-like.\n🧘 Mind: Encourages relaxation and peaceful nighttime listening."
+    },
+    {
+        name: "Raag Malkauns",
+        time: "Late Night",
+        bg: "linear-gradient(135deg, #200122 0%, #6f0000 100%)",
+        desc: "🌙 Vibe: Powerful, mysterious and meditative.\n🧘 Mind: Encourages deep focus and inner stillness."
+    },
+    {
+        name: "Raag Bhairav",
+        time: "Early Morning",
+        bg: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)",
+        desc: "🌅 Vibe: Powerful morning awakening energy.\n🧘 Mind: Encourages focus, discipline and inner stillness."
+    },
+    {
+        name: "Raag Lalit",
+        time: "Early Dawn",
+        bg: "linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)",
+        desc: "🌅 Vibe: Delicate, peaceful and contemplative.\n🧘 Mind: Creates a calm transition into the morning."
+    },
+    {
+        name: "Raag Bhoop",
+        time: "Evening",
+        bg: "linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)",
+        desc: "✨ Vibe: Pure, simple and uplifting.\n🧘 Mind: Encourages tranquility and mental composure."
+    },
+    {
+        name: "Raag Madhuwanti",
+        time: "Afternoon / Evening",
+        bg: "linear-gradient(135deg, #37ecba 0%, #72aff3 100%)",
+        desc: "🌿 Vibe: Soft, warm and soothing.\n🧘 Mind: Creates gentle emotional comfort and peacefulness."
+    },
+    {
+        name: "Raag Pilu",
+        time: "Flexible",
+        bg: "linear-gradient(135deg, #f6d365 0%, #fda085 100%)",
+        desc: "✨ Vibe: Sweet, expressive and emotionally warm.\n🧘 Mind: Brings gentle joy and lightheartedness."
+    },
+    {
+        name: "Raag Shivranjani",
+        time: "Evening / Night",
+        bg: "linear-gradient(135deg, #ff0844 0%, #ffb199 100%)",
+        desc: "🧘 Vibe: Melancholic yet soothing.\n✨ Mind: Encourages introspection and emotional expression."
+    },
+    {
+        name: "Raag Jay Jaywanti",
+        time: "Evening",
+        bg: "linear-gradient(135deg, #b92b27 0%, #1565c0 100%)",
+        desc: "✨ Vibe: Graceful, expressive and uplifting.\n🧘 Mind: Encourages emotional freshness and renewed energy."
+    },
+    {
+        name: "Raag Khamaj",
+        time: "Late Evening",
+        bg: "linear-gradient(135deg, #a8ff78 0%, #78ffd6 100%)",
+        desc: "🌿 Vibe: Sweet, romantic and relaxed.\n🧘 Mind: Induces soothing emotional ease."
+    },
+    {
+        name: "Tanpura",
+        time: "Continuous Drone",
+        bg: "linear-gradient(135deg, #2b5876 0%, #4e4376 100%)",
+        desc: "🎵 Vibe: Pure sustained tonal foundation.\n🧘 Mind: Ideal for meditation, riyaaz and deep listening."
+    }
 ];
 
 
 /* =========================================================
-   DOM ELEMENTS
+   STATE
    ========================================================= */
 
-const raagName = document.getElementById("raag-name");
-const raagTime = document.getElementById("raag-time");
-const raagDesc = document.getElementById("raag-desc");
-
-const playBtn = document.getElementById("play");
-const prevBtn = document.getElementById("prev");
-const nextBtn = document.getElementById("next");
-
-const playerContainer = document.querySelector(".player-container");
-const body = document.getElementById("app-body") || document.body;
-
-const progressContainer =
-  document.getElementById("progress-container");
-
-const progressBar =
-  document.getElementById("progress");
-
-const currentTimeEl =
-  document.getElementById("current-time");
-
-const durationEl =
-  document.getElementById("duration");
-
-const volumeSlider =
-  document.getElementById("volume-slider");
-
-const muteBtn =
-  document.getElementById("mute-btn");
-
-const searchInput =
-  document.getElementById("search-input");
-
-const searchResults =
-  document.getElementById("search-results");
+let player = null;
+let youtubeReady = false;
+let isPlaying = false;
+let isMuted = false;
+let preMuteVolume = DEFAULT_VOLUME;
+let progressTimer = null;
+let lastKnownIndex = 0;
 
 
 /* =========================================================
-   YOUTUBE IFRAME API
+   DOM
    ========================================================= */
 
-const tag = document.createElement("script");
+const $ = (id) => document.getElementById(id);
 
-tag.src = "https://www.youtube.com/iframe_api";
+const raagName = $("raag-name");
+const raagTime = $("raag-time");
+const raagDesc = $("raag-desc");
 
-const firstScriptTag =
-  document.getElementsByTagName("script")[0];
+const playBtn = $("play");
+const prevBtn = $("prev");
+const nextBtn = $("next");
 
-if (firstScriptTag) {
-  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-} else {
-  document.head.appendChild(tag);
+const progressContainer = $("progress-container");
+const progressBar = $("progress");
+
+const currentTimeEl = $("current-time");
+const durationEl = $("duration");
+
+const volumeSlider = $("volume-slider");
+const muteBtn = $("mute-btn");
+
+const searchInput = $("search-input");
+const searchResults = $("search-results");
+
+const playerContainer =
+    document.querySelector(".player-container");
+
+const appBody =
+    document.getElementById("app-body") ||
+    document.body;
+
+
+/* =========================================================
+   UI HELPERS
+   ========================================================= */
+
+function setRaag(index, animate = true) {
+
+    if (!raagData[index]) return;
+
+    lastKnownIndex = index;
+
+    const data = raagData[index];
+
+    if (raagName) {
+        raagName.textContent = data.name;
+    }
+
+    if (raagTime) {
+        raagTime.textContent = data.time;
+    }
+
+    if (raagDesc) {
+        raagDesc.textContent = data.desc;
+    }
+
+    if (appBody) {
+        appBody.style.background = data.bg;
+    }
+
+    if (animate) {
+
+        [
+            raagName,
+            raagTime,
+            raagDesc
+        ].forEach((element) => {
+
+            if (!element) return;
+
+            element.classList.remove("fade-in");
+
+            void element.offsetWidth;
+
+            element.classList.add("fade-in");
+
+        });
+
+    }
+}
+
+
+function getIndex() {
+
+    if (
+        !player ||
+        typeof player.getPlaylistIndex !== "function"
+    ) {
+        return lastKnownIndex;
+    }
+
+    const index = player.getPlaylistIndex();
+
+    if (
+        typeof index !== "number" ||
+        index < 0 ||
+        index >= raagData.length
+    ) {
+        return lastKnownIndex;
+    }
+
+    return index;
 }
 
 
 /* =========================================================
-   YOUTUBE READY
+   INITIAL UI
    ========================================================= */
 
-window.onYouTubeIframeAPIReady = function () {
+setRaag(0, false);
 
-  player = new YT.Player("youtube-player", {
 
-    height: "1",
-    width: "1",
+/* =========================================================
+   LOAD YOUTUBE IFRAME API
+   ========================================================= */
 
-    playerVars: {
-      listType: "playlist",
-      list: playlistId,
-      autoplay: 0,
-      controls: 0,
-      rel: 0,
-      modestbranding: 1,
-      playsinline: 1
-    },
+function loadYouTubeAPI() {
 
-    events: {
-      onReady: onPlayerReady,
-      onStateChange: onPlayerStateChange,
-      onError: onPlayerError
+    /*
+     * If API already exists, don't load it again.
+     */
+
+    if (window.YT && window.YT.Player) {
+
+        createPlayer();
+
+        return;
     }
 
-  });
+    /*
+     * YouTube calls this global function when loaded.
+     */
 
-};
+    window.onYouTubeIframeAPIReady = function () {
+
+        createPlayer();
+
+    };
+
+    /*
+     * Prevent duplicate script injection.
+     */
+
+    if (
+        document.querySelector(
+            'script[src="https://www.youtube.com/iframe_api"]'
+        )
+    ) {
+        return;
+    }
+
+    const script =
+        document.createElement("script");
+
+    script.src =
+        "https://www.youtube.com/iframe_api";
+
+    script.async = true;
+
+    document.head.appendChild(script);
+}
+
+
+/* =========================================================
+   CREATE PLAYER
+   ========================================================= */
+
+function createPlayer() {
+
+    if (player) return;
+
+    const container =
+        document.getElementById("youtube-player");
+
+    if (!container) {
+
+        console.error(
+            "RAAGLY: #youtube-player not found in HTML."
+        );
+
+        return;
+    }
+
+    try {
+
+        player = new YT.Player(
+            "youtube-player",
+            {
+
+                width: "1",
+                height: "1",
+
+                playerVars: {
+
+                    listType: "playlist",
+                    list: PLAYLIST_ID,
+
+                    autoplay: 0,
+                    controls: 0,
+
+                    rel: 0,
+                    modestbranding: 1,
+
+                    playsinline: 1,
+
+                    origin:
+                        window.location.origin
+                },
+
+                events: {
+
+                    onReady:
+                        handlePlayerReady,
+
+                    onStateChange:
+                        handleStateChange,
+
+                    onError:
+                        handlePlayerError
+                }
+
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "RAAGLY: Could not create YouTube player.",
+            error
+        );
+
+    }
+}
 
 
 /* =========================================================
    PLAYER READY
    ========================================================= */
 
-function onPlayerReady() {
+function handlePlayerReady() {
 
-  player.setVolume(preMuteVolume);
+    youtubeReady = true;
 
-  /*
-    YouTube playlist metadata can take a moment to load.
-    Try several times until the playlist index becomes available.
-  */
+    try {
 
-  let attempts = 0;
+        player.setVolume(DEFAULT_VOLUME);
 
-  const waitForPlaylist = setInterval(() => {
+        if (volumeSlider) {
+            volumeSlider.value =
+                DEFAULT_VOLUME;
+        }
 
-    attempts++;
+    } catch (error) {
 
-    if (
-      player &&
-      typeof player.getPlaylistIndex === "function"
-    ) {
+        console.warn(
+            "RAAGLY: Volume setup failed.",
+            error
+        );
 
-      const playlist = player.getPlaylist();
+    }
 
-      if (playlist && playlist.length > 0) {
+    /*
+     * Playlist data is sometimes available
+     * slightly after onReady.
+     */
 
-        clearInterval(waitForPlaylist);
+    waitForPlaylist();
 
-        updateTrackInfo();
+}
+
+
+/* =========================================================
+   WAIT FOR PLAYLIST
+   ========================================================= */
+
+function waitForPlaylist() {
+
+    let attempts = 0;
+
+    const checker =
+        setInterval(() => {
+
+            attempts++;
+
+            if (
+                player &&
+                typeof player.getPlaylist === "function"
+            ) {
+
+                const playlist =
+                    player.getPlaylist();
+
+                if (
+                    Array.isArray(playlist) &&
+                    playlist.length > 0
+                ) {
+
+                    clearInterval(checker);
+
+                    syncCurrentTrack();
+
+                    return;
+                }
+
+            }
+
+            /*
+             * Even if YouTube doesn't expose
+             * playlist immediately, don't leave
+             * the UI stuck.
+             */
+
+            if (attempts >= 30) {
+
+                clearInterval(checker);
+
+                setRaag(0);
+
+            }
+
+        }, 300);
+
+}
+
+
+/* =========================================================
+   SYNC CURRENT TRACK
+   ========================================================= */
+
+function syncCurrentTrack() {
+
+    const index =
+        getIndex();
+
+    setRaag(index);
+
+}
+
+
+/* =========================================================
+   YOUTUBE STATE
+   ========================================================= */
+
+function handleStateChange(event) {
+
+    if (!window.YT) return;
+
+    switch (event.data) {
+
+        case YT.PlayerState.UNSTARTED:
+
+            break;
+
+
+        case YT.PlayerState.BUFFERING:
+
+            syncCurrentTrack();
+
+            break;
+
+
+        case YT.PlayerState.PLAYING:
+
+            isPlaying = true;
+
+            syncCurrentTrack();
+
+            updatePlayIcon(true);
+
+            if (playerContainer) {
+                playerContainer.classList.add("play");
+            }
+
+            startProgressTimer();
+
+            break;
+
+
+        case YT.PlayerState.PAUSED:
+
+            isPlaying = false;
+
+            updatePlayIcon(false);
+
+            if (playerContainer) {
+                playerContainer.classList.remove("play");
+            }
+
+            stopProgressTimer();
+
+            updateProgress();
+
+            break;
+
+
+        case YT.PlayerState.ENDED:
+
+            isPlaying = false;
+
+            updatePlayIcon(false);
+
+            if (playerContainer) {
+                playerContainer.classList.remove("play");
+            }
+
+            stopProgressTimer();
+
+            updateProgress();
+
+            /*
+             * IMPORTANT:
+             *
+             * Do NOT call nextVideo() here.
+             * YouTube playlist normally advances itself.
+             *
+             * We only resync the UI.
+             */
+
+            setTimeout(() => {
+
+                syncCurrentTrack();
+
+            }, 600);
+
+            break;
+
+    }
+
+}
+
+
+/* =========================================================
+   PLAY / PAUSE
+   ========================================================= */
+
+function togglePlay() {
+
+    if (!youtubeReady || !player) {
+
+        console.warn(
+            "RAAGLY: YouTube player is not ready yet."
+        );
 
         return;
-      }
     }
 
-    if (attempts >= 20) {
-      clearInterval(waitForPlaylist);
-      updateTrackInfo();
+    try {
+
+        if (isPlaying) {
+
+            player.pauseVideo();
+
+        } else {
+
+            /*
+             * On first click, explicitly select
+             * the current playlist index.
+             */
+
+            player.playVideo();
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "RAAGLY: Play/Pause failed.",
+            error
+        );
+
+    }
+}
+
+
+if (playBtn) {
+
+    playBtn.addEventListener(
+        "click",
+        togglePlay
+    );
+
+}
+
+
+/* =========================================================
+   PLAY ICON
+   ========================================================= */
+
+function updatePlayIcon(playing) {
+
+    if (!playBtn) return;
+
+    const icon =
+        playBtn.querySelector("i");
+
+    if (!icon) return;
+
+    icon.className =
+        playing
+            ? "fas fa-pause"
+            : "fas fa-play";
+}
+
+
+/* =========================================================
+   NEXT
+   ========================================================= */
+
+function nextTrack() {
+
+    if (
+        !youtubeReady ||
+        !player ||
+        typeof player.nextVideo !== "function"
+    ) {
+        return;
     }
 
-  }, 500);
+    player.nextVideo();
+
+    /*
+     * YouTube updates playlist index asynchronously.
+     */
+
+    setTimeout(() => {
+
+        syncCurrentTrack();
+
+    }, 700);
+
+}
+
+
+if (nextBtn) {
+
+    nextBtn.addEventListener(
+        "click",
+        nextTrack
+    );
 
 }
 
 
 /* =========================================================
-   GET CURRENT PLAYLIST INDEX
+   PREVIOUS
    ========================================================= */
 
-function getCurrentIndex() {
+function previousTrack() {
 
-  if (
-    !player ||
-    typeof player.getPlaylistIndex !== "function"
-  ) {
-    return 0;
-  }
+    if (
+        !youtubeReady ||
+        !player ||
+        typeof player.previousVideo !== "function"
+    ) {
+        return;
+    }
 
-  let index = player.getPlaylistIndex();
+    player.previousVideo();
 
-  if (
-    index === undefined ||
-    index === null ||
-    index < 0
-  ) {
-    index = 0;
-  }
+    setTimeout(() => {
 
-  return index % raagData.length;
+        syncCurrentTrack();
+
+    }, 700);
+
 }
 
 
-/* =========================================================
-   UPDATE RAAG UI
-   ========================================================= */
+if (prevBtn) {
 
-function updateTrackInfo() {
-
-  if (!raagData.length) return;
-
-  const index = getCurrentIndex();
-
-  const data = raagData[index];
-
-  if (!data) return;
-
-  if (raagName) {
-    raagName.textContent = data.name;
-  }
-
-  if (raagTime) {
-    raagTime.textContent = data.time;
-  }
-
-  if (raagDesc) {
-    raagDesc.textContent = data.desc;
-  }
-
-  if (body) {
-    body.style.background = data.bgColor;
-  }
-
-  /*
-    Restart text animation.
-  */
-
-  [
-    raagName,
-    raagTime,
-    raagDesc
-  ].forEach((element) => {
-
-    if (!element) return;
-
-    element.classList.remove("fade-in");
-
-    void element.offsetWidth;
-
-    element.classList.add("fade-in");
-
-  });
+    prevBtn.addEventListener(
+        "click",
+        previousTrack
+    );
 
 }
 
 
 /* =========================================================
-   TIME FORMAT
+   SEEK BAR
    ========================================================= */
 
-function formatTime(seconds) {
+function seekFromClick(event) {
 
-  if (
-    isNaN(seconds) ||
-    seconds === null ||
-    seconds < 0
-  ) {
-    return "0:00";
-  }
+    if (
+        !player ||
+        typeof player.getDuration !== "function"
+    ) {
+        return;
+    }
 
-  const mins =
-    Math.floor(seconds / 60);
+    const duration =
+        player.getDuration();
 
-  const secs =
-    Math.floor(seconds % 60);
+    if (!duration) return;
 
-  return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+    const rect =
+        progressContainer.getBoundingClientRect();
+
+    const x =
+        event.clientX - rect.left;
+
+    const percentage =
+        Math.max(
+            0,
+            Math.min(
+                1,
+                x / rect.width
+            )
+        );
+
+    player.seekTo(
+        duration * percentage,
+        true
+    );
+
+    updateProgress();
+}
+
+
+if (progressContainer) {
+
+    progressContainer.addEventListener(
+        "click",
+        seekFromClick
+    );
 
 }
 
@@ -460,41 +836,60 @@ function formatTime(seconds) {
 
 function updateProgress() {
 
-  if (
-    !player ||
-    typeof player.getCurrentTime !== "function" ||
-    typeof player.getDuration !== "function"
-  ) {
-    return;
-  }
+    if (
+        !player ||
+        typeof player.getCurrentTime !== "function" ||
+        typeof player.getDuration !== "function"
+    ) {
+        return;
+    }
 
-  const current =
-    player.getCurrentTime() || 0;
+    const current =
+        Number(player.getCurrentTime()) || 0;
 
-  const duration =
-    player.getDuration() || 0;
+    const duration =
+        Number(player.getDuration()) || 0;
 
-  if (duration > 0) {
+    if (duration <= 0) {
+
+        if (progressBar) {
+            progressBar.style.width = "0%";
+        }
+
+        if (currentTimeEl) {
+            currentTimeEl.textContent = "0:00";
+        }
+
+        if (durationEl) {
+            durationEl.textContent = "0:00";
+        }
+
+        return;
+    }
 
     const percentage =
-      (current / duration) * 100;
+        Math.max(
+            0,
+            Math.min(
+                100,
+                (current / duration) * 100
+            )
+        );
 
     if (progressBar) {
-      progressBar.style.width =
-        `${Math.min(100, Math.max(0, percentage))}%`;
+        progressBar.style.width =
+            `${percentage}%`;
     }
 
     if (currentTimeEl) {
-      currentTimeEl.textContent =
-        formatTime(current);
+        currentTimeEl.textContent =
+            formatTime(current);
     }
 
     if (durationEl) {
-      durationEl.textContent =
-        formatTime(duration);
+        durationEl.textContent =
+            formatTime(duration);
     }
-
-  }
 
 }
 
@@ -505,245 +900,53 @@ function updateProgress() {
 
 function startProgressTimer() {
 
-  stopProgressTimer();
+    stopProgressTimer();
 
-  progressTimer =
-    setInterval(updateProgress, 250);
+    progressTimer =
+        setInterval(
+            updateProgress,
+            250
+        );
 
 }
 
 
 function stopProgressTimer() {
 
-  if (progressTimer) {
+    if (progressTimer) {
 
-    clearInterval(progressTimer);
+        clearInterval(progressTimer);
 
-    progressTimer = null;
-
-  }
+        progressTimer = null;
+    }
 
 }
 
 
 /* =========================================================
-   SEEK
+   FORMAT TIME
    ========================================================= */
 
-if (progressContainer) {
-
-  progressContainer.addEventListener("click", (event) => {
+function formatTime(seconds) {
 
     if (
-      !player ||
-      typeof player.getDuration !== "function"
+        !Number.isFinite(seconds) ||
+        seconds < 0
     ) {
-      return;
+        return "0:00";
     }
 
-    const duration =
-      player.getDuration();
-
-    if (!duration) return;
-
-    const rect =
-      progressContainer.getBoundingClientRect();
-
-    const clickX =
-      event.clientX - rect.left;
-
-    const percentage =
-      Math.min(
-        1,
-        Math.max(
-          0,
-          clickX / rect.width
-        )
-      );
-
-    const seekTime =
-      percentage * duration;
-
-    player.seekTo(seekTime, true);
-
-    updateProgress();
-
-  });
-
-}
-
-
-/* =========================================================
-   PLAY / PAUSE
-   ========================================================= */
-
-if (playBtn) {
-
-  playBtn.addEventListener("click", () => {
-
-    if (!player) return;
-
-    if (isPlaying) {
-
-      player.pauseVideo();
-
-    } else {
-
-      player.playVideo();
-
-    }
-
-  });
-
-}
-
-
-/* =========================================================
-   YOUTUBE STATE CHANGE
-   ========================================================= */
-
-function onPlayerStateChange(event) {
-
-  if (!window.YT) return;
-
-  if (event.data === YT.PlayerState.PLAYING) {
-
-    isPlaying = true;
-
-    if (playerContainer) {
-      playerContainer.classList.add("play");
-    }
-
-    updatePlayIcon(true);
-
-    updateTrackInfo();
-
-    startProgressTimer();
-
-  }
-
-
-  else if (
-    event.data === YT.PlayerState.PAUSED
-  ) {
-
-    isPlaying = false;
-
-    if (playerContainer) {
-      playerContainer.classList.remove("play");
-    }
-
-    updatePlayIcon(false);
-
-    stopProgressTimer();
-
-    updateProgress();
-
-  }
-
-
-  else if (
-    event.data === YT.PlayerState.ENDED
-  ) {
-
-    isPlaying = false;
-
-    if (playerContainer) {
-      playerContainer.classList.remove("play");
-    }
-
-    updatePlayIcon(false);
-
-    stopProgressTimer();
-
-    updateProgress();
-
-    /*
-      IMPORTANT:
-      Let YouTube playlist advance naturally.
-      We do NOT manually call nextVideo() here,
-      because doing so can cause skipped tracks.
-    */
-
-    setTimeout(() => {
-      updateTrackInfo();
-    }, 700);
-
-  }
-
-}
-
-
-/* =========================================================
-   PLAY BUTTON ICON
-   ========================================================= */
-
-function updatePlayIcon(playing) {
-
-  if (!playBtn) return;
-
-  const icon =
-    playBtn.querySelector("i");
-
-  if (!icon) return;
-
-  icon.className =
-    playing
-      ? "fas fa-pause"
-      : "fas fa-play";
-
-}
-
-
-/* =========================================================
-   NEXT
-   ========================================================= */
-
-if (nextBtn) {
-
-  nextBtn.addEventListener("click", () => {
-
-    if (
-      !player ||
-      typeof player.nextVideo !== "function"
-    ) {
-      return;
-    }
-
-    player.nextVideo();
-
-    /*
-      YouTube updates playlist index asynchronously.
-    */
-
-    setTimeout(updateTrackInfo, 700);
-
-  });
-
-}
-
-
-/* =========================================================
-   PREVIOUS
-   ========================================================= */
-
-if (prevBtn) {
-
-  prevBtn.addEventListener("click", () => {
-
-    if (
-      !player ||
-      typeof player.previousVideo !== "function"
-    ) {
-      return;
-    }
-
-    player.previousVideo();
-
-    setTimeout(updateTrackInfo, 700);
-
-  });
-
+    const mins =
+        Math.floor(seconds / 60);
+
+    const secs =
+        Math.floor(seconds % 60);
+
+    return (
+        `${mins}:` +
+        `${secs < 10 ? "0" : ""}` +
+        `${secs}`
+    );
 }
 
 
@@ -753,40 +956,43 @@ if (prevBtn) {
 
 if (volumeSlider) {
 
-  volumeSlider.addEventListener("input", (event) => {
+    volumeSlider.addEventListener(
+        "input",
+        (event) => {
 
-    const value =
-      Number(event.target.value);
+            const volume =
+                Number(event.target.value);
 
-    if (
-      player &&
-      typeof player.setVolume === "function"
-    ) {
+            if (
+                player &&
+                typeof player.setVolume === "function"
+            ) {
 
-      player.unMute();
-      player.setVolume(value);
+                player.unMute();
+                player.setVolume(volume);
 
-    }
+            }
 
-    if (value === 0) {
+            if (volume === 0) {
 
-      isMuted = true;
+                isMuted = true;
 
-      updateVolumeIcon("mute");
+                setVolumeIcon("mute");
 
-    } else {
+            } else {
 
-      isMuted = false;
+                isMuted = false;
 
-      if (value < 50) {
-        updateVolumeIcon("low");
-      } else {
-        updateVolumeIcon("high");
-      }
+                if (volume < 50) {
+                    setVolumeIcon("low");
+                } else {
+                    setVolumeIcon("high");
+                }
 
-    }
+            }
 
-  });
+        }
+    );
 
 }
 
@@ -797,50 +1003,58 @@ if (volumeSlider) {
 
 if (muteBtn) {
 
-  muteBtn.addEventListener("click", () => {
+    muteBtn.addEventListener(
+        "click",
+        () => {
 
-    if (!player) return;
+            if (!player) return;
 
-    if (isMuted) {
+            if (isMuted) {
 
-      const volume =
-        Number(preMuteVolume) || 80;
+                const volume =
+                    Number(preMuteVolume) || DEFAULT_VOLUME;
 
-      player.unMute();
-      player.setVolume(volume);
+                player.unMute();
+                player.setVolume(volume);
 
-      if (volumeSlider) {
-        volumeSlider.value = volume;
-      }
+                if (volumeSlider) {
+                    volumeSlider.value =
+                        volume;
+                }
 
-      isMuted = false;
+                isMuted = false;
 
-      if (volume < 50) {
-        updateVolumeIcon("low");
-      } else {
-        updateVolumeIcon("high");
-      }
+                setVolumeIcon(
+                    volume < 50
+                        ? "low"
+                        : "high"
+                );
 
-    } else {
+            } else {
 
-      if (volumeSlider) {
-        preMuteVolume =
-          Number(volumeSlider.value) || 80;
-      }
+                if (volumeSlider) {
 
-      player.mute();
+                    preMuteVolume =
+                        Number(
+                            volumeSlider.value
+                        ) || DEFAULT_VOLUME;
 
-      if (volumeSlider) {
-        volumeSlider.value = 0;
-      }
+                }
 
-      isMuted = true;
+                player.mute();
 
-      updateVolumeIcon("mute");
+                if (volumeSlider) {
+                    volumeSlider.value = 0;
+                }
 
-    }
+                isMuted = true;
 
-  });
+                setVolumeIcon("mute");
+
+            }
+
+        }
+    );
 
 }
 
@@ -849,31 +1063,31 @@ if (muteBtn) {
    VOLUME ICON
    ========================================================= */
 
-function updateVolumeIcon(type) {
+function setVolumeIcon(type) {
 
-  if (!muteBtn) return;
+    if (!muteBtn) return;
 
-  const icon =
-    muteBtn.querySelector("i");
+    const icon =
+        muteBtn.querySelector("i");
 
-  if (!icon) return;
+    if (!icon) return;
 
-  if (type === "mute") {
+    if (type === "mute") {
 
-    icon.className =
-      "fas fa-volume-mute";
+        icon.className =
+            "fas fa-volume-mute";
 
-  } else if (type === "low") {
+    } else if (type === "low") {
 
-    icon.className =
-      "fas fa-volume-down";
+        icon.className =
+            "fas fa-volume-down";
 
-  } else {
+    } else {
 
-    icon.className =
-      "fas fa-volume-up";
+        icon.className =
+            "fas fa-volume-up";
 
-  }
+    }
 
 }
 
@@ -882,145 +1096,157 @@ function updateVolumeIcon(type) {
    SEARCH
    ========================================================= */
 
-if (
-  searchInput &&
-  searchResults
-) {
+function searchRaags(query) {
 
-  searchInput.addEventListener(
-    "input",
-    (event) => {
+    if (!searchResults) return;
 
-      const query =
-        event.target.value
-          .toLowerCase()
-          .trim();
+    searchResults.innerHTML = "";
 
-      searchResults.innerHTML = "";
-
-      if (!query) {
+    if (!query) {
 
         searchResults.style.display =
-          "none";
+            "none";
 
         return;
+    }
 
-      }
-
-      const matches =
+    const results =
         raagData
-          .map((item, index) => ({
-            ...item,
-            index
-          }))
-          .filter((item) => {
+            .map((raag, index) => ({
+                ...raag,
+                index
+            }))
+            .filter((raag) => {
 
-            const searchable =
-              `${item.name} ${item.time} ${item.desc}`
-                .toLowerCase();
+                const text =
+                    [
+                        raag.name,
+                        raag.time,
+                        raag.desc
+                    ]
+                    .join(" ")
+                    .toLowerCase();
 
-            return searchable.includes(query);
+                return text.includes(query);
 
-          });
+            });
 
 
-      if (!matches.length) {
+    if (!results.length) {
 
         const li =
-          document.createElement("li");
+            document.createElement("li");
 
         li.textContent =
-          "No matching Raag found";
+            "No matching Raag found";
 
         li.style.cursor =
-          "default";
+            "default";
 
         li.style.opacity =
-          "0.65";
+            "0.65";
 
         searchResults.appendChild(li);
 
-      } else {
+    } else {
 
-        matches.forEach((item) => {
+        results.forEach((raag) => {
 
-          const li =
-            document.createElement("li");
+            const li =
+                document.createElement("li");
 
-          const strong =
-            document.createElement("strong");
+            const strong =
+                document.createElement("strong");
 
-          strong.textContent =
-            item.name;
+            strong.textContent =
+                raag.name;
 
-          const small =
-            document.createElement("span");
+            const info =
+                document.createElement("span");
 
-          const firstLine =
-            item.desc
-              .split("\n")[0];
+            info.textContent =
+                `${raag.time} • ${raag.desc.split("\n")[0]}`;
 
-          small.textContent =
-            `${item.time} • ${firstLine}`;
+            info.style.display =
+                "block";
 
-          small.style.display =
-            "block";
+            info.style.fontSize =
+                "11px";
 
-          small.style.fontSize =
-            "11px";
+            info.style.opacity =
+                "0.7";
 
-          small.style.opacity =
-            "0.7";
+            li.appendChild(strong);
+            li.appendChild(info);
 
-          li.appendChild(strong);
-          li.appendChild(small);
+            li.addEventListener(
+                "click",
+                () => {
 
-          li.addEventListener(
-            "click",
-            () => {
+                    playRaag(raag.index);
 
-              playRaag(item.index);
+                    if (searchInput) {
+                        searchInput.value = "";
+                    }
 
-              searchInput.value =
-                "";
+                    searchResults.style.display =
+                        "none";
 
-              searchResults.style.display =
-                "none";
+                }
+            );
 
-            }
-          );
-
-          searchResults.appendChild(li);
+            searchResults.appendChild(li);
 
         });
 
-      }
-
-      searchResults.style.display =
-        "block";
-
     }
-  );
+
+    searchResults.style.display =
+        "block";
+}
 
 
-  document.addEventListener(
+if (searchInput) {
+
+    searchInput.addEventListener(
+        "input",
+        (event) => {
+
+            const query =
+                event.target.value
+                    .toLowerCase()
+                    .trim();
+
+            searchRaags(query);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SEARCH CLOSE
+   ========================================================= */
+
+document.addEventListener(
     "click",
     (event) => {
 
-      if (
-        !searchInput.contains(event.target) &&
-        !searchResults.contains(event.target)
-      ) {
+        if (
+            searchInput &&
+            searchResults &&
+            !searchInput.contains(event.target) &&
+            !searchResults.contains(event.target)
+        ) {
 
-        searchResults.style.display =
-          "none";
+            searchResults.style.display =
+                "none";
 
-      }
+        }
 
     }
-  );
-
-}
+);
 
 
 /* =========================================================
@@ -1029,192 +1255,171 @@ if (
 
 function playRaag(index) {
 
-  if (
-    !player ||
-    typeof player.playVideoAt !== "function"
-  ) {
-    return;
-  }
+    if (
+        !youtubeReady ||
+        !player ||
+        typeof player.playVideoAt !== "function"
+    ) {
+        return;
+    }
 
-  if (
-    index < 0 ||
-    index >= raagData.length
-  ) {
-    return;
-  }
+    if (
+        index < 0 ||
+        index >= raagData.length
+    ) {
+        return;
+    }
 
-  /*
-    Update UI immediately.
-    Then tell YouTube to play the exact playlist index.
-  */
+    /*
+     * Update UI first so the user immediately
+     * sees the selected Raag.
+     */
 
-  updateTrackInfoForIndex(index);
+    setRaag(index);
 
-  player.playVideoAt(index);
+    lastKnownIndex = index;
 
-  setTimeout(() => {
-    updateTrackInfo();
-  }, 700);
+    try {
+
+        player.playVideoAt(index);
+
+    } catch (error) {
+
+        console.error(
+            "RAAGLY: Could not play selected Raag.",
+            error
+        );
+
+    }
+
+    setTimeout(() => {
+
+        syncCurrentTrack();
+
+    }, 700);
 
 }
 
 
 /* =========================================================
-   IMMEDIATE UI UPDATE FOR SEARCH
+   YOUTUBE ERRORS
    ========================================================= */
 
-function updateTrackInfoForIndex(index) {
+function handlePlayerError(event) {
 
-  const data =
-    raagData[index];
+    console.error(
+        "RAAGLY YouTube Error:",
+        event.data
+    );
 
-  if (!data) return;
+    /*
+     * Don't break the whole player.
+     */
 
-  if (raagName) {
-    raagName.textContent =
-      data.name;
-  }
-
-  if (raagTime) {
-    raagTime.textContent =
-      data.time;
-  }
-
-  if (raagDesc) {
-    raagDesc.textContent =
-      data.desc;
-  }
-
-  if (body) {
-    body.style.background =
-      data.bgColor;
-  }
+    updatePlayIcon(false);
 
 }
 
 
 /* =========================================================
-   YOUTUBE ERROR
-   ========================================================= */
-
-function onPlayerError(event) {
-
-  console.warn(
-    "YouTube Player Error:",
-    event.data
-  );
-
-}
-
-
-/* =========================================================
-   INITIAL DEFAULT UI
-   ========================================================= */
-
-function setInitialTrack() {
-
-  const data =
-    raagData[0];
-
-  if (!data) return;
-
-  if (raagName) {
-    raagName.textContent =
-      data.name;
-  }
-
-  if (raagTime) {
-    raagTime.textContent =
-      data.time;
-  }
-
-  if (raagDesc) {
-    raagDesc.textContent =
-      data.desc;
-  }
-
-  if (body) {
-    body.style.background =
-      data.bgColor;
-  }
-
-}
-
-setInitialTrack();
-
-
-/* =========================================================
-   OPTIONAL KEYBOARD CONTROLS
+   KEYBOARD CONTROLS
    ========================================================= */
 
 document.addEventListener(
-  "keydown",
-  (event) => {
+    "keydown",
+    (event) => {
 
-    /*
-      Don't hijack typing inside search.
-    */
+        /*
+         * Don't interfere with search input.
+         */
 
-    if (
-      event.target.tagName === "INPUT" ||
-      event.target.tagName === "TEXTAREA"
-    ) {
-      return;
+        if (
+            event.target &&
+            (
+                event.target.tagName === "INPUT" ||
+                event.target.tagName === "TEXTAREA"
+            )
+        ) {
+            return;
+        }
+
+
+        /* Space = Play / Pause */
+
+        if (event.code === "Space") {
+
+            event.preventDefault();
+
+            togglePlay();
+
+        }
+
+
+        /* Arrow Right = +5 sec */
+
+        if (event.code === "ArrowRight") {
+
+            if (
+                player &&
+                typeof player.getCurrentTime === "function" &&
+                typeof player.seekTo === "function"
+            ) {
+
+                const current =
+                    player.getCurrentTime();
+
+                player.seekTo(
+                    current + 5,
+                    true
+                );
+
+            }
+
+        }
+
+
+        /* Arrow Left = -5 sec */
+
+        if (event.code === "ArrowLeft") {
+
+            if (
+                player &&
+                typeof player.getCurrentTime === "function" &&
+                typeof player.seekTo === "function"
+            ) {
+
+                const current =
+                    player.getCurrentTime();
+
+                player.seekTo(
+                    Math.max(0, current - 5),
+                    true
+                );
+
+            }
+
+        }
+
     }
+);
 
-    if (event.code === "Space") {
 
-      event.preventDefault();
+/* =========================================================
+   START
+   ========================================================= */
 
-      if (!player) return;
+loadYouTubeAPI();
 
-      if (isPlaying) {
-        player.pauseVideo();
-      } else {
-        player.playVideo();
-      }
 
-    }
+/* =========================================================
+   DEBUG INFO
+   ========================================================= */
 
-    if (event.code === "ArrowRight") {
+console.log(
+    `RAAGLY loaded — ${raagData.length} tracks mapped.`
+);
 
-      if (
-        player &&
-        player.getCurrentTime &&
-        player.getDuration
-      ) {
-
-        const nextTime =
-          Math.min(
-            player.getCurrentTime() + 5,
-            player.getDuration()
-          );
-
-        player.seekTo(nextTime, true);
-
-      }
-
-    }
-
-    if (event.code === "ArrowLeft") {
-
-      if (
-        player &&
-        player.getCurrentTime
-      ) {
-
-        const previousTime =
-          Math.max(
-            player.getCurrentTime() - 5,
-            0
-          );
-
-        player.seekTo(previousTime, true);
-
-      }
-
-    }
-
-  }
+console.log(
+    `Playlist ID: ${PLAYLIST_ID}`
 );
 ```
