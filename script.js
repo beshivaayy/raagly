@@ -1,329 +1,302 @@
-```javascript
 /* =========================================================
-   RAAGLY
-   Premium Music Player
-========================================================= */
+   RAAGLY — MAIN JAVASCRIPT
+   ========================================================= */
 
 
 /* =========================================================
-   PLAYLIST
-========================================================= */
+   YOUTUBE PLAYLIST
+   ========================================================= */
 
 const playlistId = "PLJRipbfj__b0";
+
+let player = null;
+
+let isPlaying = false;
+let isMuted = false;
+
+let progressTimer = null;
+
+let currentIndex = 0;
+
+let preMuteVolume = 75;
+
+let apiReady = false;
 
 
 /* =========================================================
    RAAG DATA
-========================================================= */
+   ========================================================= */
 
 const raagData = [
 
     {
         name: "Raag Khamaj",
-        subtitle: "Warmth • Ease • Evening",
-        gradient: "linear-gradient(135deg,#86a86d,#183d37)",
-        desc:
-            "🌿 Physical wellness association: traditionally linked with digestive ease.\n" +
-            "🧘 Listening mood: warm, soothing and emotionally gentle."
+        time: "Evening",
+        categories: ["health", "mind"],
+        accent: "#78ffd6",
+        desc: "🌿 Physical Health: Traditionally associated with digestive ease and emotional relaxation.\n🧘 Mind: A gentle, soothing mood for unwinding.",
+        short: "Gentle • Soothing • Evening"
     },
 
     {
         name: "Raag Pilu",
-        subtitle: "Gentle Joy • Lightness",
-        gradient: "linear-gradient(135deg,#d7a84c,#743b25)",
-        desc:
-            "🌿 Traditional association: vitality and restorative listening.\n" +
-            "🧘 Listening mood: gentle joy and lightheartedness."
+        time: "Afternoon / Evening",
+        categories: ["health", "mind"],
+        accent: "#f6a65b",
+        desc: "🌿 Traditionally associated with vitality and emotional warmth.\n🧘 Mind: Brings a gentle, playful and lighthearted atmosphere.",
+        short: "Warm • Playful • Joyful"
     },
 
     {
         name: "Raag Malkauns",
-        subtitle: "Depth • Stillness • Night",
-        gradient: "linear-gradient(135deg,#1a1027,#6d2834)",
-        desc:
-            "🌿 Traditional wellness association: deep breathing and restorative calm.\n" +
-            "🧘 Listening mood: meditative focus and inner strength."
+        time: "Late Night",
+        categories: ["mind", "health"],
+        accent: "#a54b63",
+        desc: "🌙 Deep nocturnal character for meditation and inward attention.\n🧘 Mind: Encourages stillness, depth and contemplative focus.",
+        short: "Deep • Meditative • Powerful"
     },
 
     {
         name: "Raag Lalit",
-        subtitle: "Dawn • Awakening • Reflection",
-        gradient: "linear-gradient(135deg,#d99f75,#432c42)",
-        desc:
-            "🌿 Traditionally enjoyed during quiet early-morning listening.\n" +
-            "🌅 Listening mood: reflective, awakening and spacious."
+        time: "Early Dawn",
+        categories: ["mind", "health"],
+        accent: "#fcb69f",
+        desc: "🌅 A dawn Raag with a delicate and contemplative character.\n🧘 Mind: Suits quiet morning reflection and awakening.",
+        short: "Dawn • Delicate • Reflective"
     },
 
     {
         name: "Raag Bhoop",
-        subtitle: "Peace • Balance • Clarity",
-        gradient: "linear-gradient(135deg,#5c9d85,#213b58)",
-        desc:
-            "🌿 Traditionally associated with calm and balanced listening.\n" +
-            "🧘 Listening mood: tranquility and mental composure."
+        time: "Evening",
+        categories: ["mind", "health"],
+        accent: "#84fab0",
+        desc: "🌿 Traditionally associated with serenity and balance.\n🧘 Mind: Creates an open, peaceful and composed atmosphere.",
+        short: "Peaceful • Open • Balanced"
     },
 
     {
         name: "Raag Bhairavi",
-        subtitle: "Release • Reflection • Stillness",
-        gradient: "linear-gradient(135deg,#287f89,#24134d)",
-        desc:
-            "🌿 A beloved Raag for reflective and restorative listening.\n" +
-            "🧘 Listening mood: emotional release and quiet introspection."
+        time: "Morning / Closing",
+        categories: ["mind", "health"],
+        accent: "#6b7cff",
+        desc: "🌿 A deeply expressive Raag often heard toward the close of musical sessions.\n🧘 Mind: Supports reflection, surrender and emotional release.",
+        short: "Expressive • Reflective • Deep"
     },
 
     {
         name: "Raag Asavari",
-        subtitle: "Grounding • Recovery",
-        gradient: "linear-gradient(135deg,#8770a8,#416b94)",
-        desc:
-            "🌿 Traditionally used for contemplative listening.\n" +
-            "🧘 Listening mood: grounded, introspective and restorative."
+        time: "Late Morning",
+        categories: ["health", "career"],
+        accent: "#a78bfa",
+        desc: "🌿 A grounded Raag with a contemplative character.\n✨ Listening can create a sense of calm and inward attention.",
+        short: "Grounded • Calm • Reflective"
     },
 
     {
         name: "Raag Todi",
-        subtitle: "Depth • Emotion • Morning",
-        gradient: "linear-gradient(135deg,#9d6b87,#4c557f)",
-        desc:
-            "🌿 Traditionally associated with thoughtful morning listening.\n" +
-            "🧘 Listening mood: emotional depth and concentration."
+        time: "Late Morning",
+        categories: ["mind", "health"],
+        accent: "#d8a4d6",
+        desc: "🧘 An introspective Raag suited to focused listening.\n🌿 Its serious character can accompany quiet reflection.",
+        short: "Introspective • Serious • Focused"
     },
 
     {
         name: "Raag Jaunpuri",
-        subtitle: "Reflection • Stability",
-        gradient: "linear-gradient(135deg,#3278ad,#164c5e)",
-        desc:
-            "🌿 Traditionally appreciated for reflective listening.\n" +
-            "🧘 Listening mood: calm focus and emotional steadiness."
+        time: "Late Morning",
+        categories: ["health", "career"],
+        accent: "#00d9ff",
+        desc: "🌿 A graceful and emotionally expressive Raag.\n✨ Useful for creating a composed atmosphere during focused listening.",
+        short: "Graceful • Expressive • Calm"
     },
 
     {
         name: "Raag Kirwani",
-        subtitle: "Emotion • Flow • Introspection",
-        gradient: "linear-gradient(135deg,#369d75,#19585d)",
-        desc:
-            "🌿 Traditionally enjoyed during introspective listening.\n" +
-            "🧘 Listening mood: emotional depth and endurance."
+        time: "Evening",
+        categories: ["mind", "career"],
+        accent: "#43e97b",
+        desc: "🧘 A beautiful evening mood with emotional depth.\n✨ Suitable for quiet concentration and reflective listening.",
+        short: "Emotional • Evening • Focus"
     },
 
     {
         name: "Raag Neelambri",
-        subtitle: "Rest • Night • Softness",
-        gradient: "linear-gradient(135deg,#a65372,#675b38)",
-        desc:
-            "🌿 Traditionally associated with quiet evening listening.\n" +
-            "🧘 Listening mood: softness, rest and emotional ease."
+        time: "Night",
+        categories: ["mind", "health"],
+        accent: "#fa709a",
+        desc: "🌙 A gentle night-time character traditionally associated with lullaby-like moods.\n🧘 Creates a soft and restful listening environment.",
+        short: "Night • Gentle • Restful"
     },
 
     {
         name: "Raag Bhairav",
-        subtitle: "Dawn • Discipline • Focus",
-        gradient: "linear-gradient(135deg,#a46d70,#47364a)",
-        desc:
-            "🌿 Traditionally enjoyed during early morning practice.\n" +
-            "🌅 Listening mood: focused, grounded and contemplative."
+        time: "Early Morning",
+        categories: ["health", "mind"],
+        accent: "#ff9a9e",
+        desc: "🌅 A powerful morning Raag with a serious, meditative character.\n🧘 Excellent for starting a quiet and focused morning listening session.",
+        short: "Morning • Powerful • Meditative"
     },
 
     {
         name: "Raag Darbari",
-        subtitle: "Majesty • Depth • Night",
-        gradient: "linear-gradient(135deg,#102840,#354f68)",
-        desc:
-            "🌿 A deep classical listening experience.\n" +
-            "🧘 Listening mood: dignity, gravity and emotional depth."
+        time: "Late Night",
+        categories: ["mind", "relationships"],
+        accent: "#537895",
+        desc: "🌙 Deep, majestic and introspective.\n🧘 Its serious character makes it suitable for quiet reflection and emotional depth.",
+        short: "Majestic • Deep • Introspective"
     },
 
     {
         name: "Raag Gandharva",
-        subtitle: "Expression • Learning • Flow",
-        gradient: "linear-gradient(135deg,#6586ad,#3d6572)",
-        desc:
-            "🌿 Traditionally connected with expressive musical listening.\n" +
-            "🧘 Listening mood: communication, creativity and flow."
+        time: "Day",
+        categories: ["career", "mind"],
+        accent: "#a1c4fd",
+        desc: "✨ Associated with expressive musicality and communication.\n💼 A thoughtful listening choice during study and creative work.",
+        short: "Creative • Expressive • Bright"
     },
 
     {
         name: "Raag Kalyan",
-        subtitle: "Expansion • Light • Evening",
-        gradient: "linear-gradient(135deg,#a14c56,#774c38)",
-        desc:
-            "🌿 Traditionally associated with expansive evening listening.\n" +
-            "🧘 Listening mood: openness, warmth and clarity."
+        time: "Evening",
+        categories: ["relationships", "mind"],
+        accent: "#ff7096",
+        desc: "🧘 A luminous evening character associated with expansiveness.\n🤝 Creates a graceful atmosphere for connection and reflection.",
+        short: "Luminous • Graceful • Open"
     },
 
     {
         name: "Raag Poorvi",
-        subtitle: "Mystery • Evening • Reflection",
-        gradient: "linear-gradient(135deg,#9b382b,#8d681c)",
-        desc:
-            "🌿 Traditionally enjoyed during reflective evening sessions.\n" +
-            "🧘 Listening mood: wisdom, depth and contemplation."
+        time: "Evening",
+        categories: ["career", "mind"],
+        accent: "#f5af19",
+        desc: "✨ A serious evening Raag with a distinctive contemplative mood.\n💼 Works well as background music for thoughtful work.",
+        short: "Serious • Evening • Focus"
     },
 
     {
         name: "Raag Jay Jaywanti",
-        subtitle: "Energy • Expression • Renewal",
-        gradient: "linear-gradient(135deg,#7b342e,#214d83)",
-        desc:
-            "🌿 Traditionally associated with expressive and uplifting listening.\n" +
-            "🧘 Listening mood: renewed energy and emotional movement."
+        time: "Evening",
+        categories: ["mind", "health"],
+        accent: "#568cff",
+        desc: "🌿 Expressive and emotionally nuanced.\n🧘 Suitable for moments when you want a balance between tenderness and energy.",
+        short: "Tender • Expressive • Balanced"
     },
 
     {
         name: "Raag Madhuwanti",
-        subtitle: "Dusk • Tenderness • Peace",
-        gradient: "linear-gradient(135deg,#298d7c,#4c75a0)",
-        desc:
-            "🧘 Listening mood: gentle, soothing and emotionally spacious.\n" +
-            "✨ Particularly beautiful for quiet dusk listening."
+        time: "Afternoon / Evening",
+        categories: ["mind", "relationships"],
+        accent: "#72aff3",
+        desc: "🧘 A soft and romantic character with a soothing emotional quality.\n✨ Ideal for quiet evening listening.",
+        short: "Soothing • Romantic • Soft"
     },
 
     {
         name: "Raag Shudh",
-        subtitle: "Clarity • Simplicity • Warmth",
-        gradient: "linear-gradient(135deg,#b28c4a,#80513e)",
-        desc:
-            "🧘 Listening mood: simplicity, motivation and emotional warmth.\n" +
-            "🤝 Traditionally associated with harmonious listening."
+        time: "Day",
+        categories: ["mind", "relationships"],
+        accent: "#fda085",
+        desc: "✨ A bright and clean musical character.\n🤝 Suitable for creating a warm, positive atmosphere.",
+        short: "Bright • Clean • Warm"
     },
 
     {
         name: "Raag Komal",
-        subtitle: "Tenderness • Emotion • Healing",
-        gradient: "linear-gradient(135deg,#765b99,#865d7c)",
-        desc:
-            "🧘 Listening mood: tenderness, emotional reflection and softness.\n" +
-            "✨ Best experienced slowly and without distraction."
+        time: "Evening",
+        categories: ["mind", "relationships"],
+        accent: "#b59be8",
+        desc: "🧘 Soft and emotionally sensitive in character.\n🌙 Suitable for quiet introspection and emotional processing.",
+        short: "Soft • Sensitive • Introspective"
     },
 
     {
         name: "Raag Yaman",
-        subtitle: "Peace • Evening • Expansion",
-        gradient: "linear-gradient(135deg,#936e78,#63516e)",
-        desc:
-            "🧘 Listening mood: peace, openness and emotional balance.\n" +
-            "🌙 Traditionally loved for evening listening."
+        time: "Evening",
+        categories: ["mind", "relationships"],
+        accent: "#e9b7ff",
+        desc: "✨ One of the most serene evening moods in Hindustani music.\n🧘 Creates an expansive, peaceful listening environment.",
+        short: "Serene • Expansive • Peaceful"
     },
 
     {
         name: "Raag Hansdhawani",
-        subtitle: "Joy • Brightness • Flow",
-        gradient: "linear-gradient(135deg,#9e646b,#765f55)",
-        desc:
-            "🧘 Listening mood: brightness, inner stillness and joy.\n" +
-            "✨ A graceful choice for uplifting listening."
+        time: "Evening",
+        categories: ["mind", "relationships"],
+        accent: "#ffb4cf",
+        desc: "✨ Bright, elegant and uplifting in character.\n🤝 Works beautifully for positive and joyful listening.",
+        short: "Bright • Joyful • Elegant"
     },
 
     {
         name: "Raag Shivranjani",
-        subtitle: "Memory • Emotion • Introspection",
-        gradient: "linear-gradient(135deg,#9c334c,#8b5545)",
-        desc:
-            "🧠 Traditionally appreciated for reflective listening and concentration.\n" +
-            "🧘 Listening mood: melancholic, intimate and introspective."
+        time: "Evening / Night",
+        categories: ["mind", "health"],
+        accent: "#ff5279",
+        desc: "🧠 A deeply expressive and melancholic character.\n🧘 Suitable for introspective listening and emotional release.",
+        short: "Melancholic • Deep • Expressive"
     },
 
     {
         name: "Raag Nat Bhairav",
-        subtitle: "Morning • Balance • Resolve",
-        gradient: "linear-gradient(135deg,#a13e2e,#83631d)",
-        desc:
-            "💼 Traditionally associated with disciplined morning listening.\n" +
-            "🤝 Listening mood: stability, resolve and balance."
+        time: "Morning",
+        categories: ["career", "relationships"],
+        accent: "#f59e0b",
+        desc: "🌅 A morning Raag combining strength with introspection.\n✨ Suitable for beginning the day with focused listening.",
+        short: "Morning • Strong • Focused"
     },
 
     {
         name: "Raag Brindabani Sarang",
-        subtitle: "Nature • Affection • Afternoon",
-        gradient: "linear-gradient(135deg,#1c5976,#518d84)",
-        desc:
-            "🌿 A refreshing Raag often associated with nature and openness.\n" +
-            "🧘 Listening mood: affection, freshness and ease."
+        time: "Afternoon",
+        categories: ["relationships", "mind"],
+        accent: "#64d4c8",
+        desc: "☀️ A bright afternoon Raag with a graceful and devotional atmosphere.\n🤝 Creates a warm, open emotional mood.",
+        short: "Afternoon • Graceful • Warm"
     },
 
     {
         name: "Raag Tanpura",
-        subtitle: "Drone • Foundation • Stillness",
-        gradient: "linear-gradient(135deg,#243f57,#453d63)",
-        desc:
-            "🎵 A foundational drone experience for deep listening.\n" +
-            "🧘 Listening mood: grounding, continuity and stillness."
+        time: "Anytime",
+        categories: ["career", "relationships"],
+        accent: "#7c6ac9",
+        desc: "🎵 A drone-focused listening experience for grounding and concentration.\n🧘 Particularly suitable for meditation and practice.",
+        short: "Drone • Grounding • Focus"
     },
 
     {
         name: "Raag Shadbhinna",
-        subtitle: "Focus • Discipline • Depth",
-        gradient: "linear-gradient(135deg,#2b3e48,#24749a)",
-        desc:
-            "💼 Traditionally suited to focused and contemplative listening.\n" +
-            "🧘 Listening mood: discipline, concentration and respect."
+        time: "Day",
+        categories: ["career", "relationships"],
+        accent: "#26a0da",
+        desc: "✨ A distinctive classical colour for attentive listening.\n🧘 Best approached slowly, allowing the musical details to unfold.",
+        short: "Distinctive • Classical • Focus"
     }
 
 ];
 
 
 /* =========================================================
-   STATE
-========================================================= */
-
-let player = null;
-
-let isPlaying = false;
-let isMuted = false;
-let repeatCurrent = false;
-
-let progressTimer = null;
-
-let previousVolume = 75;
-
-let currentSpeed = 1;
-
-let currentIndex = 0;
-
-let apiReady = false;
-
-let toastTimer = null;
-
-
-/* =========================================================
    DOM
-========================================================= */
+   ========================================================= */
 
 const body = document.getElementById("app-body");
 
-const playerCard =
-    document.querySelector(".player-card");
+const playerCard = document.querySelector(".player-card");
 
-const raagName =
-    document.getElementById("raag-name");
+const raagName = document.getElementById("raag-name");
+const raagTime = document.getElementById("raag-time");
+const raagDesc = document.getElementById("raag-desc");
 
-const raagSubtitle =
-    document.getElementById("raag-subtitle");
+const statusText = document.getElementById("status-text");
 
-const raagTime =
-    document.getElementById("raag-time");
-
-const raagDesc =
-    document.getElementById("raag-desc");
-
-const raagNumber =
-    document.getElementById("raag-number");
-
-const playBtn =
-    document.getElementById("play");
-
-const prevBtn =
-    document.getElementById("prev");
-
-const nextBtn =
-    document.getElementById("next");
+const playBtn = document.getElementById("play");
+const prevBtn = document.getElementById("prev");
+const nextBtn = document.getElementById("next");
 
 const progressContainer =
     document.getElementById("progress-container");
 
-const progressBar =
+const progress =
     document.getElementById("progress");
 
 const progressThumb =
@@ -338,17 +311,11 @@ const durationEl =
 const volumeSlider =
     document.getElementById("volume-slider");
 
+const volumeValue =
+    document.getElementById("volume-value");
+
 const muteBtn =
     document.getElementById("mute-btn");
-
-const speedBtn =
-    document.getElementById("speed-btn");
-
-const speedMenu =
-    document.getElementById("speed-menu");
-
-const repeatBtn =
-    document.getElementById("repeat-btn");
 
 const searchInput =
     document.getElementById("search-input");
@@ -362,316 +329,286 @@ const searchResults =
 const raagGrid =
     document.getElementById("raag-grid");
 
-const statusText =
-    document.getElementById("status-text");
+const library =
+    document.getElementById("library");
 
-const toast =
-    document.getElementById("toast");
+const libraryToggle =
+    document.getElementById("library-toggle");
 
-const toastText =
-    document.getElementById("toast-text");
+const libraryClose =
+    document.getElementById("library-close");
+
+const libraryList =
+    document.getElementById("library-list");
+
+const overlay =
+    document.getElementById("overlay");
+
+const trackCounter =
+    document.getElementById("track-counter");
+
+const showAll =
+    document.getElementById("show-all");
 
 
 /* =========================================================
-   INITIAL UI
-========================================================= */
+   UTILITIES
+   ========================================================= */
 
-function renderLibrary() {
+function formatTime(seconds) {
 
-    raagGrid.innerHTML = "";
+    if (
+        !Number.isFinite(seconds) ||
+        seconds < 0
+    ) {
+        return "0:00";
+    }
 
-    raagData.forEach((raag, index) => {
+    const minutes =
+        Math.floor(seconds / 60);
 
-        const card =
-            document.createElement("article");
+    const secs =
+        Math.floor(seconds % 60);
 
-        card.className = "raag-card";
+    return `${minutes}:${secs
+        .toString()
+        .padStart(2, "0")}`;
+}
 
-        card.dataset.index = index;
 
-        card.style.setProperty(
-            "--card-gradient",
-            raag.gradient
-        );
+function getSafeIndex(index) {
 
-        card.innerHTML = `
-            <span class="card-number">
-                ${String(index + 1).padStart(2, "0")}
-            </span>
+    if (!raagData.length) {
+        return 0;
+    }
 
-            <div class="card-name">
-                ${raag.name}
-            </div>
+    return (
+        (index % raagData.length) +
+        raagData.length
+    ) % raagData.length;
+}
 
-            <span class="card-desc">
-                ${raag.subtitle}
-            </span>
-        `;
 
-        card.addEventListener(
-            "click",
-            () => selectRaag(index)
-        );
+function animateText() {
 
-        raagGrid.appendChild(card);
+    [
+        raagName,
+        raagTime,
+        raagDesc
+    ].forEach(element => {
+
+        element.classList.remove("fade-change");
+
+        void element.offsetWidth;
+
+        element.classList.add("fade-change");
+
     });
-
-    updateActiveCard();
-}
-
-
-function updateActiveCard() {
-
-    document
-        .querySelectorAll(".raag-card")
-        .forEach(card => {
-
-            card.classList.toggle(
-                "active",
-                Number(card.dataset.index) === currentIndex
-            );
-        });
 }
 
 
 /* =========================================================
-   RAAG UI
-========================================================= */
+   THEME
+   ========================================================= */
+
+function applyTheme(index) {
+
+    const data =
+        raagData[getSafeIndex(index)];
+
+    if (!data) {
+        return;
+    }
+
+    const accent = data.accent;
+
+    body.style.setProperty(
+        "--accent",
+        accent
+    );
+
+    body.style.setProperty(
+        "--glow",
+        `${accent}42`
+    );
+
+    body.style.background = `
+        radial-gradient(
+            circle at 50% 20%,
+            ${accent}18,
+            transparent 38%
+        ),
+        radial-gradient(
+            circle at 10% 90%,
+            ${accent}0d,
+            transparent 35%
+        ),
+        #08090d
+    `;
+
+    document.documentElement.style.setProperty(
+        "--accent",
+        accent
+    );
+
+    document.documentElement.style.setProperty(
+        "--glow",
+        `${accent}42`
+    );
+}
+
+
+/* =========================================================
+   TRACK INFO
+   ========================================================= */
 
 function updateTrackInfo(index = currentIndex) {
 
-    if (!raagData[index]) return;
+    currentIndex =
+        getSafeIndex(index);
 
-    currentIndex = index;
+    const data =
+        raagData[currentIndex];
 
-    const data = raagData[index];
+    if (!data) {
+        return;
+    }
 
-    raagName.classList.remove("track-change");
-    raagSubtitle.classList.remove("track-change");
+    raagName.textContent =
+        data.name;
 
-    void raagName.offsetWidth;
-
-    raagName.classList.add("track-change");
-    raagSubtitle.classList.add("track-change");
-
-    raagName.textContent = data.name;
-
-    raagSubtitle.textContent =
-        data.subtitle;
+    raagTime.textContent =
+        `${data.time} · Sound Healing Frequencies`;
 
     raagDesc.textContent =
         data.desc;
 
-    raagNumber.textContent =
-        String(index + 1).padStart(2, "0");
+    trackCounter.textContent =
+        `${String(currentIndex + 1).padStart(2, "0")} / ${String(raagData.length).padStart(2, "0")}`;
 
-    raagTime.textContent =
-        "Sound • Stillness • Listening";
+    applyTheme(currentIndex);
 
-    body.style.background = `
-        radial-gradient(
-            circle at 50% -10%,
-            ${getGradientColor(index)},
-            transparent 43%
-        ),
-        #09090d
-    `;
+    animateText();
 
-    document
-        .querySelector(".ambient-one")
-        .style.background =
-        getGradientColor(index);
-
-    document
-        .querySelector(".ambient-two")
-        .style.background =
-        getSecondaryColor(index);
-
-    updateActiveCard();
-}
-
-
-function getGradientColor(index) {
-
-    const colors = [
-        "#55785d",
-        "#9c6d36",
-        "#4e293d",
-        "#a66f63",
-        "#427568",
-        "#3e6480",
-        "#675681",
-        "#75566d",
-        "#306b8b",
-        "#287d6c",
-        "#9b5367",
-        "#86545c",
-        "#27455f",
-        "#6481a1",
-        "#8c4853",
-        "#894127",
-        "#6e302b",
-        "#328477",
-        "#9b713f",
-        "#76578e",
-        "#81616e",
-        "#95606b",
-        "#913549",
-        "#2b6980",
-        "#344d65",
-        "#344b55"
-    ];
-
-    return colors[index] || "#8b6b3f";
-}
-
-
-function getSecondaryColor(index) {
-
-    const colors = [
-        "#244c46",
-        "#5c3429",
-        "#231b48",
-        "#56334a",
-        "#223a55",
-        "#24133f",
-        "#304e73",
-        "#3c4467",
-        "#153d52",
-        "#154b45",
-        "#54442c",
-        "#372f4b",
-        "#1a2d40",
-        "#304c5b",
-        "#5e3030",
-        "#5a491c",
-        "#253c6b",
-        "#315c82",
-        "#54352d",
-        "#4a315d",
-        "#453d5b",
-        "#443344",
-        "#52253b",
-        "#204f57",
-        "#282445",
-        "#1e5d72"
-    ];
-
-    return colors[index] || "#3c305b";
+    updateActiveCards();
 }
 
 
 /* =========================================================
    YOUTUBE API
-========================================================= */
+   ========================================================= */
 
-function loadYouTubeAPI() {
+function onYouTubeIframeAPIReady() {
 
-    const tag =
-        document.createElement("script");
+    apiReady = true;
 
-    tag.src =
-        "https://www.youtube.com/iframe_api";
+    player = new YT.Player(
+        "youtube-player",
+        {
 
-    const firstScript =
-        document.getElementsByTagName("script")[0];
+            height: "1",
+            width: "1",
 
-    firstScript.parentNode.insertBefore(
-        tag,
-        firstScript
+            playerVars: {
+
+                listType: "playlist",
+
+                list: playlistId,
+
+                autoplay: 0,
+
+                controls: 0,
+
+                disablekb: 1,
+
+                playsinline: 1,
+
+                rel: 0,
+
+                modestbranding: 1
+
+            },
+
+            events: {
+
+                onReady:
+                    onPlayerReady,
+
+                onStateChange:
+                    onPlayerStateChange,
+
+                onError:
+                    onPlayerError
+
+            }
+
+        }
     );
 }
-
-
-window.onYouTubeIframeAPIReady =
-    function () {
-
-        apiReady = true;
-
-        player =
-            new YT.Player(
-                "youtube-player",
-                {
-
-                    height: "1",
-                    width: "1",
-
-                    playerVars: {
-                        listType: "playlist",
-                        list: playlistId,
-                        autoplay: 0,
-                        controls: 0,
-                        playsinline: 1,
-                        rel: 0
-                    },
-
-                    events: {
-                        onReady:
-                            onPlayerReady,
-
-                        onStateChange:
-                            onPlayerStateChange,
-
-                        onError:
-                            onPlayerError
-                    }
-                }
-            );
-    };
 
 
 function onPlayerReady() {
 
-    statusText.textContent =
-        "READY";
-
     player.setVolume(
-        previousVolume
+        Number(volumeSlider.value)
     );
 
-    setTimeout(
-        syncPlaylist,
-        900
-    );
+    setTimeout(() => {
+
+        syncPlaylistIndex();
+
+        renderEverything();
+
+    }, 1200);
+
 }
 
 
-function syncPlaylist() {
+function onPlayerError(event) {
 
-    if (!player) return;
+    console.warn(
+        "YouTube player error:",
+        event.data
+    );
 
-    try {
+    statusText.textContent =
+        "PLAYER ERROR";
+}
 
-        const index =
-            player.getPlaylistIndex();
 
-        if (
-            typeof index === "number" &&
-            index >= 0
-        ) {
-            updateTrackInfo(
-                index %
-                raagData.length
-            );
-        }
+function syncPlaylistIndex() {
 
-    } catch (error) {
-
-        console.log(
-            "Playlist sync:",
-            error
-        );
+    if (
+        !player ||
+        typeof player.getPlaylistIndex !== "function"
+    ) {
+        return;
     }
+
+    const index =
+        player.getPlaylistIndex();
+
+    if (
+        typeof index === "number" &&
+        index >= 0
+    ) {
+        currentIndex =
+            getSafeIndex(index);
+    }
+
+    updateTrackInfo(currentIndex);
 }
 
 
 /* =========================================================
    PLAYER STATE
-========================================================= */
+   ========================================================= */
 
 function onPlayerStateChange(event) {
 
-    if (!window.YT) return;
+    if (!window.YT) {
+        return;
+    }
 
     switch (event.data) {
 
@@ -679,9 +616,7 @@ function onPlayerStateChange(event) {
 
             isPlaying = true;
 
-            playerCard.classList.add(
-                "playing"
-            );
+            playerCard.classList.add("playing");
 
             playBtn.innerHTML =
                 '<i class="fa-solid fa-pause"></i>';
@@ -692,9 +627,9 @@ function onPlayerStateChange(event) {
             );
 
             statusText.textContent =
-                "PLAYING";
+                "NOW PLAYING";
 
-            syncCurrentTrack();
+            syncPlaylistIndex();
 
             startProgressTimer();
 
@@ -705,12 +640,15 @@ function onPlayerStateChange(event) {
 
             isPlaying = false;
 
-            playerCard.classList.remove(
-                "playing"
-            );
+            playerCard.classList.remove("playing");
 
             playBtn.innerHTML =
                 '<i class="fa-solid fa-play"></i>';
+
+            playBtn.setAttribute(
+                "aria-label",
+                "Play"
+            );
 
             statusText.textContent =
                 "PAUSED";
@@ -726,236 +664,191 @@ function onPlayerStateChange(event) {
 
             isPlaying = false;
 
-            playerCard.classList.remove(
-                "playing"
-            );
+            playerCard.classList.remove("playing");
+
+            playBtn.innerHTML =
+                '<i class="fa-solid fa-play"></i>';
+
+            statusText.textContent =
+                "NEXT RAAG";
 
             stopProgressTimer();
 
             updateProgress();
 
-            if (repeatCurrent) {
+            goNext();
 
-                player.seekTo(
-                    0,
-                    true
-                );
+            break;
 
-                player.playVideo();
 
-            } else {
+        case YT.PlayerState.BUFFERING:
 
-                playNext();
+            statusText.textContent =
+                "TUNING...";
 
-            }
+            break;
+
+
+        case YT.PlayerState.CUED:
+
+            statusText.textContent =
+                "READY TO LISTEN";
+
+            syncPlaylistIndex();
 
             break;
     }
 }
 
 
-function onPlayerError(event) {
-
-    statusText.textContent =
-        "UNAVAILABLE";
-
-    showToast(
-        "This track could not be played."
-    );
-
-    console.log(
-        "YouTube error:",
-        event.data
-    );
-}
-
-
-/* =========================================================
-   TRACK SYNC
-========================================================= */
-
-function syncCurrentTrack() {
-
-    if (
-        !player ||
-        typeof player.getPlaylistIndex !==
-            "function"
-    ) {
-        return;
-    }
-
-    const index =
-        player.getPlaylistIndex();
-
-    if (
-        typeof index === "number" &&
-        index >= 0
-    ) {
-
-        const safeIndex =
-            index % raagData.length;
-
-        if (safeIndex !== currentIndex) {
-
-            updateTrackInfo(
-                safeIndex
-            );
-        }
-    }
-}
-
-
 /* =========================================================
    PLAY / PAUSE
-========================================================= */
-
-function togglePlay() {
-
-    if (!player) {
-
-        showToast(
-            "Player is still loading..."
-        );
-
-        return;
-    }
-
-    if (isPlaying) {
-
-        player.pauseVideo();
-
-    } else {
-
-        player.playVideo();
-    }
-}
-
+   ========================================================= */
 
 playBtn.addEventListener(
     "click",
-    togglePlay
+    () => {
+
+        if (!player) {
+            statusText.textContent =
+                "PLAYER LOADING...";
+
+            return;
+        }
+
+        if (isPlaying) {
+
+            player.pauseVideo();
+
+        } else {
+
+            player.playVideo();
+
+        }
+
+    }
 );
 
 
 /* =========================================================
    NEXT / PREVIOUS
-========================================================= */
+   ========================================================= */
 
-function playNext() {
+function goNext() {
 
-    if (
-        !player ||
-        typeof player.nextVideo !==
-            "function"
-    ) {
+    if (!player) {
         return;
     }
 
-    player.nextVideo();
+    const playlist =
+        typeof player.getPlaylist === "function"
+            ? player.getPlaylist()
+            : null;
 
-    setTimeout(
-        syncCurrentTrack,
-        500
-    );
+    if (
+        playlist &&
+        playlist.length
+    ) {
+
+        const nextIndex =
+            getSafeIndex(currentIndex + 1);
+
+        player.playVideoAt(nextIndex);
+
+        currentIndex =
+            nextIndex;
+
+        updateTrackInfo(
+            currentIndex
+        );
+
+        return;
+    }
+
+    if (
+        typeof player.nextVideo === "function"
+    ) {
+
+        player.nextVideo();
+
+        setTimeout(
+            syncPlaylistIndex,
+            500
+        );
+
+    }
 }
 
 
-function playPrevious() {
+function goPrevious() {
 
-    if (
-        !player ||
-        typeof player.previousVideo !==
-            "function"
-    ) {
+    if (!player) {
         return;
     }
 
-    player.previousVideo();
+    const playlist =
+        typeof player.getPlaylist === "function"
+            ? player.getPlaylist()
+            : null;
 
-    setTimeout(
-        syncCurrentTrack,
-        500
-    );
+    if (
+        playlist &&
+        playlist.length
+    ) {
+
+        const previousIndex =
+            getSafeIndex(currentIndex - 1);
+
+        player.playVideoAt(
+            previousIndex
+        );
+
+        currentIndex =
+            previousIndex;
+
+        updateTrackInfo(
+            currentIndex
+        );
+
+        return;
+    }
+
+    if (
+        typeof player.previousVideo === "function"
+    ) {
+
+        player.previousVideo();
+
+        setTimeout(
+            syncPlaylistIndex,
+            500
+        );
+
+    }
 }
 
 
 nextBtn.addEventListener(
     "click",
-    playNext
+    goNext
 );
 
 
 prevBtn.addEventListener(
     "click",
-    playPrevious
+    goPrevious
 );
 
 
 /* =========================================================
-   DIRECT RAAG SELECTION
-========================================================= */
-
-function selectRaag(index) {
-
-    if (
-        index < 0 ||
-        index >= raagData.length
-    ) {
-        return;
-    }
-
-    currentIndex = index;
-
-    updateTrackInfo(index);
-
-    if (
-        player &&
-        typeof player.playVideoAt ===
-            "function"
-    ) {
-
-        player.playVideoAt(index);
-
-    } else {
-
-        showToast(
-            "Player is still loading..."
-        );
-    }
-}
-
-
-/* =========================================================
    PROGRESS
-========================================================= */
-
-function formatTime(seconds) {
-
-    if (
-        !Number.isFinite(seconds) ||
-        seconds < 0
-    ) {
-        return "0:00";
-    }
-
-    const minutes =
-        Math.floor(seconds / 60);
-
-    const secondsPart =
-        Math.floor(seconds % 60);
-
-    return `${minutes}:${String(
-        secondsPart
-    ).padStart(2, "0")}`;
-}
-
+   ========================================================= */
 
 function updateProgress() {
 
     if (
         !player ||
-        typeof player.getCurrentTime !==
-            "function"
+        typeof player.getCurrentTime !== "function"
     ) {
         return;
     }
@@ -966,28 +859,37 @@ function updateProgress() {
     const duration =
         player.getDuration() || 0;
 
-    if (duration <= 0) return;
-
-    const percent =
-        Math.min(
-            100,
-            Math.max(
-                0,
-                (current / duration) * 100
-            )
-        );
-
-    progressBar.style.width =
-        `${percent}%`;
-
-    progressThumb.style.left =
-        `${percent}%`;
-
     currentTimeEl.textContent =
         formatTime(current);
 
     durationEl.textContent =
         formatTime(duration);
+
+    if (duration > 0) {
+
+        const percentage =
+            Math.min(
+                100,
+                Math.max(
+                    0,
+                    (current / duration) * 100
+                )
+            );
+
+        progress.style.width =
+            `${percentage}%`;
+
+        progressThumb.style.left =
+            `${percentage}%`;
+
+    } else {
+
+        progress.style.width =
+            "0%";
+
+        progressThumb.style.left =
+            "0%";
+    }
 }
 
 
@@ -1014,113 +916,116 @@ function stopProgressTimer() {
         );
 
         progressTimer = null;
+
     }
 }
 
 
-/* =========================================================
-   SEEK
-========================================================= */
+function seekFromPointer(event) {
+
+    if (
+        !player ||
+        typeof player.getDuration !== "function"
+    ) {
+        return;
+    }
+
+    const duration =
+        player.getDuration();
+
+    if (!duration) {
+        return;
+    }
+
+    const rect =
+        progressContainer.getBoundingClientRect();
+
+    const x =
+        event.clientX -
+        rect.left;
+
+    const percentage =
+        Math.min(
+            1,
+            Math.max(
+                0,
+                x / rect.width
+            )
+        );
+
+    const time =
+        percentage * duration;
+
+    player.seekTo(
+        time,
+        true
+    );
+
+    updateProgress();
+}
+
 
 progressContainer.addEventListener(
     "click",
-    event => {
-
-        if (
-            !player ||
-            typeof player.getDuration !==
-                "function"
-        ) {
-            return;
-        }
-
-        const duration =
-            player.getDuration();
-
-        if (!duration) return;
-
-        const rect =
-            progressContainer
-                .getBoundingClientRect();
-
-        const x =
-            event.clientX -
-            rect.left;
-
-        const percentage =
-            Math.max(
-                0,
-                Math.min(
-                    1,
-                    x / rect.width
-                )
-            );
-
-        player.seekTo(
-            duration * percentage,
-            true
-        );
-
-        updateProgress();
-    }
+    seekFromPointer
 );
 
 
 /* =========================================================
    VOLUME
-========================================================= */
+   ========================================================= */
 
 volumeSlider.addEventListener(
     "input",
     event => {
 
-        const value =
+        const volume =
             Number(event.target.value);
 
-        if (
-            player &&
-            typeof player.setVolume ===
-                "function"
-        ) {
+        volumeValue.textContent =
+            volume;
 
-            player.setVolume(value);
+        if (player) {
+
+            player.unMute();
+
+            player.setVolume(
+                volume
+            );
+
         }
 
-        if (value === 0) {
+        isMuted =
+            volume === 0;
 
-            isMuted = true;
+        updateVolumeIcon(
+            volume
+        );
 
-            muteBtn.innerHTML =
-                '<i class="fa-solid fa-volume-xmark"></i>';
-
-        } else {
-
-            isMuted = false;
-
-            previousVolume = value;
-
-            updateVolumeIcon(value);
-        }
     }
 );
 
 
-function updateVolumeIcon(value) {
+function updateVolumeIcon(volume) {
 
-    if (value === 0) {
+    const icon =
+        muteBtn.querySelector("i");
 
-        muteBtn.innerHTML =
-            '<i class="fa-solid fa-volume-xmark"></i>';
+    if (volume === 0) {
 
-    } else if (value < 50) {
+        icon.className =
+            "fa-solid fa-volume-xmark";
 
-        muteBtn.innerHTML =
-            '<i class="fa-solid fa-volume-low"></i>';
+    } else if (volume < 45) {
+
+        icon.className =
+            "fa-solid fa-volume-low";
 
     } else {
 
-        muteBtn.innerHTML =
-            '<i class="fa-solid fa-volume-high"></i>';
+        icon.className =
+            "fa-solid fa-volume-high";
+
     }
 }
 
@@ -1129,243 +1034,227 @@ muteBtn.addEventListener(
     "click",
     () => {
 
-        if (!player) return;
+        if (!player) {
+            return;
+        }
 
         if (isMuted) {
+
+            isMuted = false;
 
             player.unMute();
 
             player.setVolume(
-                previousVolume || 75
+                preMuteVolume || 75
             );
 
             volumeSlider.value =
-                previousVolume || 75;
+                preMuteVolume || 75;
 
-            isMuted = false;
+            volumeValue.textContent =
+                preMuteVolume || 75;
 
             updateVolumeIcon(
-                previousVolume || 75
+                preMuteVolume || 75
             );
 
         } else {
 
-            previousVolume =
-                Number(
-                    volumeSlider.value
-                ) || 75;
-
-            player.mute();
-
-            volumeSlider.value = 0;
+            preMuteVolume =
+                Number(volumeSlider.value) || 75;
 
             isMuted = true;
 
+            player.mute();
+
+            volumeSlider.value =
+                0;
+
+            volumeValue.textContent =
+                "0";
+
             updateVolumeIcon(0);
+
         }
+
     }
 );
 
 
 /* =========================================================
-   PLAYBACK SPEED
-========================================================= */
+   PLAY SPECIFIC RAAG
+   ========================================================= */
 
-speedBtn.addEventListener(
-    "click",
-    event => {
+function playRaag(index) {
 
-        event.stopPropagation();
+    index =
+        getSafeIndex(index);
 
-        speedMenu.classList.toggle(
-            "open"
-        );
+    currentIndex =
+        index;
+
+    updateTrackInfo(
+        index
+    );
+
+    if (!player) {
+
+        statusText.textContent =
+            "PLAYER LOADING...";
+
+        return;
+
     }
-);
 
+    try {
 
-document
-    .querySelectorAll(
-        ".speed-menu button"
-    )
-    .forEach(button => {
+        if (
+            typeof player.playVideoAt === "function"
+        ) {
 
-        button.addEventListener(
-            "click",
-            () => {
+            player.playVideoAt(index);
 
-                const speed =
-                    Number(
-                        button.dataset.speed
-                    );
+        } else {
 
-                currentSpeed =
-                    speed;
+            player.playVideo();
 
-                if (
-                    player &&
-                    typeof player.setPlaybackRate ===
-                        "function"
-                ) {
+        }
 
-                    player.setPlaybackRate(
-                        speed
-                    );
-                }
+    } catch (error) {
 
-                speedBtn.textContent =
-                    `${speed}×`;
-
-                document
-                    .querySelectorAll(
-                        ".speed-menu button"
-                    )
-                    .forEach(
-                        item =>
-                            item.classList.toggle(
-                                "active",
-                                Number(
-                                    item.dataset.speed
-                                ) === speed
-                            )
-                    );
-
-                speedMenu.classList.remove(
-                    "open"
-                );
-
-                showToast(
-                    `Playback speed ${speed}×`
-                );
-            }
-        );
-    });
-
-
-/* =========================================================
-   REPEAT
-========================================================= */
-
-repeatBtn.addEventListener(
-    "click",
-    () => {
-
-        repeatCurrent =
-            !repeatCurrent;
-
-        repeatBtn.classList.toggle(
-            "active",
-            repeatCurrent
+        console.warn(
+            "Could not select track:",
+            error
         );
 
-        showToast(
-            repeatCurrent
-                ? "Repeat enabled"
-                : "Repeat disabled"
-        );
     }
-);
+
+}
 
 
 /* =========================================================
    SEARCH
-========================================================= */
+   ========================================================= */
 
-function performSearch(query) {
+function searchRaags(query) {
 
-    searchResults.innerHTML = "";
+    const cleanQuery =
+        query
+            .toLowerCase()
+            .trim();
 
-    const clean =
-        query.toLowerCase().trim();
-
-    clearSearch.classList.toggle(
-        "visible",
-        clean.length > 0
-    );
-
-    if (!clean) {
+    if (!cleanQuery) {
 
         searchResults.style.display =
             "none";
 
         return;
+
     }
 
     const results =
         raagData
             .map(
-                (item, index) => ({
-                    ...item,
+                (data, index) => ({
+                    ...data,
                     index
                 })
             )
-            .filter(item => {
+            .filter(data => {
 
                 const searchable =
-                    `${item.name}
-                     ${item.subtitle}
-                     ${item.desc}`
+                    [
+                        data.name,
+                        data.time,
+                        data.desc,
+                        data.short,
+                        data.categories.join(" ")
+                    ]
+                        .join(" ")
                         .toLowerCase();
 
                 return searchable.includes(
-                    clean
+                    cleanQuery
                 );
+
             });
+
+
+    searchResults.innerHTML = "";
 
 
     if (!results.length) {
 
-        const li =
-            document.createElement("li");
+        const empty =
+            document.createElement("div");
 
-        li.innerHTML = `
-            <strong>No Raag found</strong>
-            <span>Try another name or benefit.</span>
-        `;
+        empty.style.padding =
+            "16px";
 
-        li.style.cursor = "default";
+        empty.style.color =
+            "rgba(244,241,234,.5)";
 
-        searchResults.appendChild(li);
+        empty.style.fontSize =
+            "10px";
+
+        empty.textContent =
+            "No matching Raag found.";
+
+        searchResults.appendChild(
+            empty
+        );
 
     } else {
 
-        results.forEach(item => {
+        results.forEach(
+            data => {
 
-            const li =
-                document.createElement("li");
+                const button =
+                    document.createElement("button");
 
-            li.innerHTML = `
-                <strong>
-                    ${item.name}
-                </strong>
+                button.className =
+                    "search-result";
 
-                <span>
-                    ${item.subtitle}
-                </span>
-            `;
+                button.innerHTML = `
 
-            li.addEventListener(
-                "click",
-                () => {
+                    <span class="search-result-number">
+                        ${String(data.index + 1).padStart(2, "0")}
+                    </span>
 
-                    selectRaag(
-                        item.index
-                    );
+                    <span>
+                        <strong>${escapeHTML(data.name)}</strong>
+                        <small>${escapeHTML(data.short)}</small>
+                    </span>
 
-                    searchInput.value =
-                        "";
+                `;
 
-                    searchResults.style.display =
-                        "none";
+                button.addEventListener(
+                    "click",
+                    () => {
 
-                    clearSearch.classList.remove(
-                        "visible"
-                    );
-                }
-            );
+                        playRaag(
+                            data.index
+                        );
 
-            searchResults.appendChild(li);
-        });
+                        searchInput.value =
+                            "";
+
+                        clearSearch.style.display =
+                            "none";
+
+                        searchResults.style.display =
+                            "none";
+
+                    }
+                );
+
+                searchResults.appendChild(
+                    button
+                );
+
+            }
+        );
+
     }
 
     searchResults.style.display =
@@ -1373,12 +1262,33 @@ function performSearch(query) {
 }
 
 
+function escapeHTML(value) {
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
 searchInput.addEventListener(
     "input",
-    event =>
-        performSearch(
-            event.target.value
-        )
+    event => {
+
+        const value =
+            event.target.value;
+
+        clearSearch.style.display =
+            value
+                ? "block"
+                : "none";
+
+        searchRaags(value);
+
+    }
 );
 
 
@@ -1386,81 +1296,388 @@ clearSearch.addEventListener(
     "click",
     () => {
 
-        searchInput.value = "";
-
-        searchResults.innerHTML = "";
+        searchInput.value =
+            "";
 
         searchResults.style.display =
             "none";
 
-        clearSearch.classList.remove(
-            "visible"
-        );
+        clearSearch.style.display =
+            "none";
 
         searchInput.focus();
+
     }
 );
 
-
-/* =========================================================
-   CLOSE SEARCH / SPEED
-========================================================= */
 
 document.addEventListener(
     "click",
     event => {
 
         if (
-            !searchInput.contains(
-                event.target
-            ) &&
-            !searchResults.contains(
-                event.target
+            !event.target.closest(
+                ".search-section"
             )
         ) {
 
             searchResults.style.display =
                 "none";
+
         }
 
-        if (
-            !speedMenu.contains(
-                event.target
-            ) &&
-            !speedBtn.contains(
-                event.target
-            )
-        ) {
-
-            speedMenu.classList.remove(
-                "open"
-            );
-        }
     }
 );
 
 
 /* =========================================================
+   RAAG GRID
+   ========================================================= */
+
+let activeFilter = "all";
+
+
+function renderRaagGrid(
+    filter = activeFilter
+) {
+
+    activeFilter =
+        filter;
+
+    raagGrid.innerHTML =
+        "";
+
+    const filtered =
+        raagData
+            .map(
+                (data, index) => ({
+                    ...data,
+                    index
+                })
+            )
+            .filter(
+                data =>
+                    filter === "all" ||
+                    data.categories.includes(
+                        filter
+                    )
+            );
+
+
+    filtered.forEach(
+        data => {
+
+            const card =
+                document.createElement("article");
+
+            card.className =
+                "raag-card";
+
+            card.dataset.index =
+                data.index;
+
+            card.style.setProperty(
+                "--card-accent",
+                data.accent
+            );
+
+            const isActive =
+                data.index === currentIndex;
+
+            if (isActive) {
+                card.classList.add(
+                    "active"
+                );
+            }
+
+            card.innerHTML = `
+
+                <span class="raag-number">
+                    ${String(data.index + 1).padStart(2, "0")}
+                </span>
+
+                <div class="raag-play">
+                    <i class="fa-solid fa-play"></i>
+                </div>
+
+                <h4>
+                    ${escapeHTML(data.name)}
+                </h4>
+
+                <p>
+                    ${escapeHTML(data.short)}
+                </p>
+
+            `;
+
+            card.addEventListener(
+                "click",
+                () => {
+
+                    playRaag(
+                        data.index
+                    );
+
+                }
+            );
+
+            raagGrid.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+function updateActiveCards() {
+
+    document
+        .querySelectorAll(
+            ".raag-card"
+        )
+        .forEach(
+            card => {
+
+                const index =
+                    Number(
+                        card.dataset.index
+                    );
+
+                card.classList.toggle(
+                    "active",
+                    index === currentIndex
+                );
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            ".library-item"
+        )
+        .forEach(
+            item => {
+
+                const index =
+                    Number(
+                        item.dataset.index
+                    );
+
+                item.classList.toggle(
+                    "active",
+                    index === currentIndex
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   FILTERS
+   ========================================================= */
+
+document
+    .querySelectorAll(".filter")
+    .forEach(
+        filterButton => {
+
+            filterButton.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .querySelectorAll(
+                            ".filter"
+                        )
+                        .forEach(
+                            button =>
+                                button.classList.remove(
+                                    "active"
+                                )
+                        );
+
+                    filterButton.classList.add(
+                        "active"
+                    );
+
+                    renderRaagGrid(
+                        filterButton.dataset.filter
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+showAll.addEventListener(
+    "click",
+    () => {
+
+        document
+            .querySelectorAll(
+                ".filter"
+            )
+            .forEach(
+                button =>
+                    button.classList.remove(
+                        "active"
+                    )
+            );
+
+        document
+            .querySelector(
+                '[data-filter="all"]'
+            )
+            .classList.add(
+                "active"
+            );
+
+        renderRaagGrid(
+            "all"
+        );
+
+        document
+            .querySelector(
+                ".quick-section"
+            )
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+
+    }
+);
+
+
+/* =========================================================
+   LIBRARY
+   ========================================================= */
+
+function renderLibrary() {
+
+    libraryList.innerHTML =
+        "";
+
+    raagData.forEach(
+        (data, index) => {
+
+            const button =
+                document.createElement("button");
+
+            button.className =
+                "library-item";
+
+            button.dataset.index =
+                index;
+
+            button.innerHTML = `
+
+                <span class="library-item-number">
+                    ${String(index + 1).padStart(2, "0")}
+                </span>
+
+                <span class="library-item-name">
+                    ${escapeHTML(data.name)}
+                </span>
+
+                <i class="fa-solid fa-chevron-right"></i>
+
+            `;
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    playRaag(
+                        index
+                    );
+
+                    closeLibrary();
+
+                }
+            );
+
+            libraryList.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+function openLibrary() {
+
+    library.classList.add(
+        "open"
+    );
+
+    overlay.classList.add(
+        "active"
+    );
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+function closeLibrary() {
+
+    library.classList.remove(
+        "open"
+    );
+
+    overlay.classList.remove(
+        "active"
+    );
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+libraryToggle.addEventListener(
+    "click",
+    openLibrary
+);
+
+libraryClose.addEventListener(
+    "click",
+    closeLibrary
+);
+
+overlay.addEventListener(
+    "click",
+    closeLibrary
+);
+
+
+/* =========================================================
    KEYBOARD CONTROLS
-========================================================= */
+   ========================================================= */
 
 document.addEventListener(
     "keydown",
     event => {
 
-        const active =
-            document.activeElement;
+        const activeTag =
+            document.activeElement.tagName;
 
-        const typing =
-            active &&
-            (
-                active.tagName ===
-                    "INPUT" ||
-                active.tagName ===
-                    "TEXTAREA"
-            );
-
-        if (typing) return;
+        if (
+            activeTag === "INPUT" ||
+            activeTag === "TEXTAREA"
+        ) {
+            return;
+        }
 
 
         switch (event.code) {
@@ -1469,25 +1686,41 @@ document.addEventListener(
 
                 event.preventDefault();
 
-                togglePlay();
+                if (player) {
+
+                    if (isPlaying) {
+
+                        player.pauseVideo();
+
+                    } else {
+
+                        player.playVideo();
+
+                    }
+
+                }
 
                 break;
 
 
             case "ArrowRight":
 
-                if (
-                    player &&
-                    typeof player.getCurrentTime ===
-                        "function"
-                ) {
+                if (player) {
+
+                    const duration =
+                        player.getDuration();
+
+                    const current =
+                        player.getCurrentTime();
 
                     player.seekTo(
-                        player.getCurrentTime() + 5,
+                        Math.min(
+                            duration,
+                            current + 5
+                        ),
                         true
                     );
 
-                    updateProgress();
                 }
 
                 break;
@@ -1495,21 +1728,19 @@ document.addEventListener(
 
             case "ArrowLeft":
 
-                if (
-                    player &&
-                    typeof player.getCurrentTime ===
-                        "function"
-                ) {
+                if (player) {
+
+                    const current =
+                        player.getCurrentTime();
 
                     player.seekTo(
                         Math.max(
                             0,
-                            player.getCurrentTime() - 5
+                            current - 5
                         ),
                         true
                     );
 
-                    updateProgress();
                 }
 
                 break;
@@ -1519,7 +1750,9 @@ document.addEventListener(
 
                 event.preventDefault();
 
-                changeVolume(5);
+                changeVolume(
+                    5
+                );
 
                 break;
 
@@ -1528,111 +1761,181 @@ document.addEventListener(
 
                 event.preventDefault();
 
-                changeVolume(-5);
+                changeVolume(
+                    -5
+                );
+
+                break;
+
+
+            case "KeyM":
+
+                muteBtn.click();
 
                 break;
 
 
             case "KeyN":
 
-                playNext();
+                goNext();
 
                 break;
 
 
             case "KeyP":
 
-                playPrevious();
+                goPrevious();
 
                 break;
+
         }
+
     }
 );
 
 
 function changeVolume(amount) {
 
-    const current =
+    let volume =
         Number(
             volumeSlider.value
         );
 
-    const next =
-        Math.max(
-            0,
-            Math.min(
-                100,
-                current + amount
+    volume =
+        Math.min(
+            100,
+            Math.max(
+                0,
+                volume + amount
             )
         );
 
     volumeSlider.value =
-        next;
+        volume;
 
     volumeSlider.dispatchEvent(
         new Event("input")
     );
+
 }
 
 
 /* =========================================================
-   TOAST
-========================================================= */
+   INITIAL RENDER
+   ========================================================= */
 
-function showToast(message) {
+function renderEverything() {
 
-    toastText.textContent =
-        message;
-
-    toast.classList.add(
-        "show"
+    renderRaagGrid(
+        "all"
     );
 
-    clearTimeout(
-        toastTimer
+    renderLibrary();
+
+    updateTrackInfo(
+        currentIndex
     );
 
-    toastTimer =
-        setTimeout(
-            () => {
+    updateVolumeIcon(
+        Number(volumeSlider.value)
+    );
 
-                toast.classList.remove(
-                    "show"
-                );
-
-            },
-            1800
-        );
 }
 
 
-/* =========================================================
-   INITIALIZE
-========================================================= */
-
-renderLibrary();
-
-updateTrackInfo(0);
-
-loadYouTubeAPI();
+renderEverything();
 
 
 /* =========================================================
-   SAFETY SYNC
-========================================================= */
+   SAFETY: IF API IS SLOW
+   ========================================================= */
 
-setInterval(
+setTimeout(
     () => {
 
-        if (
-            player &&
-            isPlaying
-        ) {
+        if (!apiReady) {
 
-            syncCurrentTrack();
+            statusText.textContent =
+                "CONNECTING TO MUSIC...";
+
         }
 
     },
-    1500
+    4000
 );
-```
+
+
+/* =========================================================
+   MOBILE TOUCH SEEK
+   ========================================================= */
+
+let seeking = false;
+
+progressContainer.addEventListener(
+    "pointerdown",
+    event => {
+
+        seeking = true;
+
+        progressContainer.setPointerCapture(
+            event.pointerId
+        );
+
+        seekFromPointer(
+            event
+        );
+
+    }
+);
+
+
+progressContainer.addEventListener(
+    "pointermove",
+    event => {
+
+        if (seeking) {
+
+            seekFromPointer(
+                event
+            );
+
+        }
+
+    }
+);
+
+
+progressContainer.addEventListener(
+    "pointerup",
+    () => {
+
+        seeking = false;
+
+    }
+);
+
+
+/* =========================================================
+   PAGE VISIBILITY
+   ========================================================= */
+
+document.addEventListener(
+    "visibilitychange",
+    () => {
+
+        if (
+            document.hidden
+        ) {
+
+            stopProgressTimer();
+
+        } else if (
+            isPlaying
+        ) {
+
+            startProgressTimer();
+
+        }
+
+    }
+);
