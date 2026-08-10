@@ -1,9 +1,7 @@
-```js
 /* =========================================================
    RAAGLY — SCRIPT.JS
-   Fixed YouTube Playlist Player
+   YouTube Playlist Player
    Playlist: PLJRipbfj__b0
-   Playlist order = 27 Raags supplied by user
    ========================================================= */
 
 "use strict";
@@ -15,10 +13,12 @@
 const PLAYLIST_ID = "PLJRipbfj__b0";
 const DEFAULT_VOLUME = 80;
 
-/*
- * IMPORTANT:
- * This array follows the exact playlist order.
- */
+
+/* =========================================================
+   RAAG DATA
+   EXACT YOUTUBE PLAYLIST ORDER
+   ========================================================= */
+
 const raagData = [
     {
         name: "Raag Bhimpalasi",
@@ -27,7 +27,7 @@ const raagData = [
         desc: "🌿 Vibe: Warm, emotional and soothing.\n🧘 Mind: Encourages relaxation, introspection and emotional balance."
     },
     {
-        name: "Raag Darbari",
+        name: "Raag Darbari Kanada",
         time: "Late Night",
         bg: "linear-gradient(135deg, #09203f 0%, #537895 100%)",
         desc: "🌙 Vibe: Deep, majestic and contemplative.\n🧘 Mind: Creates a calm and introspective atmosphere."
@@ -39,7 +39,7 @@ const raagData = [
         desc: "☀️ Vibe: Bright, refreshing and graceful.\n🧘 Mind: Encourages clarity and emotional freshness."
     },
     {
-        name: "Raag Komal Asavari",
+        name: "Raag Komal Rishabh Asavari",
         time: "Morning",
         bg: "linear-gradient(135deg, #8360c3 0%, #2ebf91 100%)",
         desc: "🌿 Vibe: Gentle and reflective.\n🧘 Mind: Supports quiet contemplation and emotional release."
@@ -51,7 +51,7 @@ const raagData = [
         desc: "✨ Vibe: Serene, graceful and expansive.\n🧘 Mind: Encourages peace, openness and relaxation."
     },
     {
-        name: "Raag Hansdhawani",
+        name: "Raag Hamsadhwani",
         time: "Evening",
         bg: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)",
         desc: "✨ Vibe: Bright, joyful and uplifting.\n🧘 Mind: Creates a feeling of inner stillness and lightness."
@@ -93,7 +93,7 @@ const raagData = [
         desc: "🌅 Vibe: Strong and grounded morning energy.\n🧘 Mind: Encourages clarity and emotional stability."
     },
     {
-        name: "Raag Brindabani Sarang",
+        name: "Raag Vrindavani Sarang",
         time: "Afternoon",
         bg: "linear-gradient(135deg, #13547a 0%, #80d0c7 100%)",
         desc: "🌿 Vibe: Refreshing, peaceful and affectionate.\n🧘 Mind: Creates a light and joyful atmosphere."
@@ -117,7 +117,7 @@ const raagData = [
         desc: "🧘 Vibe: Emotional, peaceful and meditative.\n✨ Mind: Creates a soothing space for deep listening."
     },
     {
-        name: "Raag Neelambri",
+        name: "Raag Neelambari",
         time: "Night",
         bg: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
         desc: "🌙 Vibe: Gentle and lullaby-like.\n🧘 Mind: Encourages relaxation and peaceful nighttime listening."
@@ -165,7 +165,7 @@ const raagData = [
         desc: "🧘 Vibe: Melancholic yet soothing.\n✨ Mind: Encourages introspection and emotional expression."
     },
     {
-        name: "Raag Jay Jaywanti",
+        name: "Raag Jaijaiwanti",
         time: "Evening",
         bg: "linear-gradient(135deg, #b92b27 0%, #1565c0 100%)",
         desc: "✨ Vibe: Graceful, expressive and uplifting.\n🧘 Mind: Encourages emotional freshness and renewed energy."
@@ -228,16 +228,14 @@ const playerContainer =
     document.querySelector(".player-container");
 
 const appBody =
-    document.getElementById("app-body") ||
-    document.body;
+    document.getElementById("app-body") || document.body;
 
 
 /* =========================================================
-   UI HELPERS
+   UI
    ========================================================= */
 
 function setRaag(index, animate = true) {
-
     if (!raagData[index]) return;
 
     lastKnownIndex = index;
@@ -261,13 +259,7 @@ function setRaag(index, animate = true) {
     }
 
     if (animate) {
-
-        [
-            raagName,
-            raagTime,
-            raagDesc
-        ].forEach((element) => {
-
+        [raagName, raagTime, raagDesc].forEach((element) => {
             if (!element) return;
 
             element.classList.remove("fade-in");
@@ -275,15 +267,12 @@ function setRaag(index, animate = true) {
             void element.offsetWidth;
 
             element.classList.add("fade-in");
-
         });
-
     }
 }
 
 
 function getIndex() {
-
     if (
         !player ||
         typeof player.getPlaylistIndex !== "function"
@@ -306,53 +295,35 @@ function getIndex() {
 
 
 /* =========================================================
-   INITIAL UI
+   INITIAL STATE
    ========================================================= */
 
 setRaag(0, false);
 
 
 /* =========================================================
-   LOAD YOUTUBE IFRAME API
+   YOUTUBE API
    ========================================================= */
 
 function loadYouTubeAPI() {
 
-    /*
-     * If API already exists, don't load it again.
-     */
-
     if (window.YT && window.YT.Player) {
-
         createPlayer();
-
         return;
     }
-
-    /*
-     * YouTube calls this global function when loaded.
-     */
 
     window.onYouTubeIframeAPIReady = function () {
-
         createPlayer();
-
     };
 
-    /*
-     * Prevent duplicate script injection.
-     */
-
-    if (
+    const existingScript =
         document.querySelector(
             'script[src="https://www.youtube.com/iframe_api"]'
-        )
-    ) {
-        return;
-    }
+        );
 
-    const script =
-        document.createElement("script");
+    if (existingScript) return;
+
+    const script = document.createElement("script");
 
     script.src =
         "https://www.youtube.com/iframe_api";
@@ -375,11 +346,9 @@ function createPlayer() {
         document.getElementById("youtube-player");
 
     if (!container) {
-
         console.error(
-            "RAAGLY: #youtube-player not found in HTML."
+            "RAAGLY: #youtube-player not found."
         );
-
         return;
     }
 
@@ -388,39 +357,25 @@ function createPlayer() {
         player = new YT.Player(
             "youtube-player",
             {
-
                 width: "1",
                 height: "1",
 
                 playerVars: {
-
                     listType: "playlist",
                     list: PLAYLIST_ID,
-
                     autoplay: 0,
                     controls: 0,
-
                     rel: 0,
                     modestbranding: 1,
-
                     playsinline: 1,
-
-                    origin:
-                        window.location.origin
+                    origin: window.location.origin
                 },
 
                 events: {
-
-                    onReady:
-                        handlePlayerReady,
-
-                    onStateChange:
-                        handleStateChange,
-
-                    onError:
-                        handlePlayerError
+                    onReady: handlePlayerReady,
+                    onStateChange: handleStateChange,
+                    onError: handlePlayerError
                 }
-
             }
         );
 
@@ -430,7 +385,6 @@ function createPlayer() {
             "RAAGLY: Could not create YouTube player.",
             error
         );
-
     }
 }
 
@@ -448,8 +402,7 @@ function handlePlayerReady() {
         player.setVolume(DEFAULT_VOLUME);
 
         if (volumeSlider) {
-            volumeSlider.value =
-                DEFAULT_VOLUME;
+            volumeSlider.value = DEFAULT_VOLUME;
         }
 
     } catch (error) {
@@ -458,16 +411,9 @@ function handlePlayerReady() {
             "RAAGLY: Volume setup failed.",
             error
         );
-
     }
 
-    /*
-     * Playlist data is sometimes available
-     * slightly after onReady.
-     */
-
     waitForPlaylist();
-
 }
 
 
@@ -479,63 +425,50 @@ function waitForPlaylist() {
 
     let attempts = 0;
 
-    const checker =
-        setInterval(() => {
+    const checker = setInterval(() => {
 
-            attempts++;
+        attempts++;
+
+        if (
+            player &&
+            typeof player.getPlaylist === "function"
+        ) {
+
+            const playlist = player.getPlaylist();
 
             if (
-                player &&
-                typeof player.getPlaylist === "function"
+                Array.isArray(playlist) &&
+                playlist.length > 0
             ) {
-
-                const playlist =
-                    player.getPlaylist();
-
-                if (
-                    Array.isArray(playlist) &&
-                    playlist.length > 0
-                ) {
-
-                    clearInterval(checker);
-
-                    syncCurrentTrack();
-
-                    return;
-                }
-
-            }
-
-            /*
-             * Even if YouTube doesn't expose
-             * playlist immediately, don't leave
-             * the UI stuck.
-             */
-
-            if (attempts >= 30) {
 
                 clearInterval(checker);
 
-                setRaag(0);
+                syncCurrentTrack();
 
+                return;
             }
+        }
 
-        }, 300);
+        if (attempts >= 30) {
 
+            clearInterval(checker);
+
+            setRaag(0);
+        }
+
+    }, 300);
 }
 
 
 /* =========================================================
-   SYNC CURRENT TRACK
+   SYNC TRACK
    ========================================================= */
 
 function syncCurrentTrack() {
 
-    const index =
-        getIndex();
+    const index = getIndex();
 
     setRaag(index);
-
 }
 
 
@@ -548,11 +481,6 @@ function handleStateChange(event) {
     if (!window.YT) return;
 
     switch (event.data) {
-
-        case YT.PlayerState.UNSTARTED:
-
-            break;
-
 
         case YT.PlayerState.BUFFERING:
 
@@ -610,24 +538,16 @@ function handleStateChange(event) {
             updateProgress();
 
             /*
-             * IMPORTANT:
-             *
-             * Do NOT call nextVideo() here.
-             * YouTube playlist normally advances itself.
-             *
-             * We only resync the UI.
+             * DO NOT manually call nextVideo().
+             * YouTube playlist handles progression.
              */
 
             setTimeout(() => {
-
                 syncCurrentTrack();
-
-            }, 600);
+            }, 800);
 
             break;
-
     }
-
 }
 
 
@@ -638,29 +558,18 @@ function handleStateChange(event) {
 function togglePlay() {
 
     if (!youtubeReady || !player) {
-
         console.warn(
-            "RAAGLY: YouTube player is not ready yet."
+            "RAAGLY: Player is not ready."
         );
-
         return;
     }
 
     try {
 
         if (isPlaying) {
-
             player.pauseVideo();
-
         } else {
-
-            /*
-             * On first click, explicitly select
-             * the current playlist index.
-             */
-
             player.playVideo();
-
         }
 
     } catch (error) {
@@ -669,18 +578,15 @@ function togglePlay() {
             "RAAGLY: Play/Pause failed.",
             error
         );
-
     }
 }
 
 
 if (playBtn) {
-
     playBtn.addEventListener(
         "click",
         togglePlay
     );
-
 }
 
 
@@ -720,26 +626,17 @@ function nextTrack() {
 
     player.nextVideo();
 
-    /*
-     * YouTube updates playlist index asynchronously.
-     */
-
     setTimeout(() => {
-
         syncCurrentTrack();
-
-    }, 700);
-
+    }, 800);
 }
 
 
 if (nextBtn) {
-
     nextBtn.addEventListener(
         "click",
         nextTrack
     );
-
 }
 
 
@@ -760,32 +657,28 @@ function previousTrack() {
     player.previousVideo();
 
     setTimeout(() => {
-
         syncCurrentTrack();
-
-    }, 700);
-
+    }, 800);
 }
 
 
 if (prevBtn) {
-
     prevBtn.addEventListener(
         "click",
         previousTrack
     );
-
 }
 
 
 /* =========================================================
-   SEEK BAR
+   SEEK
    ========================================================= */
 
 function seekFromClick(event) {
 
     if (
         !player ||
+        !progressContainer ||
         typeof player.getDuration !== "function"
     ) {
         return;
@@ -826,7 +719,6 @@ if (progressContainer) {
         "click",
         seekFromClick
     );
-
 }
 
 
@@ -890,7 +782,6 @@ function updateProgress() {
         durationEl.textContent =
             formatTime(duration);
     }
-
 }
 
 
@@ -907,7 +798,6 @@ function startProgressTimer() {
             updateProgress,
             250
         );
-
 }
 
 
@@ -919,7 +809,6 @@ function stopProgressTimer() {
 
         progressTimer = null;
     }
-
 }
 
 
@@ -942,11 +831,7 @@ function formatTime(seconds) {
     const secs =
         Math.floor(seconds % 60);
 
-    return (
-        `${mins}:` +
-        `${secs < 10 ? "0" : ""}` +
-        `${secs}`
-    );
+    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
 }
 
 
@@ -970,7 +855,6 @@ if (volumeSlider) {
 
                 player.unMute();
                 player.setVolume(volume);
-
             }
 
             if (volume === 0) {
@@ -983,17 +867,14 @@ if (volumeSlider) {
 
                 isMuted = false;
 
-                if (volume < 50) {
-                    setVolumeIcon("low");
-                } else {
-                    setVolumeIcon("high");
-                }
-
+                setVolumeIcon(
+                    volume < 50
+                        ? "low"
+                        : "high"
+                );
             }
-
         }
     );
-
 }
 
 
@@ -1012,7 +893,8 @@ if (muteBtn) {
             if (isMuted) {
 
                 const volume =
-                    Number(preMuteVolume) || DEFAULT_VOLUME;
+                    Number(preMuteVolume) ||
+                    DEFAULT_VOLUME;
 
                 player.unMute();
                 player.setVolume(volume);
@@ -1037,8 +919,8 @@ if (muteBtn) {
                     preMuteVolume =
                         Number(
                             volumeSlider.value
-                        ) || DEFAULT_VOLUME;
-
+                        ) ||
+                        DEFAULT_VOLUME;
                 }
 
                 player.mute();
@@ -1050,12 +932,9 @@ if (muteBtn) {
                 isMuted = true;
 
                 setVolumeIcon("mute");
-
             }
-
         }
     );
-
 }
 
 
@@ -1086,9 +965,7 @@ function setVolumeIcon(type) {
 
         icon.className =
             "fas fa-volume-up";
-
     }
-
 }
 
 
@@ -1128,7 +1005,6 @@ function searchRaags(query) {
                     .toLowerCase();
 
                 return text.includes(query);
-
             });
 
 
@@ -1191,14 +1067,11 @@ function searchRaags(query) {
 
                     searchResults.style.display =
                         "none";
-
                 }
             );
 
             searchResults.appendChild(li);
-
         });
-
     }
 
     searchResults.style.display =
@@ -1218,15 +1091,13 @@ if (searchInput) {
                     .trim();
 
             searchRaags(query);
-
         }
     );
-
 }
 
 
 /* =========================================================
-   SEARCH CLOSE
+   CLOSE SEARCH
    ========================================================= */
 
 document.addEventListener(
@@ -1242,9 +1113,7 @@ document.addEventListener(
 
             searchResults.style.display =
                 "none";
-
         }
-
     }
 );
 
@@ -1260,6 +1129,10 @@ function playRaag(index) {
         !player ||
         typeof player.playVideoAt !== "function"
     ) {
+        console.warn(
+            "RAAGLY: Player not ready."
+        );
+
         return;
     }
 
@@ -1270,14 +1143,9 @@ function playRaag(index) {
         return;
     }
 
-    /*
-     * Update UI first so the user immediately
-     * sees the selected Raag.
-     */
+    lastKnownIndex = index;
 
     setRaag(index);
-
-    lastKnownIndex = index;
 
     try {
 
@@ -1289,15 +1157,11 @@ function playRaag(index) {
             "RAAGLY: Could not play selected Raag.",
             error
         );
-
     }
 
     setTimeout(() => {
-
         syncCurrentTrack();
-
-    }, 700);
-
+    }, 800);
 }
 
 
@@ -1313,11 +1177,16 @@ function handlePlayerError(event) {
     );
 
     /*
-     * Don't break the whole player.
+     * Common YouTube errors:
+     *
+     * 2   = Invalid parameter
+     * 5   = HTML5 player error
+     * 100 = Video not found/private
+     * 101 = Embedding not allowed
+     * 150 = Embedding not allowed
      */
 
     updatePlayIcon(false);
-
 }
 
 
@@ -1328,10 +1197,6 @@ function handlePlayerError(event) {
 document.addEventListener(
     "keydown",
     (event) => {
-
-        /*
-         * Don't interfere with search input.
-         */
 
         if (
             event.target &&
@@ -1351,11 +1216,10 @@ document.addEventListener(
             event.preventDefault();
 
             togglePlay();
-
         }
 
 
-        /* Arrow Right = +5 sec */
+        /* Arrow Right = +5 seconds */
 
         if (event.code === "ArrowRight") {
 
@@ -1372,13 +1236,11 @@ document.addEventListener(
                     current + 5,
                     true
                 );
-
             }
-
         }
 
 
-        /* Arrow Left = -5 sec */
+        /* Arrow Left = -5 seconds */
 
         if (event.code === "ArrowLeft") {
 
@@ -1395,24 +1257,35 @@ document.addEventListener(
                     Math.max(0, current - 5),
                     true
                 );
-
             }
-
         }
 
+
+        /* N = Next */
+
+        if (event.key.toLowerCase() === "n") {
+            nextTrack();
+        }
+
+
+        /* P = Previous */
+
+        if (event.key.toLowerCase() === "p") {
+            previousTrack();
+        }
     }
 );
 
 
 /* =========================================================
-   START
+   START RAAGLY
    ========================================================= */
 
 loadYouTubeAPI();
 
 
 /* =========================================================
-   DEBUG INFO
+   DEBUG
    ========================================================= */
 
 console.log(
@@ -1422,4 +1295,3 @@ console.log(
 console.log(
     `Playlist ID: ${PLAYLIST_ID}`
 );
-```
