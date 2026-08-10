@@ -2,9 +2,9 @@ let player;
 let isPlaying = false;
 let progressTimer = null;
 let isMuted = false;
-let preMuteVolume = 80; // Default volume level
+let preMuteVolume = 80; 
 
-// Playlist ID
+// Teri Playlist ka ID
 const playlistId = 'PLJRipbfj__b0'; 
 
 // 27 Raags Master Data (Benefits & Gradients)
@@ -48,7 +48,6 @@ const nextBtn = document.getElementById('next');
 const playerContainer = document.querySelector('.player-container');
 const body = document.getElementById('app-body');
 
-// Seek Bar & Volume Elements
 const progressContainer = document.getElementById('progress-container');
 const progressBar = document.getElementById('progress');
 const currentTimeEl = document.getElementById('current-time');
@@ -58,7 +57,7 @@ const muteBtn = document.getElementById('mute-btn');
 const searchInput = document.getElementById('search-input');
 const searchResults = document.getElementById('search-results');
 
-// YouTube Iframe API Loading
+// Load YouTube Iframe API
 var tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -71,7 +70,8 @@ function onYouTubeIframeAPIReady() {
         playerVars: {
             'listType': 'playlist',
             'list': playlistId,
-            'autoplay': 0
+            'autoplay': 0,
+            'controls': 0
         },
         events: {
             'onReady': onPlayerReady,
@@ -84,47 +84,39 @@ function onPlayerReady() {
     if (player && player.setVolume) {
         player.setVolume(preMuteVolume);
     }
-    updateTrackInfo();
+    // API playlist load karne me thoda millisecond leti hai, isliye delay diya hai
+    setTimeout(updateTrackInfo, 800);
 }
 
 function updateTrackInfo() {
-    if (!player || !player.getPlaylistIndex) return;
+    if (!player || typeof player.getPlaylistIndex !== 'function') return;
 
     let currentIndex = player.getPlaylistIndex();
     if (currentIndex === undefined || currentIndex < 0) currentIndex = 0;
 
     const currentData = raagData[currentIndex % raagData.length];
 
-    if (player.getVideoData && player.getVideoData().title) {
-        raagName.innerText = player.getVideoData().title;
-    } else if (currentData) {
+    if (currentData) {
         raagName.innerText = currentData.name;
+        raagDesc.innerText = currentData.desc;
+        body.style.background = currentData.bgColor;
     }
 
     if (raagTime) {
         raagTime.innerText = "Sound Healing Frequencies";
     }
 
-    if (raagDesc && currentData) {
-        raagDesc.innerText = currentData.desc;
-    }
-
-    if (currentData) {
-        body.style.background = currentData.bgColor;
-    }
-
-    // Trigger Fade In Animation smoothly on changing text
+    // Smooth Fade Animation Trigger
     const textElements = [raagName, raagTime, raagDesc];
     textElements.forEach(el => {
         if (el) {
             el.classList.remove('fade-in');
-            void el.offsetWidth; // Reflow to restart animation
+            void el.offsetWidth; 
             el.classList.add('fade-in');
         }
     });
 }
 
-// Time Formatter (Helper)
 function formatTime(seconds) {
     if (isNaN(seconds) || seconds === null) return "0:00";
     const mins = Math.floor(seconds / 60);
@@ -132,7 +124,6 @@ function formatTime(seconds) {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
 }
 
-// Live Progress Sync
 function updateProgress() {
     if (!player || !player.getCurrentTime || !player.getDuration) return;
 
@@ -144,10 +135,6 @@ function updateProgress() {
         progressBar.style.width = `${progressPercent}%`;
         currentTimeEl.innerText = formatTime(currentTime);
         durationEl.innerText = formatTime(duration);
-    } else {
-        progressBar.style.width = '0%';
-        currentTimeEl.innerText = '0:00';
-        durationEl.innerText = '0:00';
     }
 }
 
@@ -163,7 +150,6 @@ function stopProgressTimer() {
     }
 }
 
-// Seek/Click Interaction on Progress bar
 if (progressContainer) {
     progressContainer.addEventListener('click', (e) => {
         if (!player || !player.getDuration) return;
@@ -175,11 +161,10 @@ if (progressContainer) {
         const seekTime = (clickX / width) * duration;
 
         player.seekTo(seekTime, true);
-        updateProgress();
+        setTimeout(updateProgress, 100);
     });
 }
 
-// Play / Pause Logic
 playBtn.addEventListener('click', () => {
     if (!player) return;
     if (isPlaying) {
@@ -202,18 +187,27 @@ function onPlayerStateChange(event) {
         playBtn.querySelector('i').className = 'fas fa-play';
         stopProgressTimer();
         updateProgress();
+        if (event.data == YT.PlayerState.ENDED) {
+            // Auto play next track
+            if (player && player.nextVideo) player.nextVideo();
+        }
     }
 }
 
 nextBtn.addEventListener('click', () => {
-    if (player && player.nextVideo) player.nextVideo();
+    if (player && player.nextVideo) {
+        player.nextVideo();
+        setTimeout(updateTrackInfo, 500);
+    }
 });
 
 prevBtn.addEventListener('click', () => {
-    if (player && player.previousVideo) player.previousVideo();
+    if (player && player.previousVideo) {
+        player.previousVideo();
+        setTimeout(updateTrackInfo, 500);
+    }
 });
 
-// Volume Controls Interaction
 if (volumeSlider) {
     volumeSlider.addEventListener('input', (e) => {
         const volumeValue = e.target.value;
@@ -232,7 +226,6 @@ if (volumeSlider) {
 if (muteBtn) {
     muteBtn.addEventListener('click', () => {
         if (!player) return;
-
         if (isMuted) {
             player.unMute();
             player.setVolume(preMuteVolume);
@@ -249,7 +242,7 @@ if (muteBtn) {
     });
 }
 
-// Search Bar Logic
+// Live Search Panel
 if (searchInput && searchResults) {
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase().trim();
@@ -280,6 +273,7 @@ if (searchInput && searchResults) {
                     }
                     searchInput.value = '';
                     searchResults.style.display = 'none';
+                    setTimeout(updateTrackInfo, 500);
                 });
                 searchResults.appendChild(li);
             });
