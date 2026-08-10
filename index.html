@@ -1,51 +1,43 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    >
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-    <meta
-        name="description"
-        content="RAAGLY — A peaceful space for listening to Indian Raags."
-    >
+    <meta name="theme-color" content="#08090d">
 
-    <meta name="theme-color" content="#09090d">
+    <meta name="description"
+          content="RAAGLY — immersive Raag listening, meditation and sound exploration.">
 
-    <title>RAAGLY — Sound • Stillness • Soul</title>
+    <title>RAAGLY — Sound Beyond Silence</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
-        rel="stylesheet"
-    >
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+          rel="stylesheet">
 
     <!-- Font Awesome -->
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    >
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+    <!-- Main CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body id="app-body">
 
-    <!-- Ambient background -->
+    <!-- Ambient Background -->
     <div class="ambient ambient-one"></div>
     <div class="ambient ambient-two"></div>
-    <div class="noise"></div>
+    <div class="ambient ambient-three"></div>
 
-    <main class="app-shell">
+    <main class="app">
 
-        <!-- HEADER -->
+        <!-- Header -->
         <header class="topbar">
 
             <div class="brand">
@@ -53,288 +45,335 @@
 
                 <div>
                     <h1>RAAGLY</h1>
-                    <p>SOUND • STILLNESS • SOUL</p>
+                    <span>sound beyond silence</span>
                 </div>
             </div>
 
-            <div class="header-status">
-                <span class="status-dot"></span>
-                <span id="status-text">READY</span>
-            </div>
+            <button id="library-toggle"
+                    class="icon-button"
+                    aria-label="Open Raag library">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
 
         </header>
 
 
-        <!-- MAIN PLAYER -->
+        <!-- Search -->
+        <section class="search-section">
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    id="search-input"
+                    type="search"
+                    placeholder="Search a Raag, illness, benefit..."
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+
+                <button id="clear-search"
+                        class="clear-search"
+                        aria-label="Clear search">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+            <div id="search-results"
+                 class="search-results">
+            </div>
+
+        </section>
+
+
+        <!-- Main Player -->
         <section class="player-card">
 
-            <div class="visual-section">
+            <!-- Visualizer -->
+            <div class="visual-stage">
 
-                <div class="visual-ring ring-one"></div>
-                <div class="visual-ring ring-two"></div>
-                <div class="visual-ring ring-three"></div>
+                <div class="orbit orbit-one"></div>
+                <div class="orbit orbit-two"></div>
 
                 <div class="mandala">
+
+                    <div class="mandala-ring ring-one"></div>
+                    <div class="mandala-ring ring-two"></div>
+                    <div class="mandala-ring ring-three"></div>
 
                     <div class="mandala-core">
                         <span>ॐ</span>
                     </div>
 
-                    <div class="petal petal-1"></div>
-                    <div class="petal petal-2"></div>
-                    <div class="petal petal-3"></div>
-                    <div class="petal petal-4"></div>
-                    <div class="petal petal-5"></div>
-                    <div class="petal petal-6"></div>
-
                 </div>
 
-                <div class="visual-label">
-                    <span id="raag-number">01</span>
-                    <span>RAAG</span>
+                <div class="sound-bars" id="sound-bars">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
 
             </div>
 
 
-            <!-- INFO -->
+            <!-- Track Information -->
             <div class="track-info">
 
                 <div class="eyebrow">
-                    <span id="raag-time">Sound Healing • Listening</span>
+                    <span class="live-dot"></span>
+                    <span id="status-text">READY TO LISTEN</span>
                 </div>
 
-                <h2 id="raag-name">Loading Raags...</h2>
+                <h2 id="raag-name">Loading Raag...</h2>
 
-                <p id="raag-subtitle">
-                    Allow the sound to settle.
+                <p id="raag-time">
+                    Sound Healing Frequencies
                 </p>
 
-            </div>
+                <div class="description-container">
 
+                    <p id="raag-desc">
+                        Select a Raag and enter the sound.
+                    </p>
 
-            <!-- SEARCH -->
-            <div class="search-container">
-
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-
-                <input
-                    type="text"
-                    id="search-input"
-                    placeholder="Search a Raag or benefit..."
-                    autocomplete="off"
-                >
-
-                <button
-                    id="clear-search"
-                    class="clear-search"
-                    aria-label="Clear search"
-                >
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-
-                <ul
-                    id="search-results"
-                    class="search-results-list"
-                ></ul>
-
-            </div>
-
-
-            <!-- DESCRIPTION -->
-            <div class="description-container">
-
-                <div class="description-heading">
-                    <span class="description-icon">
-                        <i class="fa-solid fa-sparkles"></i>
-                    </span>
-
-                    <span>ABOUT THIS RAAG</span>
                 </div>
 
-                <p id="raag-desc">
-                    Select or play a track to explore its character.
-                </p>
-
-                <p class="medical-note">
-                    Traditional listening associations are presented for
-                    cultural and wellness exploration, not as medical treatment.
-                </p>
-
             </div>
 
 
-            <!-- PROGRESS -->
+            <!-- Progress -->
             <div class="progress-area">
 
-                <div
-                    id="progress-container"
-                    class="progress-container"
-                    aria-label="Seek"
-                >
-                    <div id="progress" class="progress"></div>
-                    <div id="progress-thumb" class="progress-thumb"></div>
+                <div id="progress-container"
+                     class="progress-container"
+                     role="slider"
+                     aria-label="Seek">
+
+                    <div id="progress"
+                         class="progress"></div>
+
+                    <div id="progress-thumb"
+                         class="progress-thumb"></div>
+
                 </div>
 
                 <div class="time-display">
+
                     <span id="current-time">0:00</span>
+
                     <span id="duration">0:00</span>
+
                 </div>
 
             </div>
 
 
-            <!-- CONTROLS -->
+            <!-- Controls -->
             <div class="controls">
 
-                <button
-                    id="prev"
-                    class="control-btn"
-                    aria-label="Previous Raag"
-                    title="Previous"
-                >
+                <button id="prev"
+                        class="control-button"
+                        aria-label="Previous Raag">
+
                     <i class="fa-solid fa-backward-step"></i>
+
                 </button>
 
-                <button
-                    id="play"
-                    class="play-btn"
-                    aria-label="Play"
-                    title="Play / Pause"
-                >
+
+                <button id="play"
+                        class="play-button"
+                        aria-label="Play">
+
                     <i class="fa-solid fa-play"></i>
+
                 </button>
 
-                <button
-                    id="next"
-                    class="control-btn"
-                    aria-label="Next Raag"
-                    title="Next"
-                >
+
+                <button id="next"
+                        class="control-button"
+                        aria-label="Next Raag">
+
                     <i class="fa-solid fa-forward-step"></i>
+
                 </button>
 
             </div>
 
 
-            <!-- EXTRA PLAYER CONTROLS -->
-            <div class="player-tools">
+            <!-- Volume -->
+            <div class="volume-container">
 
-                <button
-                    id="mute-btn"
-                    class="tool-btn"
-                    title="Mute"
-                >
+                <button id="mute-btn"
+                        class="volume-button"
+                        aria-label="Mute">
+
                     <i class="fa-solid fa-volume-high"></i>
+
                 </button>
 
-
-                <div class="volume-control">
-
-                    <i class="fa-solid fa-volume-low"></i>
-
-                    <input
-                        type="range"
-                        id="volume-slider"
-                        min="0"
-                        max="100"
-                        value="75"
-                        aria-label="Volume"
-                    >
-
-                </div>
-
-
-                <button
-                    id="speed-btn"
-                    class="tool-btn speed-btn"
-                    title="Playback speed"
+                <input
+                    id="volume-slider"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="75"
+                    aria-label="Volume"
                 >
-                    1×
-                </button>
 
-
-                <button
-                    id="repeat-btn"
-                    class="tool-btn"
-                    title="Repeat"
-                >
-                    <i class="fa-solid fa-repeat"></i>
-                </button>
+                <span id="volume-value">75</span>
 
             </div>
 
 
-            <!-- SPEED MENU -->
-            <div id="speed-menu" class="speed-menu">
+            <!-- Mini Player Info -->
+            <div class="player-footer">
 
-                <button data-speed="0.75">0.75×</button>
-                <button data-speed="1">1×</button>
-                <button data-speed="1.25">1.25×</button>
-                <button data-speed="1.5">1.5×</button>
-                <button data-speed="2">2×</button>
+                <span>
+                    <i class="fa-solid fa-headphones"></i>
+                    RAAGLY
+                </span>
+
+                <span id="track-counter">
+                    01 / 27
+                </span>
 
             </div>
 
         </section>
 
 
-        <!-- RAAG LIBRARY -->
-        <section class="library-section">
+        <!-- Quick Filters -->
+        <section class="quick-section">
 
             <div class="section-heading">
 
                 <div>
-                    <span class="section-kicker">EXPLORE</span>
-                    <h3>Raag Library</h3>
+                    <span>EXPLORE</span>
+                    <h3>Find your Raag</h3>
                 </div>
 
-                <span id="track-count">27 RAAGS</span>
+                <button id="show-all"
+                        class="text-button">
+                    View all
+                </button>
 
             </div>
 
 
-            <div
-                id="raag-grid"
-                class="raag-grid"
-            ></div>
+            <div class="filter-row">
+
+                <button class="filter active"
+                        data-filter="all">
+                    All
+                </button>
+
+                <button class="filter"
+                        data-filter="health">
+                    Health
+                </button>
+
+                <button class="filter"
+                        data-filter="mind">
+                    Mind
+                </button>
+
+                <button class="filter"
+                        data-filter="career">
+                    Career
+                </button>
+
+                <button class="filter"
+                        data-filter="relationships">
+                    Harmony
+                </button>
+
+            </div>
+
+
+            <div id="raag-grid"
+                 class="raag-grid">
+            </div>
 
         </section>
 
 
-        <!-- FOOTER -->
-        <footer class="footer">
+        <!-- Quote -->
+        <section class="quote-section">
 
-            <div class="footer-line"></div>
+            <div class="quote-symbol">“</div>
 
             <p>
-                Made with
-                <span class="heart">♥</span>
-                by <strong>Shani Dev's Favourite Balak</strong>
+                Where words end,<br>
+                <span>Raag begins.</span>
             </p>
 
-            <span class="footer-small">
-                RAAGLY • Listen Slowly
-            </span>
+            <small>
+                Made with love by Shani Dev's Favourite Balak
+            </small>
 
+        </section>
+
+
+        <footer>
+            <span>RAAGLY</span>
+            <span>•</span>
+            <span>LISTEN · BREATHE · BE</span>
         </footer>
 
     </main>
 
 
-    <!-- Hidden YouTube player -->
-    <div id="youtube-player" class="hidden-player"></div>
+    <!-- Library Drawer -->
+    <aside id="library"
+           class="library">
+
+        <div class="library-header">
+
+            <div>
+                <span>RAAGLY</span>
+                <h2>Raag Library</h2>
+            </div>
+
+            <button id="library-close"
+                    class="icon-button"
+                    aria-label="Close library">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
 
 
-    <!-- Toast -->
-    <div id="toast" class="toast">
-        <i class="fa-solid fa-circle-check"></i>
-        <span id="toast-text">Ready</span>
+        <div id="library-list"
+             class="library-list">
+        </div>
+
+    </aside>
+
+
+    <div id="overlay"
+         class="overlay">
     </div>
 
 
+    <!-- Hidden YouTube Player -->
+    <div id="youtube-player"
+         class="hidden-player">
+    </div>
+
+
+    <!-- YouTube API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <!-- Main JS -->
     <script src="script.js"></script>
 
 </body>
 </html>
-```
