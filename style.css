@@ -1,12 +1,12 @@
 /* =========================================================
-   RAAGLY — FINAL CSS (CHANDIRA, BASGIRA & OUTFIT FONTS)
+   RAAGLY — FINAL CSS (pankh, BASGIRA & OUTFIT FONTS)
    ========================================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap');
 
 @font-face {
-    font-family: 'Chandira';
-    src: url('chandira.otf') format('opentype');
+    font-family: 'pankh';
+    src: url('pankh.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
@@ -51,9 +51,9 @@ body {
     overflow-x: hidden;
 }
 
-/* Chandira Font for Main Brand Heading */
+/* pankh Font for Main Brand Heading */
 .brand h1 {
-    font-family: 'Chandira', serif !important;
+    font-family: 'pankh', serif !important;
     letter-spacing: 1px !important;
     font-size: 26px;
     font-weight: 500;
