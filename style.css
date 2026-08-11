@@ -4,14 +4,14 @@
 
 @font-face {
     font-family: 'Amisha';
-    src: url('fonts/amisha.otf') format('opentype');
+    src: url('amisha.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Pankh';
-    src: url('fonts/pankh.otf') format('opentype');
+    src: url('pankh.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
