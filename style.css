@@ -10,8 +10,8 @@
 }
 
 @font-face {
-    font-family: 'Pankh';
-    src: url('pankh.otf') format('opentype');
+    font-family: 'nistha';
+    src: url('nistha.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
@@ -58,7 +58,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Sirf Raag names aur Headings par Pankh aur Amisha font chalega */
+/* Sirf Raag names aur Headings par nistha aur Amisha font chalega */
 .brand h1 {
     font-family: 'Amisha', serif !important;
     letter-spacing: 1px !important;
@@ -69,7 +69,7 @@ body {
 #raag-name, 
 .raag-card h4, 
 .library-item-name {
-    font-family: 'Pankh', sans-serif !important;
+    font-family: 'nistha', sans-serif !important;
 }
 
 /* =========================================================
