@@ -1,17 +1,17 @@
 /* =========================================================
-   RAAGLY — FONTS SWAP FIX
+   RAAGLY — NISHTA & CHANDIRA FONTS FIX
    ========================================================= */
 
 @font-face {
-    font-family: 'Amisha';
-    src: url('amisha.otf') format('opentype');
+    font-family: 'Nistha';
+    src: url('nistha.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'Pankh';
-    src: url('pankh.otf') format('opentype');
+    font-family: 'Chandira';
+    src: url('chandira.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
@@ -61,23 +61,23 @@ body {
 }
 
 /* =========================================================
-   SWAPPED FONT SETTINGS
+   FONT MAPPINGS
    ========================================================= */
 
-/* 1. RAAGLY Heading par ab Pankh font set hai */
+/* 1. RAAGLY Heading par Chandira font */
 .brand h1 {
-    font-family: 'Pankh', serif !important;
+    font-family: 'Chandira', serif !important;
     font-size: 26px;
     font-weight: 500;
     letter-spacing: 2px;
 }
 
-/* 2. Raag ke naam aur titles par ab Amisha font set hai */
+/* 2. Raag ke naam aur titles par Nistha font */
 #raag-name, 
 .raag-card h4, 
 .library-item-name,
 .search-result strong {
-    font-family: 'Amisha', sans-serif !important;
+    font-family: 'Nistha', sans-serif !important;
 }
 
 
