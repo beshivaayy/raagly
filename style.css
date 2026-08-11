@@ -1,17 +1,17 @@
 /* =========================================================
-   RAAGLY — NISHTA & CHANDIRA FONTS FIX
+   RAAGLY — FIXED & CLEAN CLASSICAL UI
    ========================================================= */
 
 @font-face {
-    font-family: 'Nistha';
-    src: url('nistha.otf') format('opentype');
+    font-family: 'Amisha';
+    src: url('amisha.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'Chandira';
-    src: url('chandira.otf') format('opentype');
+    font-family: 'Pankh';
+    src: url('pankh.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
@@ -35,9 +35,7 @@
     --accent-soft: rgba(205, 166, 107, 0.18);
 
     --glow: rgba(205, 166, 107, 0.25);
-
     --radius: 26px;
-
     --transition: 0.45s cubic-bezier(.22, .61, .36, 1);
 }
 
@@ -45,6 +43,7 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Body par standard font rakhenge taaki numbers aur timers ajeeb na dikhein */
 body {
     min-height: 100vh;
     background:
@@ -55,31 +54,23 @@ body {
         ),
         var(--bg);
     color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-family: system-ui, -apple-system, sans-serif !important;
     overflow-x: hidden;
-    transition: background 1.5s ease, color 0.6s ease;
 }
 
-/* =========================================================
-   FONT MAPPINGS
-   ========================================================= */
-
-/* 1. RAAGLY Heading par Chandira font */
+/* Sirf Raag names aur Headings par Pankh aur Amisha font chalega */
 .brand h1 {
-    font-family: 'Chandira', serif !important;
+    font-family: 'Amisha', serif !important;
+    letter-spacing: 1px !important;
     font-size: 26px;
     font-weight: 500;
-    letter-spacing: 2px;
 }
 
-/* 2. Raag ke naam aur titles par Nistha font */
 #raag-name, 
 .raag-card h4, 
-.library-item-name,
-.search-result strong {
-    font-family: 'Nistha', sans-serif !important;
+.library-item-name {
+    font-family: 'Pankh', sans-serif !important;
 }
-
 
 /* =========================================================
    AMBIENT BACKGROUND
@@ -96,34 +87,19 @@ body {
     z-index: -2;
 }
 
-.ambient-one {
-    top: -160px;
-    left: -120px;
-    background: var(--accent);
-}
-
-.ambient-two {
-    right: -180px;
-    bottom: 5%;
-    background: var(--accent);
-}
-
-.ambient-three {
-    left: 35%;
-    bottom: -250px;
-    background: #6d5dfc;
-}
-
-
-/* =========================================================
-   APP CONTAINER & HEADER
-   ========================================================= */
+.ambient-one { top: -160px; left: -120px; background: var(--accent); }
+.ambient-two { right: -180px; bottom: 5%; background: var(--accent); }
+.ambient-three { left: 35%; bottom: -250px; background: #6d5dfc; }
 
 .app {
     width: min(100%, 560px);
     margin: auto;
     padding: 28px 20px 60px;
 }
+
+/* =========================================================
+   HEADER
+   ========================================================= */
 
 .topbar {
     display: grid;
@@ -180,9 +156,7 @@ body {
 .icon-button:hover {
     background: var(--accent-soft);
     color: var(--accent);
-    transform: rotate(8deg);
 }
-
 
 /* =========================================================
    SEARCH
@@ -203,18 +177,9 @@ body {
     border: 1px solid var(--border);
     background: rgba(14, 16, 22, 0.9);
     backdrop-filter: blur(20px);
-    transition: var(--transition);
 }
 
-.search-box:focus-within {
-    border-color: rgba(205, 166, 107, 0.45);
-    box-shadow: 0 0 0 4px rgba(205, 166, 107, 0.06), 0 15px 40px rgba(0, 0, 0, 0.15);
-}
-
-.search-box > i {
-    color: var(--muted);
-    font-size: 13px;
-}
+.search-box > i { color: var(--muted); font-size: 13px; }
 
 #search-input {
     flex: 1;
@@ -224,18 +189,6 @@ body {
     color: var(--text);
     font-family: inherit;
     font-size: 13px;
-}
-
-#search-input::placeholder {
-    color: var(--muted);
-}
-
-.clear-search {
-    display: none;
-    border: none;
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
 }
 
 .search-results {
@@ -250,18 +203,7 @@ body {
     border: 1px solid var(--border);
     border-radius: 17px;
     background: rgba(12, 14, 20, 0.98);
-    backdrop-filter: blur(25px);
-    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
     z-index: 50;
-}
-
-.search-results::-webkit-scrollbar {
-    width: 4px;
-}
-
-.search-results::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 10px;
 }
 
 .search-result {
@@ -276,40 +218,17 @@ body {
     color: var(--text);
     text-align: left;
     cursor: pointer;
-    transition: 0.25s ease;
 }
 
-.search-result:hover {
-    background: var(--surface-light);
-}
-
-.search-result-number {
-    width: 30px;
-    height: 30px;
-    display: grid;
-    place-items: center;
-    border-radius: 9px;
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-size: 10px;
-}
-
-.search-result small {
-    display: block;
-    margin-top: 4px;
-    color: var(--muted);
-    font-size: 10px;
-    line-height: 1.4;
-}
-
+.search-result:hover { background: var(--surface-light); }
 
 /* =========================================================
-   PLAYER CARD & VISUAL STAGE
+   PLAYER CARD & CONTROLS FIX
    ========================================================= */
 
 .player-card {
     position: relative;
-    padding: 26px 20px 18px;
+    padding: 26px 20px 22px;
     border-radius: var(--radius);
     border: 1px solid var(--border);
     background: rgba(14, 16, 22, 0.92);
@@ -318,19 +237,10 @@ body {
     overflow: hidden;
 }
 
-.player-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 50% 0%, var(--glow), transparent 45%);
-    opacity: 0.35;
-    pointer-events: none;
-}
-
 .visual-stage {
     position: relative;
-    width: 235px;
-    height: 235px;
+    width: 215px;
+    height: 215px;
     margin: 0 auto 8px;
     display: grid;
     place-items: center;
@@ -338,17 +248,12 @@ body {
 
 .mandala {
     position: relative;
-    width: 155px;
-    height: 155px;
+    width: 145px;
+    height: 145px;
     display: grid;
     place-items: center;
     border-radius: 50%;
     filter: drop-shadow(0 0 20px var(--glow));
-    transition: transform 1s ease;
-}
-
-.player-card.playing .mandala {
-    animation: breathing 4s ease-in-out infinite;
 }
 
 .mandala-ring {
@@ -358,117 +263,45 @@ body {
     opacity: 0.45;
 }
 
-.ring-one {
-    inset: 0;
-    border-style: dashed;
-    animation: rotateClockwise 28s linear infinite;
-}
-
-.ring-two {
-    inset: 16px;
-    border-style: dotted;
-    animation: rotateReverse 19s linear infinite;
-}
-
-.ring-three {
-    inset: 34px;
-    border-width: 2px;
-    opacity: 0.2;
-    animation: rotateClockwise 12s linear infinite;
-}
+.ring-one { inset: 0; border-style: dashed; animation: rotateClockwise 28s linear infinite; }
+.ring-two { inset: 14px; border-style: dotted; animation: rotateReverse 19s linear infinite; }
+.ring-three { inset: 30px; border-width: 2px; opacity: 0.2; animation: rotateClockwise 12s linear infinite; }
 
 .mandala-core {
-    width: 75px;
-    height: 75px;
+    width: 65px;
+    height: 65px;
     display: grid;
     place-items: center;
     border-radius: 50%;
     background: radial-gradient(circle, rgba(255,255,255,0.08), rgba(0,0,0,0.22));
     border: 1px solid rgba(255,255,255,0.12);
-    box-shadow: inset 0 0 30px rgba(255,255,255,0.04), 0 0 45px var(--glow);
 }
 
-.mandala-core span {
-    font-size: 26px;
-    color: var(--accent);
-    text-shadow: 0 0 25px var(--accent);
-}
+.mandala-core span { font-size: 22px; color: var(--accent); }
 
-.sound-bars {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    height: 22px;
-    opacity: 0.5;
-}
-
-.sound-bars span {
-    width: 2px;
-    height: 7px;
-    border-radius: 3px;
-    background: var(--accent);
-    transition: height 0.2s ease;
-}
-
-.player-card.playing .sound-bars span {
-    animation: soundWave 0.8s ease-in-out infinite alternate;
-}
-
-.sound-bars span:nth-child(2) { animation-delay: -0.2s; }
-.sound-bars span:nth-child(3) { animation-delay: -0.4s; }
-.sound-bars span:nth-child(4) { animation-delay: -0.1s; }
-.sound-bars span:nth-child(5) { animation-delay: -0.5s; }
-.sound-bars span:nth-child(6) { animation-delay: -0.3s; }
-.sound-bars span:nth-child(7) { animation-delay: -0.6s; }
-
-
-/* =========================================================
-   TRACK INFO & CONTROLS
-   ========================================================= */
-
-.track-info {
-    position: relative;
-    text-align: center;
-    z-index: 2;
-}
+.track-info { text-align: center; margin-top: 10px; }
 
 .eyebrow {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 7px;
-    margin-bottom: 7px;
+    margin-bottom: 5px;
     color: var(--muted);
     font-size: 9px;
     letter-spacing: 2px;
-    font-weight: 600;
 }
 
-.live-dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 10px var(--accent);
-}
-
-.player-card.playing .live-dot {
-    animation: pulse 1.2s infinite;
-}
+.live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
 
 #raag-name {
-    min-height: 40px;
-    font-size: clamp(22px, 4.5vw, 28px);
+    font-size: 26px;
     font-weight: 500;
     letter-spacing: 1px;
 }
 
 #raag-time {
-    margin-top: 5px;
+    margin-top: 3px;
     color: var(--muted);
     font-size: 10px;
     letter-spacing: 1.8px;
@@ -477,9 +310,9 @@ body {
 
 .description-container {
     max-width: 420px;
-    margin: 18px auto 20px;
-    padding: 13px 15px;
-    border-radius: 14px;
+    margin: 14px auto 16px;
+    padding: 10px 14px;
+    border-radius: 12px;
     border: 1px solid rgba(255,255,255,0.055);
     background: rgba(255,255,255,0.03);
 }
@@ -487,21 +320,17 @@ body {
 #raag-desc {
     color: #f4f1ea;
     font-size: 11px;
-    line-height: 1.75;
-    white-space: pre-line;
+    line-height: 1.6;
 }
 
-.progress-area {
-    position: relative;
-    z-index: 3;
-}
-
+/* Progress Bar */
 .progress-container {
     position: relative;
-    height: 18px;
+    height: 16px;
     display: flex;
     align-items: center;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 .progress-container::before {
@@ -521,7 +350,6 @@ body {
     height: 3px;
     border-radius: 20px;
     background: var(--accent);
-    box-shadow: 0 0 10px var(--glow);
 }
 
 .progress-thumb {
@@ -531,7 +359,6 @@ body {
     height: 9px;
     border-radius: 50%;
     background: var(--accent);
-    box-shadow: 0 0 12px var(--accent);
     transform: translateX(-50%);
 }
 
@@ -540,22 +367,16 @@ body {
     justify-content: space-between;
     color: var(--muted);
     font-size: 9px;
+    margin-bottom: 12px;
 }
 
+/* Controls */
 .controls {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 35px;
-    margin: 20px 0 15px;
-}
-
-.control-button,
-.play-button {
-    border: none;
-    cursor: pointer;
-    color: var(--text);
-    transition: transform 0.25s ease, color 0.25s ease, background 0.25s ease;
+    gap: 30px;
+    margin: 12px 0;
 }
 
 .control-button {
@@ -563,60 +384,101 @@ body {
     height: 36px;
     border-radius: 50%;
     background: transparent;
-    font-size: 13px;
+    border: none;
     color: var(--muted);
+    cursor: pointer;
+    font-size: 13px;
 }
 
-.control-button:hover {
-    color: var(--accent);
-    transform: scale(1.12);
-}
+.control-button:hover { color: var(--accent); }
 
 .play-button {
-    width: 58px;
-    height: 58px;
+    width: 52px;
+    height: 52px;
     display: grid;
     place-items: center;
     border-radius: 50%;
     background: var(--text);
     color: #090a0e;
-    font-size: 17px;
-    box-shadow: 0 10px 35px rgba(0,0,0,0.25), 0 0 30px var(--glow);
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 0 25px var(--glow);
 }
 
-.play-button:hover {
-    transform: scale(1.07);
+.play-button:hover { background: var(--accent); }
+
+/* --- FIXED VOLUME SECTION LAYOUT --- */
+.volume-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.volume-button {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 12px;
+}
+
+#volume-slider {
+    width: 100px;
+    height: 3px;
+    appearance: none;
+    background: rgba(255,255,255,0.12);
+    border-radius: 10px;
+    outline: none;
+}
+
+#volume-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
     background: var(--accent);
-    color: #090a0e;
+    cursor: pointer;
 }
 
+#volume-value {
+    min-width: 22px;
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.player-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    color: var(--muted);
+    font-size: 9px;
+}
 
 /* =========================================================
-   RAAG GRID & CARDS
+   EXPLORE & CARDS
    ========================================================= */
 
-.quick-section {
-    margin-top: 42px;
-}
+.quick-section { margin-top: 36px; }
 
 .section-heading {
     display: flex;
     justify-content: space-between;
     align-items: end;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
 }
 
-.section-heading span {
-    color: var(--accent);
-    font-size: 9px;
-    letter-spacing: 2px;
-}
+.section-heading span { color: var(--accent); font-size: 9px; letter-spacing: 2px; }
+.section-heading h3 { font-size: 18px; font-weight: 500; }
 
-.section-heading h3 {
-    margin-top: 5px;
-    font-size: 18px;
-    font-weight: 500;
-}
+.text-button { border: none; background: transparent; color: var(--muted); cursor: pointer; font-size: 10px; }
+.text-button:hover { color: var(--accent); }
 
 .filter-row {
     display: flex;
@@ -625,20 +487,20 @@ body {
     padding-bottom: 5px;
     scrollbar-width: none;
 }
+.filter-row::-webkit-scrollbar { display: none; }
 
 .filter {
     flex: 0 0 auto;
-    padding: 7px 12px;
+    padding: 6px 12px;
     border: 1px solid var(--border);
     border-radius: 30px;
     background: rgba(14, 16, 22, 0.8);
     color: var(--muted);
     cursor: pointer;
-    font-size: 9px;
+    font-size: 10px;
 }
 
-.filter:hover,
-.filter.active {
+.filter:hover, .filter.active {
     background: var(--accent-soft);
     border-color: rgba(205,166,107,0.25);
     color: var(--accent);
@@ -648,7 +510,7 @@ body {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    margin-top: 18px;
+    margin-top: 16px;
 }
 
 .raag-card {
@@ -657,41 +519,36 @@ body {
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-    min-height: 125px;
-    padding: 16px;
-    border-radius: 18px;
+    min-height: 120px;
+    padding: 14px;
+    border-radius: 16px;
     border: 1px solid var(--border);
     background: rgba(14, 16, 22, 0.9);
-    backdrop-filter: blur(15px);
     cursor: pointer;
-    overflow: hidden;
-    transition: transform 0.35s ease, border-color 0.35s ease;
+    transition: 0.3s ease;
 }
 
 .raag-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-3px);
     border-color: rgba(205, 166, 107, 0.35);
+    background: rgba(20, 23, 33, 0.95);
 }
 
-.raag-number {
-    color: var(--muted);
-    font-size: 8px;
-    letter-spacing: 1px;
-}
+.raag-card.active { border-color: var(--accent); }
+
+.raag-number { color: var(--muted); font-size: 8px; }
 
 .raag-card h4 {
     margin-top: 6px;
     font-size: 14px;
     font-weight: 600;
-    line-height: 1.35;
     color: var(--text);
 }
 
 .raag-card p {
-    margin-top: 6px;
-    color: rgba(244, 241, 234, 0.75);
+    margin-top: 4px;
+    color: rgba(244, 241, 234, 0.7);
     font-size: 10px;
-    line-height: 1.45;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -702,8 +559,8 @@ body {
     position: absolute;
     right: 12px;
     top: 12px;
-    width: 25px;
-    height: 25px;
+    width: 24px;
+    height: 24px;
     display: grid;
     place-items: center;
     border-radius: 50%;
@@ -712,74 +569,54 @@ body {
     font-size: 9px;
 }
 
-.library {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: min(390px, 92vw);
-    height: 100vh;
-    padding: 25px 20px;
-    background: linear-gradient(160deg, rgba(14,16,22,0.98), rgba(7,8,12,0.99));
-    border-left: 1px solid var(--border);
-    backdrop-filter: blur(30px);
-    transform: translateX(105%);
-    transition: transform 0.5s cubic-bezier(.22,.61,.36,1);
-    z-index: 100;
+/* =========================================================
+   HIGHLIGHTED FOOTER ("SHANI DEV'S FAVOURITE BALAK")
+   ========================================================= */
+
+.quote-section {
+    margin-top: 45px;
+    padding: 30px 15px;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
-.library.open {
-    transform: translateX(0);
+.quote-symbol { color: var(--accent); font-family: Georgia, serif; font-size: 35px; }
+
+.quote-section p {
+    margin-top: 10px;
+    font-size: 15px;
+    font-style: italic;
 }
 
-.library-header {
+.quote-section p span { color: var(--accent); font-style: normal; }
+
+/* SHANI DEV'S FAVOURITE BALAK LINE HIGHLIGHTED */
+.quote-section small, 
+footer small,
+.shani-credit {
+    display: block;
+    margin-top: 12px;
+    color: var(--accent) !important;
+    font-size: 10px !important;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-shadow: 0 0 12px var(--glow);
+}
+
+footer {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 22px;
+    color: var(--muted);
+    font-size: 8px;
+    letter-spacing: 1.2px;
 }
 
-.library-list {
-    height: calc(100vh - 110px);
-    overflow-y: auto;
-}
-
-.library-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    padding: 13px 10px;
-    border: none;
-    border-bottom: 1px solid rgba(255,255,255,0.045);
-    background: transparent;
-    color: var(--text);
-    text-align: left;
-    cursor: pointer;
-}
-
-.library-item-name {
-    flex: 1;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    opacity: 0;
-    visibility: hidden;
-    transition: 0.4s ease;
-    z-index: 90;
-}
-
-.overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
 
 @keyframes rotateClockwise { to { transform: rotate(360deg); } }
 @keyframes rotateReverse { to { transform: rotate(-360deg); } }
-@keyframes breathing { 0%, 100% { transform: scale(0.98); } 50% { transform: scale(1.04); } }
-@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.7); } }
-@keyframes soundWave { from { height: 5px; } to { height: 20px; } }
