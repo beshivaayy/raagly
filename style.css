@@ -1,5 +1,5 @@
 /* =========================================================
-   RAAGLY — ULTIMATE PREMIUM CLASSICAL UI (CUSTOM FONTS)
+   RAAGLY — CUSTOM FONTS FIX
    ========================================================= */
 
 @font-face {
@@ -45,6 +45,7 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Poori website ka default text clean rakha hai taaki readable rahe */
 body {
     min-height: 100vh;
     background:
@@ -55,22 +56,30 @@ body {
         ),
         var(--bg);
     color: var(--text);
-    font-family: 'Pankh', sans-serif !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
     overflow-x: hidden;
     transition:
         background 1.5s ease,
         color 0.6s ease;
 }
 
-/* Headings & Specific Elements */
+/* =========================================================
+   FONT SETTINGS (Kahan kaun sa font chalega)
+   ========================================================= */
+
+/* 1. Sirf RAAGLY Heading ke liye Amisha Font */
 .brand h1 {
     font-family: 'Amisha', serif !important;
-    letter-spacing: 1px !important;
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: 2px;
 }
 
-.brand-mark, 
+/* 2. Player aur Raag ke naam ke liye Pankh Font */
 #raag-name, 
-.section-heading h3 {
+.raag-card h4, 
+.library-item-name,
+.search-result strong {
     font-family: 'Pankh', sans-serif !important;
 }
 
@@ -87,9 +96,6 @@ body {
     filter: blur(100px);
     pointer-events: none;
     opacity: 0.18;
-    transition:
-        background 1.5s ease,
-        transform 2s ease;
     z-index: -2;
 }
 
@@ -113,22 +119,14 @@ body {
 
 
 /* =========================================================
-   APP
+   APP CONTAINER & HEADER
    ========================================================= */
 
 .app {
     width: min(100%, 560px);
     margin: auto;
-    padding:
-        28px
-        20px
-        60px;
+    padding: 28px 20px 60px;
 }
-
-
-/* =========================================================
-   HEADER (CENTERED BRAND)
-   ========================================================= */
 
 .topbar {
     display: grid;
@@ -158,12 +156,6 @@ body {
     color: var(--accent);
     font-size: 18px;
     box-shadow: 0 0 25px var(--glow);
-}
-
-.brand h1 {
-    font-size: 26px;
-    font-weight: 500;
-    letter-spacing: 2px;
 }
 
 .brand span:last-child {
@@ -219,9 +211,7 @@ body {
 
 .search-box:focus-within {
     border-color: rgba(205, 166, 107, 0.45);
-    box-shadow:
-        0 0 0 4px rgba(205, 166, 107, 0.06),
-        0 15px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 0 4px rgba(205, 166, 107, 0.06), 0 15px 40px rgba(0, 0, 0, 0.15);
 }
 
 .search-box > i {
@@ -277,10 +267,6 @@ body {
     border-radius: 10px;
 }
 
-.search-results::-webkit-scrollbar-thumb:hover {
-    background: var(--accent);
-}
-
 .search-result {
     display: flex;
     align-items: center;
@@ -311,11 +297,6 @@ body {
     font-size: 10px;
 }
 
-.search-result strong {
-    display: block;
-    font-size: 13px;
-}
-
 .search-result small {
     display: block;
     margin-top: 4px;
@@ -326,7 +307,7 @@ body {
 
 
 /* =========================================================
-   PLAYER CARD
+   PLAYER CARD & VISUAL STAGE
    ========================================================= */
 
 .player-card {
@@ -344,20 +325,10 @@ body {
     content: "";
     position: absolute;
     inset: 0;
-    background:
-        radial-gradient(
-            circle at 50% 0%,
-            var(--glow),
-            transparent 45%
-        );
+    background: radial-gradient(circle at 50% 0%, var(--glow), transparent 45%);
     opacity: 0.35;
     pointer-events: none;
 }
-
-
-/* =========================================================
-   VISUAL STAGE
-   ========================================================= */
 
 .visual-stage {
     position: relative;
@@ -415,43 +386,15 @@ body {
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background:
-        radial-gradient(
-            circle,
-            rgba(255,255,255,0.08),
-            rgba(0,0,0,0.22)
-        );
+    background: radial-gradient(circle, rgba(255,255,255,0.08), rgba(0,0,0,0.22));
     border: 1px solid rgba(255,255,255,0.12);
-    box-shadow:
-        inset 0 0 30px rgba(255,255,255,0.04),
-        0 0 45px var(--glow);
+    box-shadow: inset 0 0 30px rgba(255,255,255,0.04), 0 0 45px var(--glow);
 }
 
 .mandala-core span {
     font-size: 26px;
     color: var(--accent);
     text-shadow: 0 0 25px var(--accent);
-}
-
-.orbit {
-    position: absolute;
-    border: 1px solid var(--accent);
-    border-radius: 50%;
-    opacity: 0.12;
-}
-
-.orbit-one {
-    width: 210px;
-    height: 105px;
-    transform: rotate(-25deg);
-    animation: floatOrbit 8s ease-in-out infinite;
-}
-
-.orbit-two {
-    width: 185px;
-    height: 120px;
-    transform: rotate(35deg);
-    animation: floatOrbit 10s ease-in-out infinite reverse;
 }
 
 .sound-bars {
@@ -487,7 +430,7 @@ body {
 
 
 /* =========================================================
-   TRACK INFO
+   TRACK INFO & CONTROLS
    ========================================================= */
 
 .track-info {
@@ -522,10 +465,9 @@ body {
 
 #raag-name {
     min-height: 40px;
-    font-size: clamp(24px, 5vw, 30px);
+    font-size: clamp(22px, 4.5vw, 28px);
     font-weight: 500;
     letter-spacing: 1px;
-    transition: opacity 0.3s ease;
 }
 
 #raag-time {
@@ -551,11 +493,6 @@ body {
     line-height: 1.75;
     white-space: pre-line;
 }
-
-
-/* =========================================================
-   PROGRESS
-   ========================================================= */
 
 .progress-area {
     position: relative;
@@ -588,7 +525,6 @@ body {
     border-radius: 20px;
     background: var(--accent);
     box-shadow: 0 0 10px var(--glow);
-    transition: width 0.15s linear;
 }
 
 .progress-thumb {
@@ -600,7 +536,6 @@ body {
     background: var(--accent);
     box-shadow: 0 0 12px var(--accent);
     transform: translateX(-50%);
-    transition: left 0.15s linear;
 }
 
 .time-display {
@@ -608,13 +543,7 @@ body {
     justify-content: space-between;
     color: var(--muted);
     font-size: 9px;
-    letter-spacing: 0.4px;
 }
-
-
-/* =========================================================
-   CONTROLS
-   ========================================================= */
 
 .controls {
     display: flex;
@@ -629,10 +558,7 @@ body {
     border: none;
     cursor: pointer;
     color: var(--text);
-    transition:
-        transform 0.25s ease,
-        color 0.25s ease,
-        background 0.25s ease;
+    transition: transform 0.25s ease, color 0.25s ease, background 0.25s ease;
 }
 
 .control-button {
@@ -658,9 +584,7 @@ body {
     background: var(--text);
     color: #090a0e;
     font-size: 17px;
-    box-shadow:
-        0 10px 35px rgba(0,0,0,0.25),
-        0 0 30px var(--glow);
+    box-shadow: 0 10px 35px rgba(0,0,0,0.25), 0 0 30px var(--glow);
 }
 
 .play-button:hover {
@@ -669,93 +593,9 @@ body {
     color: #090a0e;
 }
 
-.play-button:active {
-    transform: scale(0.95);
-}
-
 
 /* =========================================================
-   VOLUME
-   ========================================================= */
-
-.volume-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 9px;
-    margin-top: 8px;
-}
-
-.volume-button {
-    border: none;
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 11px;
-}
-
-.volume-button:hover {
-    color: var(--accent);
-}
-
-#volume-slider {
-    width: 90px;
-    height: 3px;
-    appearance: none;
-    background: rgba(255,255,255,0.12);
-    border-radius: 10px;
-    outline: none;
-}
-
-#volume-slider::-webkit-slider-thumb {
-    appearance: none;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--accent);
-    cursor: pointer;
-    box-shadow: 0 0 8px var(--glow);
-}
-
-#volume-slider::-moz-range-thumb {
-    width: 9px;
-    height: 9px;
-    border: none;
-    border-radius: 50%;
-    background: var(--accent);
-    cursor: pointer;
-}
-
-#volume-value {
-    min-width: 18px;
-    color: var(--muted);
-    font-size: 9px;
-}
-
-
-/* =========================================================
-   PLAYER FOOTER
-   ========================================================= */
-
-.player-footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 18px;
-    padding-top: 13px;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    color: var(--muted);
-    font-size: 8px;
-    letter-spacing: 1.2px;
-}
-
-.player-footer i {
-    margin-right: 4px;
-    color: var(--accent);
-}
-
-
-/* =========================================================
-   EXPLORE
+   RAAG GRID & CARDS
    ========================================================= */
 
 .quick-section {
@@ -781,29 +621,12 @@ body {
     font-weight: 500;
 }
 
-.text-button {
-    border: none;
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 10px;
-    letter-spacing: 0.5px;
-}
-
-.text-button:hover {
-    color: var(--accent);
-}
-
 .filter-row {
     display: flex;
     gap: 7px;
     overflow-x: auto;
     padding-bottom: 5px;
     scrollbar-width: none;
-}
-
-.filter-row::-webkit-scrollbar {
-    display: none;
 }
 
 .filter {
@@ -814,9 +637,7 @@ body {
     background: rgba(14, 16, 22, 0.8);
     color: var(--muted);
     cursor: pointer;
-    font-family: inherit;
     font-size: 9px;
-    transition: 0.25s ease;
 }
 
 .filter:hover,
@@ -825,11 +646,6 @@ body {
     border-color: rgba(205,166,107,0.25);
     color: var(--accent);
 }
-
-
-/* =========================================================
-   RAAG GRID & CARDS
-   ========================================================= */
 
 .raag-grid {
     display: grid;
@@ -852,36 +668,12 @@ body {
     backdrop-filter: blur(15px);
     cursor: pointer;
     overflow: hidden;
-    transition:
-        transform 0.35s ease,
-        border-color 0.35s ease,
-        background 0.35s ease,
-        box-shadow 0.35s ease;
-}
-
-.raag-card::after {
-    content: "";
-    position: absolute;
-    width: 90px;
-    height: 90px;
-    right: -35px;
-    bottom: -45px;
-    border-radius: 50%;
-    background: var(--card-accent);
-    filter: blur(25px);
-    opacity: 0.13;
+    transition: transform 0.35s ease, border-color 0.35s ease;
 }
 
 .raag-card:hover {
     transform: translateY(-4px);
     border-color: rgba(205, 166, 107, 0.35);
-    background: rgba(20, 23, 33, 0.95);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
-}
-
-.raag-card.active {
-    border-color: var(--accent);
-    box-shadow: inset 0 0 30px rgba(205,166,107,0.06);
 }
 
 .raag-number {
@@ -921,75 +713,7 @@ body {
     background: rgba(255,255,255,0.08);
     color: var(--text);
     font-size: 9px;
-    transition: color 0.25s ease, background 0.25s ease;
 }
-
-.raag-card:hover .raag-play,
-.raag-card.active .raag-play {
-    color: var(--accent);
-    background: rgba(205, 166, 107, 0.2);
-}
-
-
-/* =========================================================
-   QUOTE
-   ========================================================= */
-
-.quote-section {
-    margin-top: 55px;
-    padding: 35px 15px;
-    text-align: center;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-
-.quote-symbol {
-    color: var(--accent);
-    font-family: Georgia, serif;
-    font-size: 40px;
-    line-height: 20px;
-    opacity: 0.6;
-}
-
-.quote-section p {
-    margin-top: 12px;
-    font-size: 16px;
-    line-height: 1.6;
-    font-style: italic;
-}
-
-.quote-section p span {
-    color: var(--accent);
-    font-style: normal;
-}
-
-.quote-section small {
-    display: block;
-    margin-top: 15px;
-    color: var(--muted);
-    font-size: 8px;
-    letter-spacing: 1px;
-}
-
-
-/* =========================================================
-   FOOTER
-   ========================================================= */
-
-footer {
-    display: flex;
-    justify-content: center;
-    gap: 7px;
-    margin-top: 25px;
-    color: var(--muted);
-    font-size: 8px;
-    letter-spacing: 1.5px;
-}
-
-
-/* =========================================================
-   LIBRARY DRAWER
-   ========================================================= */
 
 .library {
     position: fixed;
@@ -998,12 +722,7 @@ footer {
     width: min(390px, 92vw);
     height: 100vh;
     padding: 25px 20px;
-    background:
-        linear-gradient(
-            160deg,
-            rgba(14,16,22,0.98),
-            rgba(7,8,12,0.99)
-        );
+    background: linear-gradient(160deg, rgba(14,16,22,0.98), rgba(7,8,12,0.99));
     border-left: 1px solid var(--border);
     backdrop-filter: blur(30px);
     transform: translateX(105%);
@@ -1022,35 +741,9 @@ footer {
     margin-bottom: 20px;
 }
 
-.library-header > div > span {
-    color: var(--accent);
-    font-size: 8px;
-    letter-spacing: 2px;
-}
-
-.library-header h2 {
-    margin-top: 4px;
-    font-size: 20px;
-    font-weight: 500;
-}
-
 .library-list {
     height: calc(100vh - 110px);
     overflow-y: auto;
-    padding-right: 3px;
-}
-
-.library-list::-webkit-scrollbar {
-    width: 4px;
-}
-
-.library-list::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 10px;
-}
-
-.library-list::-webkit-scrollbar-thumb:hover {
-    background: var(--accent);
 }
 
 .library-item {
@@ -1067,35 +760,11 @@ footer {
     cursor: pointer;
 }
 
-.library-item:hover {
-    background: rgba(255,255,255,0.035);
-}
-
-.library-item.active {
-    color: var(--accent);
-}
-
-.library-item-number {
-    width: 25px;
-    color: var(--muted);
-    font-size: 9px;
-}
-
 .library-item-name {
     flex: 1;
     font-size: 14px;
     font-weight: 500;
 }
-
-.library-item i {
-    color: var(--muted);
-    font-size: 10px;
-}
-
-
-/* =========================================================
-   OVERLAY
-   ========================================================= */
 
 .overlay {
     position: fixed;
@@ -1112,129 +781,8 @@ footer {
     visibility: visible;
 }
 
-
-/* =========================================================
-   YOUTUBE
-   ========================================================= */
-
-.hidden-player {
-    position: fixed;
-    width: 1px;
-    height: 1px;
-    left: -10000px;
-    top: -10000px;
-    opacity: 0;
-    pointer-events: none;
-}
-
-
-/* =========================================================
-   ANIMATIONS
-   ========================================================= */
-
-@keyframes rotateClockwise {
-    to { transform: rotate(360deg); }
-}
-
-@keyframes rotateReverse {
-    to { transform: rotate(-360deg); }
-}
-
-@keyframes breathing {
-    0%, 100% { transform: scale(0.98); }
-    50% { transform: scale(1.04); }
-}
-
-@keyframes floatOrbit {
-    0%, 100% { transform: translateY(0) rotate(-25deg); }
-    50% { transform: translateY(-7px) rotate(-15deg); }
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.35; transform: scale(0.7); }
-}
-
-@keyframes soundWave {
-    from { height: 5px; }
-    to { height: 20px; }
-}
-
-.fade-change {
-    animation: fadeChange 0.5s ease;
-}
-
-@keyframes fadeChange {
-    from {
-        opacity: 0;
-        transform: translateY(5px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 420px) {
-    .app {
-        padding: 20px 14px 45px;
-    }
-    .player-card {
-        padding-left: 16px;
-        padding-right: 16px;
-    }
-    .visual-stage {
-        width: 215px;
-        height: 215px;
-    }
-    .mandala {
-        width: 145px;
-        height: 145px;
-    }
-    .controls {
-        gap: 28px;
-    }
-    .raag-grid {
-        gap: 9px;
-    }
-    .raag-card {
-        padding: 14px;
-        min-height: 115px;
-    }
-}
-
-@media (max-width: 340px) {
-    .raag-grid {
-        grid-template-columns: 1fr;
-    }
-    .brand h1 {
-        font-size: 22px;
-    }
-}
-
-
-/* =========================================================
-   ACCESSIBILITY
-   ========================================================= */
-
-button:focus-visible,
-input:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.001ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-        transition-duration: 0.001ms !important;
-    }
-}
+@keyframes rotateClockwise { to { transform: rotate(360deg); } }
+@keyframes rotateReverse { to { transform: rotate(-360deg); } }
+@keyframes breathing { 0%, 100% { transform: scale(0.98); } 50% { transform: scale(1.04); } }
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.7); } }
+@keyframes soundWave { from { height: 5px; } to { height: 20px; } }
