@@ -1,17 +1,19 @@
 /* =========================================================
-   RAAGLY — FINAL CLEAN CSS (FIXED LIBRARY & LAYOUT)
+   RAAGLY — FINAL CSS (CHANDIRA, BASGIRA & OUTFIT FONTS)
    ========================================================= */
 
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap');
+
 @font-face {
-    font-family: 'Amisha';
-    src: url('amisha.otf') format('opentype');
+    font-family: 'Chandira';
+    src: url('chandira.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'Pankh';
-    src: url('pankh.otf') format('opentype');
+    font-family: 'Basgira';
+    src: url('basgira.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
@@ -40,25 +42,28 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Premium 'Outfit' Font lagaya gaya hai baaki saare normal text aur numbers ke liye */
 body {
     min-height: 100vh;
     background: radial-gradient(circle at 50% 10%, rgba(205, 166, 107, 0.08), transparent 35%), var(--bg);
     color: var(--text);
-    font-family: system-ui, -apple-system, sans-serif !important;
+    font-family: 'Outfit', sans-serif !important;
     overflow-x: hidden;
 }
 
+/* Chandira Font for Main Brand Heading */
 .brand h1 {
-    font-family: 'Amisha', serif !important;
+    font-family: 'Chandira', serif !important;
     letter-spacing: 1px !important;
     font-size: 26px;
     font-weight: 500;
 }
 
+/* Basgira Font for Raag Titles & Cards */
 #raag-name, 
 .raag-card h4, 
 .library-item-name {
-    font-family: 'Pankh', sans-serif !important;
+    font-family: 'Basgira', sans-serif !important;
 }
 
 /* AMBIENT BACKGROUND */
@@ -114,9 +119,10 @@ body {
     display: block;
     margin-top: 1px;
     color: var(--muted);
-    font-size: 7px;
+    font-size: 8px;
     letter-spacing: 2.2px;
     text-transform: uppercase;
+    font-weight: 500;
 }
 .icon-button {
     grid-column: 3;
@@ -159,7 +165,7 @@ body {
     background: transparent;
     color: var(--text);
     font-family: inherit;
-    font-size: 13px;
+    font-size: 14px;
 }
 .search-results {
     display: none;
@@ -246,21 +252,23 @@ body {
     gap: 7px;
     margin-bottom: 5px;
     color: var(--muted);
-    font-size: 9px;
+    font-size: 10px;
+    font-weight: 500;
     letter-spacing: 2px;
 }
 .live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
 #raag-name {
-    font-size: 26px;
+    font-size: 28px;
     font-weight: 500;
     letter-spacing: 1px;
 }
 #raag-time {
     margin-top: 3px;
     color: var(--muted);
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 1.8px;
     text-transform: uppercase;
+    font-weight: 500;
 }
 .description-container {
     max-width: 420px;
@@ -270,7 +278,7 @@ body {
     border: 1px solid rgba(255,255,255,0.055);
     background: rgba(255,255,255,0.03);
 }
-#raag-desc { color: #f4f1ea; font-size: 11px; line-height: 1.6; }
+#raag-desc { color: #f4f1ea; font-size: 12px; line-height: 1.6; font-weight: 300; }
 
 /* PROGRESS */
 .progress-container {
@@ -308,8 +316,9 @@ body {
     display: flex;
     justify-content: space-between;
     color: var(--muted);
-    font-size: 9px;
+    font-size: 11px;
     margin-bottom: 12px;
+    font-weight: 500;
 }
 
 /* CONTROLS */
@@ -327,7 +336,7 @@ body {
     border: none;
     color: var(--muted);
     cursor: pointer;
-    font-size: 13px;
+    font-size: 14px;
 }
 .control-button:hover { color: var(--accent); }
 .play-button {
@@ -338,7 +347,7 @@ body {
     color: #090a0e;
     border: none;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px;
     box-shadow: 0 0 25px var(--glow);
 }
 .play-button:hover { background: var(--accent); }
@@ -355,7 +364,7 @@ body {
 }
 .volume-button {
     border: none; background: transparent;
-    color: var(--muted); cursor: pointer; font-size: 12px;
+    color: var(--muted); cursor: pointer; font-size: 13px;
 }
 #volume-slider {
     width: 100px; height: 3px;
@@ -371,7 +380,7 @@ body {
     background: var(--accent);
     cursor: pointer;
 }
-#volume-value { min-width: 22px; color: var(--muted); font-size: 10px; }
+#volume-value { min-width: 22px; color: var(--muted); font-size: 11px; font-weight: 500; }
 
 .player-footer {
     display: flex;
@@ -380,7 +389,8 @@ body {
     padding-top: 10px;
     border-top: 1px solid rgba(255,255,255,0.05);
     color: var(--muted);
-    font-size: 9px;
+    font-size: 10px;
+    font-weight: 500;
 }
 
 /* EXPLORE */
@@ -389,9 +399,9 @@ body {
     display: flex; justify-content: space-between;
     align-items: end; margin-bottom: 14px;
 }
-.section-heading span { color: var(--accent); font-size: 9px; letter-spacing: 2px; }
-.section-heading h3 { font-size: 18px; font-weight: 500; }
-.text-button { border: none; background: transparent; color: var(--muted); cursor: pointer; font-size: 10px; }
+.section-heading span { color: var(--accent); font-size: 10px; font-weight: 500; letter-spacing: 2px; }
+.section-heading h3 { font-size: 20px; font-weight: 500; }
+.text-button { border: none; background: transparent; color: var(--muted); cursor: pointer; font-size: 11px; font-weight: 500; }
 .text-button:hover { color: var(--accent); }
 
 .filter-row {
@@ -402,12 +412,13 @@ body {
 .filter-row::-webkit-scrollbar { display: none; }
 .filter {
     flex: 0 0 auto;
-    padding: 6px 12px;
+    padding: 6px 14px;
     border: 1px solid var(--border);
     border-radius: 30px;
     background: rgba(14, 16, 22, 0.8);
     color: var(--muted);
-    cursor: pointer; font-size: 10px;
+    cursor: pointer; font-size: 11px;
+    font-weight: 500;
 }
 .filter:hover, .filter.active {
     background: var(--accent-soft);
@@ -436,18 +447,19 @@ body {
     background: rgba(20, 23, 33, 0.95);
 }
 .raag-card.active { border-color: var(--accent); }
-.raag-number { color: var(--muted); font-size: 8px; }
-.raag-card h4 { margin-top: 6px; font-size: 14px; font-weight: 600; color: var(--text); }
+.raag-number { color: var(--muted); font-size: 9px; font-weight: 500; }
+.raag-card h4 { margin-top: 6px; font-size: 16px; font-weight: 500; color: var(--text); }
 .raag-card p {
     margin-top: 4px; color: rgba(244, 241, 234, 0.7);
-    font-size: 10px; display: -webkit-box;
+    font-size: 11px; display: -webkit-box;
     -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    font-weight: 300;
 }
 .raag-play {
     position: absolute; right: 12px; top: 12px;
-    width: 24px; height: 24px; display: grid; place-items: center;
+    width: 26px; height: 26px; display: grid; place-items: center;
     border-radius: 50%; background: rgba(255,255,255,0.08);
-    color: var(--text); font-size: 9px;
+    color: var(--text); font-size: 10px;
 }
 
 /* QUOTE & FOOTER */
@@ -459,8 +471,8 @@ body {
     border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 .quote-symbol { color: var(--accent); font-family: Georgia, serif; font-size: 35px; }
-.quote-section p { margin-top: 10px; font-size: 15px; font-style: italic; }
-.quote-section p span { color: var(--accent); font-style: normal; }
+.quote-section p { margin-top: 10px; font-size: 16px; font-style: italic; font-weight: 300; }
+.quote-section p span { color: var(--accent); font-style: normal; font-weight: 400; }
 
 .quote-section small, 
 footer small,
@@ -468,7 +480,7 @@ footer small,
     display: block;
     margin-top: 12px;
     color: var(--accent) !important;
-    font-size: 10px !important;
+    font-size: 11px !important;
     font-weight: 600;
     letter-spacing: 1.5px;
     text-shadow: 0 0 12px var(--glow);
@@ -476,11 +488,11 @@ footer small,
 footer {
     display: flex; justify-content: center;
     gap: 7px; margin-top: 22px;
-    color: var(--muted); font-size: 8px; letter-spacing: 1.2px;
+    color: var(--muted); font-size: 9px; letter-spacing: 1.2px; font-weight: 500;
 }
 
 /* =========================================================
-   LIBRARY DRAWER (FIXED POSITION & SLIDE)
+   LIBRARY DRAWER
    ========================================================= */
 .library {
     position: fixed;
@@ -497,9 +509,7 @@ footer {
     z-index: 100;
 }
 
-.library.open {
-    transform: translateX(0);
-}
+.library.open { transform: translateX(0); }
 
 .library-header {
     display: flex;
@@ -507,25 +517,22 @@ footer {
     align-items: center;
     margin-bottom: 20px;
 }
-
 .library-header > div > span {
     color: var(--accent);
-    font-size: 8px;
+    font-size: 9px;
+    font-weight: 500;
     letter-spacing: 2px;
 }
-
 .library-header h2 {
     margin-top: 4px;
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 500;
 }
-
 .library-list {
     height: calc(100vh - 110px);
     overflow-y: auto;
     padding-right: 3px;
 }
-
 .library-list::-webkit-scrollbar { width: 4px; }
 .library-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 .library-list::-webkit-scrollbar-thumb:hover { background: var(--accent); }
@@ -543,12 +550,11 @@ footer {
     text-align: left;
     cursor: pointer;
 }
-
 .library-item:hover { background: rgba(255,255,255,0.035); }
 .library-item.active { color: var(--accent); }
-.library-item-number { width: 25px; color: var(--muted); font-size: 9px; }
-.library-item-name { flex: 1; font-size: 14px; font-weight: 500; }
-.library-item i { color: var(--muted); font-size: 10px; }
+.library-item-number { width: 25px; color: var(--muted); font-size: 10px; font-weight: 500; }
+.library-item-name { flex: 1; font-size: 16px; font-weight: 500; }
+.library-item i { color: var(--muted); font-size: 12px; }
 
 /* OVERLAY */
 .overlay {
