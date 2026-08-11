@@ -1,5 +1,5 @@
 /* =========================================================
-   RAAGLY — CUSTOM FONTS FIX
+   RAAGLY — FONTS SWAP FIX
    ========================================================= */
 
 @font-face {
@@ -45,7 +45,6 @@ html {
     scroll-behavior: smooth;
 }
 
-/* Poori website ka default text clean rakha hai taaki readable rahe */
 body {
     min-height: 100vh;
     background:
@@ -58,29 +57,27 @@ body {
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
     overflow-x: hidden;
-    transition:
-        background 1.5s ease,
-        color 0.6s ease;
+    transition: background 1.5s ease, color 0.6s ease;
 }
 
 /* =========================================================
-   FONT SETTINGS (Kahan kaun sa font chalega)
+   SWAPPED FONT SETTINGS
    ========================================================= */
 
-/* 1. Sirf RAAGLY Heading ke liye Amisha Font */
+/* 1. RAAGLY Heading par ab Pankh font set hai */
 .brand h1 {
-    font-family: 'Amisha', serif !important;
+    font-family: 'Pankh', serif !important;
     font-size: 26px;
     font-weight: 500;
     letter-spacing: 2px;
 }
 
-/* 2. Player aur Raag ke naam ke liye Pankh Font */
+/* 2. Raag ke naam aur titles par ab Amisha font set hai */
 #raag-name, 
 .raag-card h4, 
 .library-item-name,
 .search-result strong {
-    font-family: 'Pankh', sans-serif !important;
+    font-family: 'Amisha', sans-serif !important;
 }
 
 
