@@ -66,7 +66,7 @@ let activeFilter = "all";
 
 const body = document.body;
 
-// Player DOM elements (verify these exist in new HTML)
+// Player DOM elements (verified against new HTML)
 const raagName = document.getElementById("raag-name");
 const raagTime = document.getElementById("raag-time");
 const raagDesc = document.getElementById("raag-desc");
@@ -85,7 +85,7 @@ const muteBtn = document.getElementById("mute-btn");
 const navToggle = document.getElementById("nav-toggle");
 const mainNav = document.getElementById("main-nav");
 
-// Track counter — only element that exists in new HTML
+// Track counter — only element that exists, fixed from earlier bug
 const trackCounterEl = document.getElementById("track-counter");
 
 // Library elements (preserved from original)
@@ -94,7 +94,7 @@ const libraryList = document.getElementById("library-list");
 const libraryCloseBtn = document.getElementById("library-close");
 const overlayEl = document.getElementById("overlay");
 
-// Player footer
+// Player footer reference
 const playerContainer = document.querySelector(".player-footer");
 
 // — — — — — — — — — — — — — — — — — — — — — — — — — — — — —
@@ -116,7 +116,7 @@ function formatTime(seconds) {
 // RENDER — raag grid + library
 // — — — — — — — — — — — — — — — — — — — — — — — — — — — — —
 
-/* Render raag cards in the grid — no search, just the data */
+/* Render raag cards in the grid — search removed, just the data */
 function renderRaagCards() {
     if (!raagGrid) return;
     raagGrid.innerHTML = "";
@@ -201,7 +201,7 @@ function updatePlayIcon(playing) {
     if (icon) icon.className = playing ? "fa-solid fa-pause" : "fa-solid fa-play";
 }
 
-/* --- NAVIGATION (mobile hamburger) --- */
+/* --- NAVIGATION (mobile hamburger menu) --- */
 function openNav() { if (mainNav) mainNav.classList.add("open"); if (overlayEl) overlayEl.classList.add("active"); }
 function closeNav() { if (mainNav) mainNav.classList.remove("open"); if (overlayEl) overlayEl.classList.remove("active"); }
 
@@ -245,15 +245,15 @@ setupFilters();
 // SEARCH — REMOVED
 // — — — — — — — — — — — — — — — — — — — — — — — — — — — — —
 /* 
-   Search has been intentionally removed from the new UI.
-   The following are no longer present in the JavaScript:
-   - searchInput reference and event listener
-   - searchResults reference and rendering
-   - clearSearchBtn and its listener
-   - searchRaags() function
-   - Any DOM manipulation related to search results
-   All search-related code has been pruned. The search input and results
-   divs have been removed from the HTML.
+   Search has been intentionally removed from the new Raagly UI.
+   Removed code:
+   - searchInput reference and input event listener
+   - searchResults reference and DOM rendering
+   - clearSearchBtn and its click listener
+   - searchRaags() function and all related logic
+   - Any DOM manipulation for search results display
+   All search-related DOM elements were removed from index.html,
+   and all search event handlers were pruned from this file.
 */
 
 // — — — — — — — — — — — — — — — — — — — — — — — — — — — — —
@@ -327,15 +327,13 @@ function onPlayerStateChange(event) {
             updatePlayIcon(false); 
             if (playerContainer) playerContainer.classList.remove("playing"); 
             stopProgress(); 
-            /* Optional: auto-play next */
-            // nextTrack(); 
             break;
     }
 }
 
 function onPlayerError(e) { 
     console.error("YouTube player error:", e); 
-    /* Show user-friendly feedback */
+    /* Provide user-friendly feedback instead of failing silently */
     if (currentTimeEl) currentTimeEl.textContent = "Error";
     if (durationEl) durationEl.textContent = "Error";
 }
@@ -347,7 +345,6 @@ function loadYouTubeAPI() {
     const s = document.createElement("script");
     s.src = "https://www.youtube.com/iframe_api";
     s.async = true;
-    /* Don't block page load */
     document.head.appendChild(s);
 }
 
@@ -361,7 +358,7 @@ function seek(event) {
     if (!duration) return;
     const rect = progressContainer.getBoundingClientRect();
     if (!rect.width) return;
-    const percentage = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+    const percentage = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width);
     try { player.seekTo(duration * percentage, true); updateProgress(); } catch (e) { console.error("Seek error:", e); }
 }
 
@@ -378,7 +375,7 @@ function updateProgress() {
     if (durationEl) durationEl.textContent = formatTime(duration);
 }
 
-/* Progress timer — reduced from 250ms to 500ms for performance */
+/* Progress timer — reduced from 250ms to 500ms for better performance */
 function startProgress() { 
     if (progressTimer) clearInterval(progressTimer); 
     progressTimer = setInterval(updateProgress, 500); 
@@ -437,8 +434,9 @@ if (muteBtn) {
 // — — — — — — — — — — — — — — — — — — — — — — — — — — — — —
 /* 
    Fixed: only references #track-counter which exists in the new HTML.
-   No more erroneous references to non-existent IDs (raag-counter, track-number, etc.).
-   Updated on: track selection, next, previous, playlist changes.
+   Previously buggy references to non-existent IDs (raag-counter, track-number, etc.)
+   have been eliminated. This function is called on: track selection, next, previous,
+   playlist changes, and player state sync.
 */
 
 function updateTrackCounter(index) {
