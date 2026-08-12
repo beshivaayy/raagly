@@ -9,130 +9,86 @@
     <meta name="theme-color" content="#180A29">
 
     <meta name="description"
-          content="RAAGLY — Vedic sound astronomy, classical raag exploration, and the mathematics of time.">
+          content="RAAGLY — immersive Raag listening, meditation and sound exploration.">
+
     <title>RAAGLY — Sound Beyond Silence</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?fontfamily=Merriweather:wght@300;400;700;900&family=Inter:wght@300;400;500;600&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
           rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body id="app-body">
 
-    <!-- Vedic Geometry Header -->
-    <header class="topbar">
-
-        <div class="brand">
-            <span class="brand-mark">○</span>
-
-            <div>
-                <h1>RAAGLY</h1>
-                <span>sound beyond silence</span>
-            </div>
-        </div>
-
-        <button id="nav-toggle"
-                class="icon-button"
-                aria-label="Open navigation">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-
-    </header>
-
-
-    <!-- Main Navigation -->
-    <nav id="main-nav" class="nav-primary">
-
-        <ul>
-            <li>
-                <a href="#" class="nav-item active"
-                   data-section="explore"
-                   aria-label="Explore raags">
-                    Explore
-                </a>
-            </li>
-
-            <li>
-                <a href="#" class="nav-item"
-                   data-section="library"
-                   aria-label="Raag library">
-                    Library
-                </a>
-            </li>
-
-            <li>
-                <a href="#" class="nav-item"
-                   data-section="player"
-                   aria-label="Player">
-                    Listen
-                </a>
-            </li>
-        </ul>
-
-    </nav>
-
+    <!-- Ambient Background -->
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <div class="ambient ambient-three"></div>
 
     <main class="app">
 
-        <!-- Quick Filters -->
-        <section class="quick-section">
+        <!-- Header -->
+        <header class="topbar">
 
-            <div class="section-heading">
+            <div class="brand">
+                <span class="brand-mark">ॐ</span>
 
                 <div>
-                    <span>EXPLORE</span>
-                    <h3>Find your raag</h3>
+                    <h1>RAAGLY</h1>
+                    <span>sound beyond silence</span>
                 </div>
+            </div>
 
-                <button id="show-all"
-                        class="text-button">
-                    View all
+            <button id="library-toggle"
+                    class="icon-button"
+                    aria-label="Open Raag library">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
+
+        </header>
+
+
+        <!-- Search -->
+        <section class="search-section">
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    id="search-input"
+                    type="search"
+                    placeholder="Search a Raag, illness, benefit..."
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+
+                <button id="clear-search"
+                        class="clear-search"
+                        aria-label="Clear search">
+                    <i class="fa-solid fa-xmark"></i>
                 </button>
 
             </div>
 
-
-            <div class="filter-row">
-
-                <button class="filter active"
-                        data-filter="all">
-                    All
-                </button>
-
-                <button class="filter"
-                        data-filter="health">
-                    Health
-                </button>
-
-                <button class="filter"
-                        data-filter="mind">
-                    Mind
-                </button>
-
-                <button class="filter"
-                        data-filter="career">
-                    Career
-                </button>
-
-                <button class="filter"
-                        data-filter="relationships">
-                    Harmony
-                </button>
-
-            </div>
-
-
-            <div id="raag-grid"
-                 class="raag-grid">
+            <div id="search-results"
+                 class="search-results">
             </div>
 
         </section>
 
 
-        <!-- Player Card -->
+        <!-- Main Player -->
         <section class="player-card">
 
             <!-- Visualizer -->
@@ -148,7 +104,7 @@
                     <div class="mandala-ring ring-three"></div>
 
                     <div class="mandala-core">
-                        <span>○</span>
+                        <span>ॐ</span>
                     </div>
 
                 </div>
@@ -292,60 +248,132 @@
         </section>
 
 
-        <!-- Library Drawer -->
-        <aside id="library"
-               class="library">
+        <!-- Quick Filters -->
+        <section class="quick-section">
 
-            <div class="library-header">
+            <div class="section-heading">
 
                 <div>
-                    <span>RAAGLY</span>
-                    <h2>Raag Library</h2>
+                    <span>EXPLORE</span>
+                    <h3>Find your Raag</h3>
                 </div>
 
-                <button id="library-close"
-                        class="icon-button"
-                        aria-label="Close library">
-
-                    <i class="fa-solid fa-xmark"></i>
-
+                <button id="show-all"
+                        class="text-button">
+                    View all
                 </button>
 
             </div>
 
 
-            <div id="library-list"
-                 class="library-list">
+            <div class="filter-row">
+
+                <button class="filter active"
+                        data-filter="all">
+                    All
+                </button>
+
+                <button class="filter"
+                        data-filter="health">
+                    Health
+                </button>
+
+                <button class="filter"
+                        data-filter="mind">
+                    Mind
+                </button>
+
+                <button class="filter"
+                        data-filter="career">
+                    Career
+                </button>
+
+                <button class="filter"
+                        data-filter="relationships">
+                    Harmony
+                </button>
+
             </div>
 
-        </aside>
+
+            <div id="raag-grid"
+                 class="raag-grid">
+            </div>
+
+        </section>
 
 
-        <div id="overlay"
-             class="overlay">
-        </div>
+        <!-- Quote -->
+        <section class="quote-section">
+
+            <div class="quote-symbol">“</div>
+
+            <p>
+                Where words end,<br>
+                <span>Raag begins.</span>
+            </p>
+
+            <small>
+                Made with love by Shani Dev's Favourite Balak
+            </small>
+
+        </section>
 
 
-        <!-- Hidden YouTube Player -->
-        <div id="youtube-player"
-             class="hidden-player">
-        </div>
-
-
-        <!-- YouTube API -->
-        <script src="https://www.youtube.com/iframe_api"></script>
-
-        <!-- Main JS -->
-        <script src="script.js"></script>
+        <footer>
+            <span>RAAGLY</span>
+            <span>•</span>
+            <span>LISTEN · BREATHE · BE</span>
+        </footer>
 
     </main>
 
 
-    <footer>
-        <span>RAAGLY</span>
-        <span>•</span>
-        <span>LISTEN · BREATHE · BE</span>
-    </footer>
+    <!-- Library Drawer -->
+    <aside id="library"
+           class="library">
+
+        <div class="library-header">
+
+            <div>
+                <span>RAAGLY</span>
+                <h2>Raag Library</h2>
+            </div>
+
+            <button id="library-close"
+                    class="icon-button"
+                    aria-label="Close library">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <div id="library-list"
+             class="library-list">
+        </div>
+
+    </aside>
+
+
+    <div id="overlay"
+         class="overlay">
+    </div>
+
+
+    <!-- Hidden YouTube Player -->
+    <div id="youtube-player"
+         class="hidden-player">
+    </div>
+
+
+    <!-- YouTube API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <!-- Main JS -->
+    <script src="script.js"></script>
 
 </body>
 </html>
