@@ -1,721 +1,894 @@
 /* =========================================================
-   RAAGLY — FINAL CSS (pankh, BASGIRA, CINZEL & OUTFIT FONTS)
-   Heritage re-skin: Royal Indigo / Deep Crimson / Imperial Gold
+   RAAGLY — VEDIC ASTRONOMICAL RE-SKIN
+   No gradients. Solid palette: aged parchment, ink black,
+   deep maroon, muted saffron, deep indigo, copper accent.
+   Vedic visual language: geometry + typography + proportion + color.
    ========================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap');
-
-@font-face {
-    font-family: 'pankh';
-    src: url('pankh.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Basgira';
-    src: url('basgira.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
+/* --- COLOR PALETTE (solid only, no gradients) --- */
 :root {
-    /* Brand palette — from the RAAGLY heritage design system */
-    --bg: #180A29;               /* Royal Indigo — 60% base */
-    --secondary: #800020;        /* Deep Crimson — 30% secondary */
-    --secondary-soft: rgba(128, 0, 32, 0.32);
-    --accent: #D4AF37;           /* Imperial Gold — 10% accent */
-    --accent-strong: #e9c767;
-    --text: #FCEECB;             /* Warm Cream — text */
+    /* Base tones — solid colors only */
+    --bg: #180A29;           /* Deep indigo — surface */
+    --surface: #E8E6E3;      /* Aged parchment — cards/panels */
+    --surface-dark: #2C2C2C; /* Ink black — text blocks */
+    --muted: #6B6B6B;        /* Muted ink — secondary text */
+    --accent: #C59326;       /* Antique gold — accent only */
+    --crimson: #B40F22;      /* Deep maroon — secondary accent */
+    --saffron: #B56D25;      /* Muted saffron — highlight */
+    --border: #A8A8A8;       /* Refined border */
+    --border-soft: #D1D1D1;
+    --bg-subtle: rgba(24, 10, 41, 0.6);
 
-    --surface: rgba(32, 14, 48, 0.93);
-    --surface-light: rgba(212, 175, 55, 0.07);
-    --border: rgba(212, 175, 55, 0.16);
-    --muted: rgba(252, 238, 203, 0.62);
-    --accent-soft: rgba(212, 175, 55, 0.16);
-    --glow: rgba(212, 175, 55, 0.3);
-    --crimson-glow: rgba(128, 0, 32, 0.4);
-    --radius: 26px;
-    --transition: 0.45s cubic-bezier(.22, .61, .36, 1);
+    --radius: 12px;
+    --transition: 0.3s ease;
 }
 
+/* --- BASE --- */
 html {
     scroll-behavior: smooth;
 }
 
-/* Premium 'Outfit' Font lagaya gaya hai baaki saare normal text aur numbers ke liye */
 body {
     min-height: 100vh;
-    background:
-        radial-gradient(circle at 50% 0%, rgba(128, 0, 32, 0.35), transparent 42%),
-        radial-gradient(circle at 12% 100%, rgba(212, 175, 55, 0.1), transparent 45%),
-        var(--bg);
-    color: var(--text);
-    font-family: 'Outfit', sans-serif !important;
+    background: var(--bg);
+    color: var(--surface-dark);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
+    line-height: 1.5;
 }
 
-/* pankh Font for Main Brand Heading */
+/* --- TYPOGRAPHY --- */
 .brand h1 {
-    font-family: 'pankh', serif !important;
-    letter-spacing: 1px !important;
-    font-size: 26px;
-    font-weight: 500;
+    font-family: 'Merriweather', serif;
+    font-weight: 900;
+    font-size: clamp(1.8rem, 5vw, 2.4rem);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--surface-dark);
 }
 
-/* Cinzel — engraved royal serif for editorial/ceremonial text */
-.brand span:last-child,
-.eyebrow,
-.section-heading span,
-.library-header > div > span,
-.quote-section p,
-footer {
-    font-family: 'Cinzel', serif;
+.brand span {
+    font-family: 'Merriweather', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
 }
 
-/* Basgira Font for Raag Titles & Cards */
-#raag-name,
-.raag-card h4,
-.library-item-name {
-    font-family: 'Basgira', sans-serif !important;
+ /* Section headings */
+.section-heading h3 {
+    font-family: 'Merriweather', serif;
+    font-weight: 900;
+    font-size: clamp(1.25rem, 4vw, 1.75rem);
+    letter-spacing: 0.05em;
+    color: var(--surface-dark);
 }
 
-/* AMBIENT BACKGROUND */
-.ambient {
-    position: fixed;
-    width: 400px;
-    height: 400px;
-    border-radius: 50%;
-    filter: blur(100px);
-    pointer-events: none;
-    opacity: 0.18;
-    z-index: -2;
-}
-.ambient-one { top: -160px; left: -120px; background: var(--accent); }
-.ambient-two { right: -180px; bottom: 5%; background: var(--secondary); }
-.ambient-three { left: 35%; bottom: -250px; background: #4c1d6b; }
-
-.app {
-    width: min(100%, 560px);
-    margin: auto;
-    padding: 28px 20px 60px;
+.section-heading span {
+    font-family: 'Merriweather', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
 }
 
-/* HEADER */
+/* Body type */
+p, span, label, input, button {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: clamp(0.75rem, 2vw, 0.875rem);
+    line-height: 1.6;
+    color: var(--surface-dark);
+}
+
+/* --- NAVIGATION --- */
 .topbar {
     display: grid;
-    grid-template-columns: 40px 1fr 40px;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
-    margin-bottom: 28px;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    backdrop-filter: none;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
 }
+
 .brand {
-    grid-column: 2;
-    justify-self: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
-    gap: 8px;
+    gap: 4px;
 }
+
 .brand-mark {
-    width: 44px;
-    height: 44px;
-    display: grid;
-    place-items: center;
-    border-radius: 14px;
-    background: var(--surface-light);
-    border: 1px solid var(--border);
-    color: var(--accent);
-    font-size: 18px;
-    box-shadow: 0 0 25px var(--glow);
-}
-.brand span:last-child {
-    display: block;
-    margin-top: 1px;
-    color: var(--muted);
-    font-size: 8px;
-    letter-spacing: 2.2px;
-    text-transform: uppercase;
-    font-weight: 500;
-}
-.icon-button {
-    grid-column: 3;
-    justify-self: end;
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--accent);
     border-radius: 50%;
-    border: 1px solid var(--border);
-    background: var(--surface-light);
-    color: var(--text);
-    cursor: pointer;
+    display: grid; place-items: center;
+    font-size: 1rem;
+    color: var(--accent);
+    flex-shrink: 0;
+}
+
+.icon-button {
+    width: 36px; height: 36px;
+    border: none; background: transparent;
+    color: var(--surface-dark);
+    cursor: pointer; font-size: 1rem;
+    display: grid; place-items: center;
+    padding: 4px;
     transition: var(--transition);
 }
-.icon-button:hover {
-    background: var(--accent-soft);
-    color: var(--accent);
-}
 
-/* Heritage border rule — block-print inspired zigzag beneath the header */
-.topbar::after {
-    content: "";
-    grid-column: 1 / -1;
-    display: block;
-    height: 7px;
-    margin-top: 16px;
-    background-image:
-        repeating-linear-gradient(45deg, var(--accent) 0 1.5px, transparent 1.5px 9px),
-        repeating-linear-gradient(-45deg, var(--accent) 0 1.5px, transparent 1.5px 9px);
-    background-size: 18px 7px;
-    background-repeat: repeat-x;
-    background-position: center;
-    opacity: 0.4;
-}
+.icon-button:hover { color: var(--accent); }
 
-/* SEARCH */
-.search-section {
-    position: relative;
-    margin-bottom: 18px;
-}
-.search-box {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    padding: 0 15px;
-    height: 48px;
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    background: rgba(24, 10, 41, 0.9);
-    backdrop-filter: blur(20px);
-}
-.search-box > i { color: var(--muted); font-size: 13px; }
-#search-input {
-    flex: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    color: var(--text);
-    font-family: inherit;
-    font-size: 14px;
-}
-.search-results {
-    display: none;
-    position: absolute;
-    top: 56px;
-    left: 0;
-    right: 0;
-    max-height: 330px;
-    overflow-y: auto;
-    padding: 7px;
-    border: 1px solid var(--border);
-    border-radius: 17px;
-    background: rgba(21, 9, 36, 0.98);
-    z-index: 50;
-}
-.search-result {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 12px;
-    background: transparent;
-    color: var(--text);
-    text-align: left;
-    cursor: pointer;
-}
-.search-result:hover { background: var(--surface-light); }
-
-/* PLAYER CARD — the signature surface: quiet gold corner frame */
-.player-card {
-    position: relative;
-    padding: 26px 20px 22px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
+/* Primary navigation */
+#main-nav {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: calc(100vw - 4rem);
     background: var(--surface);
-    backdrop-filter: blur(30px);
-    box-shadow: 0 30px 100px rgba(0, 0, 0, 0.45);
-    overflow: hidden;
-    transition: box-shadow var(--transition), border-color var(--transition);
-}
-.player-card::before,
-.player-card::after {
-    content: "";
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    border: 1.5px solid var(--accent);
-    opacity: 0.5;
-    pointer-events: none;
-}
-.player-card::before {
-    top: 10px; left: 10px;
-    border-right: none; border-bottom: none;
-    border-radius: 10px 0 0 0;
-}
-.player-card::after {
-    bottom: 10px; right: 10px;
-    border-left: none; border-top: none;
-    border-radius: 0 0 10px 0;
-}
-.player-card.playing {
-    border-color: rgba(212, 175, 55, 0.4);
-    box-shadow: 0 30px 100px rgba(0, 0, 0, 0.45), 0 0 60px var(--crimson-glow);
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(.22,.61,.36,1);
+    z-index: 90;
+    padding: 8rem 2rem 2rem;
+    overflow-y: auto;
+    border-left: 1px solid var(--border);
 }
 
-.visual-stage {
-    position: relative;
-    width: 215px;
-    height: 215px;
-    margin: 0 auto 8px;
+#main-nav.open { transform: translateX(0); }
+
+#main-nav ul {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 1rem;
+}
+
+#main-nav a {
+    text-decoration: none;
+    color: var(--surface-dark);
+    font-family: 'Merriweather', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    transition: var(--transition);
+    display: block;
+}
+
+#main-nav a:hover,
+#main-nav a.active {
+    background: var(--accent);
+    color: var(--bg);
+}
+
+/* Hide desktop nav on mobile by default, show hamburger */
+@media (min-width: 769px) {
+    #main-nav { display: none; position: static; width: auto; background: transparent; transform: none; }
+    .icon-button { display: none; }
+    #main-nav ul { flex-direction: row; gap: 2rem; }
+}
+
+/* --- QUICK SECTION / FILTERS --- */
+.quick-section { margin-top: 80px; padding: 0 1rem 2rem; }
+
+.section-heading { margin-bottom: 1rem; }
+
+.filter-row {
+    display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem;
+    scrollbar-width: none; -ms-overflow-style: none;
+}
+
+.filter-row::-webkit-scrollbar { display: none; }
+
+.filter {
+    flex: 0 0 auto;
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer; font-family: 'Inter', sans-serif; font-size: 0.75rem;
+    font-weight: 500; letter-spacing: 0.05em;
+    transition: var(--transition);
+}
+
+.filter:hover,
+.filter.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: transparent;
+}
+
+/* --- CARDS / RAAG GRID --- */
+.raag-grid {
     display: grid;
-    place-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
 }
 
-/* Orbit rings — quiet ambient motion around the mandala */
+.raag-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    cursor: pointer; overflow: hidden;
+    transition: var(--transition);
+    display: flex; flex-direction: column; justify-content: space-between;
+}
+
+.raag-card:hover { border-color: var(--accent); }
+
+.raag-card.active { border-color: var(--accent); }
+
+.raag-number {
+    font-size: 0.65rem; color: var(--muted); font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.raag-card h4 {
+    font-family: 'Merriweather', serif;
+    font-size: 0.85rem; font-weight: 700;
+    color: var(--surface-dark); margin: 0.5rem 0 0.25rem;
+    letter-spacing: 0.02em;
+}
+
+.raag-card p {
+    font-size: 0.65rem; color: var(--muted);
+    flex: 1; overflow: hidden; display: -webkit-box;
+    -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    margin: 0.25rem 0.5rem 0.5rem;
+}
+
+.raag-card p:first-of-type { color: var(--crimson); font-weight: 500; }
+
+.raag-card p:last-of-type { color: var(--muted); }
+
+.raag-play {
+    margin-top: auto; padding: 0.5rem; text-align: right;
+}
+
+.raag-play i { font-size: 0.75rem; color: var(--accent); }
+
+/* --- PLAYER CARD --- */
+.player-card {
+    width: 100%;
+    max-width: 520px; margin: 2rem auto 0;
+    padding: 1.5rem 1.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    backdrop-filter: none;
+}
+
+.player-card.playing { border-color: var(--accent); }
+
+/* Visual stage - geometric, no blurred orbits */
+.visual-stage {
+    position: relative; width: 180px; height: 180px; margin: 0 auto 1rem;
+}
+
 .orbit {
-    position: absolute;
-    top: 50%; left: 50%;
-    border-radius: 50%;
-    pointer-events: none;
+    position: absolute; top: 50%; left: 50%; border-radius: 50%;
+    border: 1px solid var(--border-soft); pointer-events: none;
+    transform: translate(-50%, -50%);
 }
-.orbit-one {
-    width: 190px; height: 190px;
-    border: 1px dashed rgba(212, 175, 55, 0.22);
-    animation: orbitClockwise 42s linear infinite;
-}
-.orbit-two {
-    width: 172px; height: 172px;
-    border: 1px dotted rgba(128, 0, 32, 0.45);
-    animation: orbitReverse 30s linear infinite;
-}
-.player-card.playing .orbit-one { animation-duration: 20s; }
-.player-card.playing .orbit-two { animation-duration: 14s; }
+
+.orbit-one { width: 150px; height: 150px; animation: orbit-ccw 35s linear infinite; }
+.orbit-two { width: 110px; height: 110px; animation: orbit-cw 22s linear infinite; reverse; }
+
+@keyframes orbit-ccw { to { transform: translate(-50%, -50%) rotate(-360deg); } }
+@keyframes orbit-cw { to { transform: translate(-50%, -50%) rotate(360deg); } }
 
 .mandala {
-    position: relative;
-    width: 145px;
-    height: 145px;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    filter: drop-shadow(0 0 20px var(--glow)) drop-shadow(0 0 30px var(--crimson-glow));
-    transition: filter var(--transition);
+    position: relative; width: 110px; height: 110px; margin: 0 auto;
+    border: 1px solid var(--border); border-radius: 50%;
+    background: none; filter: none;
 }
-.player-card.playing .mandala {
-    filter: drop-shadow(0 0 28px var(--glow)) drop-shadow(0 0 40px var(--crimson-glow));
-}
-.mandala-ring {
-    position: absolute;
-    border-radius: 50%;
-    border: 1px solid var(--accent);
-    opacity: 0.45;
-}
-.ring-one { inset: 0; border-style: dashed; animation: rotateClockwise 28s linear infinite; }
-.ring-two { inset: 14px; border-style: dotted; animation: rotateReverse 19s linear infinite; }
-.ring-three { inset: 30px; border-width: 2px; border-color: var(--secondary); opacity: 0.35; animation: rotateClockwise 12s linear infinite; }
-.mandala-core {
-    width: 65px;
-    height: 65px;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.1), rgba(0, 0, 0, 0.3));
-    border: 1px solid rgba(212, 175, 55, 0.18);
-}
-.mandala-core span { font-size: 22px; color: var(--accent); }
 
-/* Sound bars — small equalizer accent tied to real playback state */
+.mandala-ring {
+    position: absolute; border-radius: 50%; border: 1px solid var(--border-soft);
+    opacity: 0.4; top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+
+.ring-one { width: 100%; height: 100%; animation: rotate-ccw 30s linear infinite; }
+.ring-two { width: 80%; height: 80%; inset: 12px; animation: rotate-cw 20s linear infinite; reverse; }
+.ring-three { width: 50%; height: 50%; inset: 24px; border-width: 2px; opacity: 0.25; animation: rotate-ccw 15s linear infinite; }
+
+.mandala-core {
+    position: absolute; width: 44px; height: 44px; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    border-radius: 50%; background: var(--surface); border: 1px solid var(--border);
+    display: grid; place-items: center;
+}
+
+.mandala-core span { font-size: 1.2rem; color: var(--accent); }
+
 .sound-bars {
-    position: absolute;
-    bottom: 6px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: flex-end;
-    gap: 3px;
-    height: 16px;
-    opacity: 0.55;
-    z-index: 1;
+    position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 2px; height: 12px; opacity: 0.5;
 }
+
 .sound-bars span {
-    width: 3px;
-    height: 5px;
-    border-radius: 2px;
-    background: var(--accent);
+    width: 2px; height: 4px; border-radius: 1px; background: var(--accent);
+    animation: sound-bounce 1s ease-in-out infinite;
 }
-.player-card.playing .sound-bars span { animation: soundBounce 1.1s ease-in-out infinite; }
+
 .sound-bars span:nth-child(1) { animation-delay: 0s; }
 .sound-bars span:nth-child(2) { animation-delay: .1s; }
 .sound-bars span:nth-child(3) { animation-delay: .2s; }
 .sound-bars span:nth-child(4) { animation-delay: .05s; }
-.sound-bars span:nth-child(5) { animation-delay: .25s; }
-.sound-bars span:nth-child(6) { animation-delay: .15s; }
+.sound-bars span:nth-child(5) { animation-delay: .15s; }
+.sound-bars span:nth-child(6) { animation-delay: .25s; }
 .sound-bars span:nth-child(7) { animation-delay: .3s; }
 
-.track-info { text-align: center; margin-top: 10px; }
-.eyebrow {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 7px;
-    margin-bottom: 5px;
-    color: var(--muted);
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 2px;
-}
-.live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
-#raag-name {
-    font-size: 28px;
-    font-weight: 500;
-    letter-spacing: 1px;
-}
-#raag-time {
-    margin-top: 3px;
-    color: var(--muted);
-    font-size: 11px;
-    letter-spacing: 1.8px;
-    text-transform: uppercase;
-    font-weight: 500;
-}
+@keyframes sound-bounce { 0%, 100% { height: 4px; } 50% { height: 12px; } }
+
+/* Track info */
+.track-info { text-align: center; margin: 1rem 0 0; }
+
+.eyebrow { display: flex; justify-content: center; align-items: center; gap: 6px; margin-bottom: 0.5rem; color: var(--muted); font-size: 0.65rem; }
+
+.live-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+
+#raag-name { font-family: 'Merriweather', serif; font-size: 1.5rem; font-weight: 700; margin: 0.25rem 0; }
+
+#raag-time { color: var(--muted); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 1rem; }
+
 .description-container {
-    max-width: 420px;
-    margin: 14px auto 16px;
-    padding: 10px 14px;
-    border-radius: 12px;
-    border: 1px solid rgba(212, 175, 55, 0.1);
-    background: rgba(212, 175, 55, 0.03);
+    margin: 0.5rem auto 1rem; max-width: 360px; padding: 0.75rem 1rem;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--surface); font-size: 0.75rem; line-height: 1.5;
 }
-#raag-desc { color: var(--text); font-size: 12px; line-height: 1.6; font-weight: 300; }
 
-/* PROGRESS */
-.progress-container {
-    position: relative;
-    height: 16px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    margin-top: 10px;
-}
+#raag-desc { color: var(--muted); font-weight: 300; }
+
+/* Progress */
+.progress-container { position: relative; height: 8px; margin: 1rem 0; cursor: pointer; }
+
 .progress-container::before {
-    content: "";
-    position: absolute;
-    left: 0; right: 0;
-    height: 3px;
-    border-radius: 20px;
-    background: rgba(212, 175, 55, 0.12);
-}
-.progress {
-    position: absolute;
-    left: 0; width: 0%;
-    height: 3px;
-    border-radius: 20px;
-    background: var(--accent);
-}
-.progress-thumb {
-    position: absolute;
-    left: 0%;
-    width: 9px; height: 9px;
-    border-radius: 50%;
-    background: var(--accent);
-    transform: translateX(-50%);
-}
-.time-display {
-    display: flex;
-    justify-content: space-between;
-    color: var(--muted);
-    font-size: 11px;
-    margin-bottom: 12px;
-    font-weight: 500;
+    content: ""; position: absolute; left: 0; right: 0; height: 2px; background: var(--border);
 }
 
-/* CONTROLS */
-.controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-    margin: 12px 0;
-}
-.control-button {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    background: transparent;
-    border: none;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 14px;
-}
+.progress { position: absolute; left: 0; height: 2px; background: var(--accent); transition: width 0.1s; }
+
+.progress-thumb { position: absolute; left: 0%; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); transform: translateX(-50%); transition-left: 0.1s; }
+
+.time-display { display: flex; justify-content: space-between; color: var(--muted); font-size: 0.65rem; margin-top: 0.5rem; }
+
+/* Controls */
+.controls { display: flex; justify-content: center; align-items: center; gap: 1rem; margin: 0.5rem 0; }
+
+.control-button { width: 32px; height: 32px; border: none; background: transparent; color: var(--muted); cursor: pointer; font-size: 1rem; }
+
 .control-button:hover { color: var(--accent); }
+
 .play-button {
-    width: 52px; height: 52px;
-    display: grid; place-items: center;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent-strong), var(--accent));
-    color: #180A29;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    box-shadow: 0 0 25px var(--glow);
-}
-.play-button:hover { background: linear-gradient(135deg, var(--accent), #b8862c); }
-
-/* VOLUME */
-.volume-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-top: 14px;
-    padding-top: 10px;
-    border-top: 1px solid rgba(212, 175, 55, 0.1);
-}
-.volume-button {
-    border: none; background: transparent;
-    color: var(--muted); cursor: pointer; font-size: 13px;
-}
-#volume-slider {
-    width: 100px; height: 3px;
-    appearance: none;
-    background: rgba(212, 175, 55, 0.18);
-    border-radius: 10px;
-    outline: none;
-}
-#volume-slider::-webkit-slider-thumb {
-    appearance: none;
-    width: 9px; height: 9px;
-    border-radius: 50%;
-    background: var(--accent);
-    cursor: pointer;
-}
-#volume-value { min-width: 22px; color: var(--muted); font-size: 11px; font-weight: 500; }
-
-.player-footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 14px;
-    padding-top: 10px;
-    border-top: 1px solid rgba(212, 175, 55, 0.1);
-    color: var(--muted);
-    font-size: 10px;
-    font-weight: 500;
+    width: 44px; height: 44px; border: none; background: var(--accent); color: var(--bg);
+    border-radius: 50%; cursor: pointer; font-size: 1rem; display: grid; place-items: center;
 }
 
-/* EXPLORE */
-.quick-section { margin-top: 36px; }
-.section-heading {
-    display: flex; justify-content: space-between;
-    align-items: end; margin-bottom: 14px;
-}
-.section-heading span { color: var(--accent); font-size: 10px; font-weight: 500; letter-spacing: 2px; }
-.section-heading h3 { font-size: 20px; font-weight: 500; }
-.text-button { border: none; background: transparent; color: var(--muted); cursor: pointer; font-size: 11px; font-weight: 500; }
-.text-button:hover { color: var(--accent); }
+.play-button:hover { background: var(--crimson); }
 
-.filter-row {
-    display: flex; gap: 7px;
-    overflow-x: auto; padding-bottom: 5px;
-    scrollbar-width: none;
-}
-.filter-row::-webkit-scrollbar { display: none; }
-.filter {
-    flex: 0 0 auto;
-    padding: 6px 14px;
-    border: 1px solid var(--border);
-    border-radius: 30px;
-    background: rgba(24, 10, 41, 0.8);
-    color: var(--muted);
-    cursor: pointer; font-size: 11px;
-    font-weight: 500;
-}
-.filter:hover, .filter.active {
-    background: var(--secondary-soft);
-    border-color: rgba(212, 175, 55, 0.4);
-    color: var(--accent);
-}
+/* Volume */
+.volume-container { display: flex; justify-content: center; align-items: center; gap: 0.75rem; margin: 0.75rem 0; padding-top: 0.5rem; border-top: 1px solid var(--border); }
 
-.raag-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-top: 16px;
-}
-.raag-card {
-    position: relative;
-    display: flex; flex-direction: column;
-    justify-content: space-between; align-items: flex-start;
-    min-height: 120px; padding: 14px 14px 14px 17px;
-    border-radius: 16px; border: 1px solid var(--border);
-    background: rgba(24, 10, 41, 0.9);
-    cursor: pointer; transition: 0.3s ease;
-    overflow: hidden;
-}
-/* top hairline: gold fading into crimson */
-.raag-card::before {
-    content: "";
-    position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, var(--accent), var(--secondary));
-    opacity: 0.75;
-}
-/* left accent bar — tinted per-raag via --card-accent set in script.js */
-.raag-card::after {
-    content: "";
-    position: absolute; top: 0; bottom: 0; left: 0; width: 3px;
-    background: var(--card-accent, var(--accent));
-    opacity: 0.7;
-}
-.raag-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(212, 175, 55, 0.35);
-    background: rgba(30, 13, 48, 0.95);
-}
-.raag-card.active { border-color: var(--accent); }
-.raag-number { color: var(--muted); font-size: 9px; font-weight: 500; }
-.raag-card h4 { margin-top: 6px; font-size: 16px; font-weight: 500; color: var(--text); }
-.raag-card p { margin-top: 4px; }
-.raag-card p:first-of-type {
-    color: var(--accent);
-    font-weight: 500;
-    letter-spacing: 0.3px;
-}
-.raag-card p:last-of-type {
-    color: rgba(252, 238, 203, 0.72);
-    border-left: 2px solid rgba(212, 175, 55, 0.3);
-    padding-left: 8px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
-.raag-play {
-    position: absolute; right: 12px; top: 12px;
-    width: 26px; height: 26px; display: grid; place-items: center;
-    border-radius: 50%; background: rgba(212, 175, 55, 0.12);
-    color: var(--accent); font-size: 10px;
-}
+.volume-button { border: none; background: transparent; color: var(--muted); cursor: pointer; font-size: 0.75rem; }
 
-/* QUOTE & FOOTER */
-.quote-section {
-    margin-top: 45px;
-    padding: 30px 15px;
-    text-align: center;
-    border-top: 1px solid rgba(212, 175, 55, 0.1);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-}
-.quote-symbol { color: var(--accent); font-family: Georgia, serif; font-size: 35px; }
-.quote-section p { margin-top: 10px; font-size: 16px; font-weight: 400; letter-spacing: 0.3px; }
-.quote-section p span { color: var(--accent); font-weight: 600; }
+#volume-slider { width: 100px; height: 2px; appearance: none; background: var(--border); border-radius: 10px; outline: none; }
 
-.quote-section small,
-footer small,
-.shani-credit {
-    display: block;
-    margin-top: 12px;
-    color: var(--accent) !important;
-    font-size: 11px !important;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-shadow: 0 0 12px var(--glow);
-}
-footer {
-    display: flex; justify-content: center;
-    gap: 7px; margin-top: 22px;
-    color: var(--muted); font-size: 9px; letter-spacing: 1.2px; font-weight: 500;
-}
+#volume-slider::-webkit-slider-thumb { appearance: none; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); cursor: pointer; }
 
-/* =========================================================
-   LIBRARY DRAWER
-   ========================================================= */
-.library {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: min(390px, 92vw);
-    height: 100vh;
-    padding: 25px 20px;
-    background: linear-gradient(165deg, rgba(38, 14, 54, 0.98), rgba(15, 6, 26, 0.99));
-    border-left: 1px solid var(--border);
-    backdrop-filter: blur(30px);
-    transform: translateX(105%);
-    transition: transform 0.5s cubic-bezier(.22,.61,.36,1);
-    z-index: 100;
-}
+#volume-value { min-width: 20px; color: var(--muted); font-size: 0.65rem; font-weight: 500; }
+
+.player-footer { margin-top: 0.75rem; padding-top: 0.5rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; color: var(--muted); font-size: 0.65rem; font-weight: 500; }
+
+/* --- EXPLORE SECTION --- */
+.quick-section { margin-top: 80px; padding: 0 1rem 2rem; }
+
+.section-heading { margin-bottom: 1rem; }
+
+/* --- LIBRARY DRAWER --- */
+.library { position: fixed; top: 0; right: 0; bottom: 0; width: 320px; background: var(--surface); border-left: 1px solid var(--border); transform: translateX(100%); transition: transform 0.3s cubic-bezier(.22,.61,.36,1); z-index: 90; padding: 2rem 1rem; }
 
 .library.open { transform: translateX(0); }
 
-.library-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.14);
-}
-.library-header > div > span {
-    color: var(--accent);
-    font-size: 9px;
-    font-weight: 500;
-    letter-spacing: 2px;
-}
-.library-header h2 {
-    margin-top: 4px;
-    font-size: 22px;
-    font-weight: 500;
-}
-.library-list {
-    height: calc(100vh - 110px);
-    overflow-y: auto;
-    padding-right: 3px;
-}
-.library-list::-webkit-scrollbar { width: 4px; }
-.library-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-.library-list::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+.library-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
 
-.library-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    padding: 13px 10px;
-    border: none;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.08);
-    background: transparent;
-    color: var(--text);
-    text-align: left;
-    cursor: pointer;
-}
-.library-item:hover { background: rgba(212, 175, 55, 0.05); }
-.library-item.active { color: var(--accent); }
-.library-item-number { width: 25px; color: var(--muted); font-size: 10px; font-weight: 500; }
-.library-item-name { flex: 1; font-size: 16px; font-weight: 500; }
-.library-item i { color: var(--muted); font-size: 12px; }
+.library-header h2 { font-family: 'Merriweather', serif; font-size: 1.25rem; font-weight: 700; color: var(--surface-dark); }
 
-/* OVERLAY */
-.overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(8, 3, 14, 0.6);
-    opacity: 0;
-    visibility: hidden;
-    transition: 0.4s ease;
-    z-index: 90;
-}
+.library-list { max-height: calc(100vh - 140px); overflow-y: auto; padding-right: 4px; }
+
+.library-list::-webkit-scrollbar { width: 3px; }
+
+.library-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
+
+.library-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border-soft); color: var(--surface-dark); cursor: pointer; font-size: 0.85rem; transition: var(--transition); }
+
+.library-item:hover { padding-left: 0.5rem; }
+
+.library-item-number { width: 20px; color: var(--muted); font-size: 0.65rem; }
+
+.library-item-name { flex: 1; }
+
+/* --- OVERLAY --- */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); opacity: 0; visibility: hidden; transition: 0.3s ease; z-index: 80; }
+
 .overlay.active { opacity: 1; visibility: visible; }
 
-/* ANIMATIONS */
-@keyframes rotateClockwise { to { transform: rotate(360deg); } }
-@keyframes rotateReverse { to { transform: rotate(-360deg); } }
-@keyframes orbitClockwise {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
+/* --- FOOTER --- */
+footer { padding: 1.5rem; text-align: center; color: var(--muted); font-size: 0.75rem; letter-spacing: 0.05em; }
+
+/* --- RESPONSIVE --- */
+@media (min-width: 769px) {
+    body { overflow-x: hidden; }
+    
+    .topbar { display: grid; grid-template-columns: auto 1fr auto; padding: 1rem; }
+    
+    .icon-button { display: none; }
+    
+    #main-nav { display: none; position: static; width: auto; background: transparent; transform: none; padding: 0; }
+    #main-nav ul { flex-direction: row; gap: 2rem; }
+    
+    .quick-section { margin-top: 80px; }
+    
+    .raag-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    
+    .player-card { max-width: 560px; margin: 3rem auto 0; }
+    
+    .library { display: none; width: 320px; }
 }
-@keyframes orbitReverse {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(-360deg); }
+
+@media (max-width: 480px) {
+    .filter-row { gap: 0.25rem; }
+    .filter { padding: 0.4rem 0.5rem; font-size: 0.65rem; }
+    
+    .raag-grid { grid-template-columns: 1fr; gap: 0.5rem; }
+    
+    .player-card { padding: 1rem 0.75rem 0.5rem; }
+    
+    .visual-stage { width: 140px; height: 140px; }
+    .orbit-one { width: 110px; height: 110px; }
+    .orbit-two { width: 70px; height: 70px; }
+    .mandala { width: 70px; height: 70px; }
+    .mandala-core { width: 28px; height: 28px; }
+    
+    .sound-bars { height: 8px; }
+    .sound-bars span { height: 3px; }
+    
+    .progress-container { height: 6px; }
+    .progress-container::before { height: 1px; }
+    .progress-thumb { width: 4px; height: 4px; }
+    
+    .time-display { font-size: 0.55rem; }
+    
+    .controls { gap: 0.5rem; }
+    .control-button { width: 28px; height: 28px; font-size: 0.75rem; }
+    .play-button { width: 36px; height: 36px; font-size: 0.75rem; }
+    
+    .volume-container { gap: 0.5rem; }
+    #volume-slider { width: 80px; }
+    
+    .player-footer { font-size: 0.55rem; }
 }
-@keyframes soundBounce { 0%, 100% { height: 5px; } 50% { height: 16px; } }
+
+/* Focus visible */
+*:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+```## FILE: script.js
+
+```javascript
+/* =========================================================
+   RAAGLY — VEDIC ASTRONOMICAL RE-SKIN
+   ========================================================= */
+
+"use strict";
+
+const PLAYLIST_ID = "PLJRipbfj__b0";
+const DEFAULT_VOLUME = 80;
+const TOTAL_TRACKS = 27;
+
+// Raag data — retained from original, categories preserved
+const raagData = [
+    { name: "Raag Bhimpalasi", time: "Afternoon", category: "Mind", desc: "Encourages relaxation, introspection and emotional balance." },
+    { name: "Raag Darbari Kanada", time: "Late Night", category: "Mind", desc: "Healing: Heart disease, child-related issues, honor, positioning in life, and paternal/government relations." },
+    { name: "Raag Shuddh Sarang", time: "Afternoon", category: "Health", desc: "Healing: Mental peace, maternal relations, family harmony, trauma, and intangible happiness." },
+    { name: "Raag Komal Rishabh Asavari", time: "Morning", category: "Mind", desc: "Healing: Mental peace, maternal relations, calmness, family harmony, and emotional trauma." },
+    { name: "Raag Yaman", time: "Evening", category: "Harmony", desc: "Healing: Mental peace, maternal relations, happiness, family atmosphere, and emotional pain." },
+    { name: "Raag Hamsadhwani", time: "Evening", category: "Mind", desc: "Healing: Mental peace, maternal relations, happiness, calmness, family harmony, and trauma." },
+    { name: "Raag Bhairavi", time: "Morning / Closing", category: "Mind", desc: "Healing: Insomnia, property-related issues, blood-related problems, violence, and accidents." },
+    { name: "Raag Asavari", time: "Late Morning", category: "Health", desc: "Healing: Property-related issues, blood-related problems, violence, and accidents." },
+    { name: "Raag Desi Todi", time: "Late Morning", category: "Mind", desc: "Healing: Property-related issues, blood-related problems, violence, and accidents." },
+    { name: "Raag Kalyan", time: "Evening", category: "Harmony", desc: "Healing: Education troubles, sibling conflicts, thyroid/hormonal imbalances, and communication." },
+    { name: "Raag Poorvi", time: "Evening", category: "Career", desc: "Healing: Education troubles, sibling conflicts, hormonal imbalances, and business." },
+    { name: "Raag Nat Bhairav", time: "Morning", category: "Career", desc: "Healing: Relationship issues and money-related financial troubles." },
+    { name: "Raag Vrindavani Sarang", time: "Afternoon", category: "Harmony", desc: "Healing: Relationship issues and money-related financial troubles." },
+    { name: "Raag Shuddh Kalyan", time: "Evening", category: "Mind", desc: "Encourages peace, clarity and gentle positivity." },
+    { name: "Raag Jaunpuri", time: "Late Morning", category: "Health", desc: "Healing: Profession-related issues, long-term diseases, and chronic troubles." },
+    { name: "Raag Kirwani", time: "Evening", category: "Mind", desc: "Healing: Profession-related issues, long-term diseases, and chronic troubles." },
+    { name: "Raag Neelambari", time: "Night", category: "Mind", desc: "Healing: Profession-related issues, long-term diseases, and chronic troubles." },
+    { name: "Raag Malkauns", time: "Late Night", category: "Mind", desc: "Healing: Provides relief from Asthma." },
+    { name: "Raag Bhairav", time: "Early Morning", category: "Health", desc: "Healing: Provides relief from Headaches." },
+    { name: "Raag Lalit", time: "Early Dawn", category: "Mind", desc: "Healing: Provides relief from Asthma." },
+    { name: "Raag Bhoop", time: "Evening", category: "Harmony", desc: "Healing: Regulates and maintains Blood Pressure." },
+    { name: "Raag Madhuwanti", time: "Afternoon / Evening", category: "Mind", desc: "Healing: Helps combat depression and mental stress." },
+    { name: "Raag Pilu", time: "Flexible", category: "Harmony", desc: "Healing: Beneficial for those suffering from Anemia." },
+    { name: "Raag Shivaranjani", time: "Evening / Night", category: "Mind", desc: "Healing: Improves retention and helps with memory loss." },
+    { name: "Raag Jaijaiwanti", time: "Evening", category: "Mind", desc: "Healing: Overcomes physical and mental weakness." },
+    { name: "Raag Khamaj", time: "Late Evening", category: "Harmony", desc: "Healing: Provides relief from acidity and indigestion." },
+    { name: "Tanpura", time: "Continuous Drone", category: "Health", desc: "Healing: Child-related problems, honor, positioning in life, and relations with father/government." }
+];
+
+/* ---------------------------------------------------------
+   STATE
+--------------------------------------------------------- */
+let player = null;
+let youtubeReady = false;
+let playlistLoaded = false;
+let pendingPlayIndex = null;
+let isPlaying = false;
+let isMuted = false;
+let preMuteVolume = DEFAULT_VOLUME;
+let progressTimer = null;
+let currentIndex = 0;
+let activeFilter = "all";
+
+/* ---------------------------------------------------------
+   DOM ELEMENTS (minimal, correct IDs)
+--------------------------------------------------------- */
+const body = document.body;
+const raagName = document.getElementById("raag-name");
+const raagTime = document.getElementById("raag-time");
+const raagDesc = document.getElementById("raag-desc");
+const playBtn = document.getElementById("play");
+const prevBtn = document.getElementById("prev");
+const nextBtn = document.getElementById("next");
+const progressContainer = document.getElementById("progress-container");
+const progressBar = document.getElementById("progress");
+const currentTimeEl = document.getElementById("current-time");
+const durationEl = document.getElementById("duration");
+const volumeSlider = document.getElementById("volume-slider");
+const volumeValueEl = document.getElementById("volume-value");
+const muteBtn = document.getElementById("mute-btn");
+const searchInput = document.getElementById("search-input");
+const searchResults = document.getElementById("search-results");
+const clearSearchBtn = document.getElementById("clear-search");
+const raagGrid = document.getElementById("raag-grid");
+const libraryList = document.getElementById("library-list");
+const libraryPanel = document.getElementById("library");
+const libraryToggleBtn = document.querySelector(".nav-toggle");
+const libraryCloseBtn = document.getElementById("library-close");
+const overlayEl = document.getElementById("overlay");
+const showAllBtn = document.getElementById("show-all");
+const filterButtons = document.querySelectorAll(".filter");
+const playerContainer = document.querySelector(".player-card");
+
+// FIXED: Only the IDs that actually exist in the HTML
+const trackCounterEl = document.getElementById("track-counter");
+
+function $(id) { return document.getElementById(id); }
+
+/* ---------------------------------------------------------
+   HELPER FUNCTIONS
+--------------------------------------------------------- */
+function escapeHTML(value) {
+    return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
+function formatTime(seconds) {
+    if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${String(secs).padStart(2, "0")}`;
+}
+
+/* ---------------------------------------------------------
+   RENDER — raag grid + library
+--------------------------------------------------------- */
+function renderRaagCards() {
+    if (!raagGrid) return;
+    raagGrid.innerHTML = "";
+    raagData.forEach((raag, index) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "raag-card";
+        card.dataset.index = index;
+        card.tabIndex = 0; /* keyboard accessible */
+        card.innerHTML = `
+            <span class="raag-number">${String(index + 1).padStart(2, "0")}</span>
+            <h4>${escapeHTML(raag.name)}</h4>
+            <p style="font-size: 0.75rem; color: var(--muted); margin: 0.25rem 0.5rem 0;">${escapeHTML(raag.time)} • ${escapeHTML(raag.category)}</p>
+            <p style="font-size: 0.7rem; line-height: 1.3; color: var(--muted); margin: 0 0.5rem 0.5rem;">${escapeHTML(raag.desc)}</p>
+            <span class="raag-play"><i class="fa-solid fa-play"></i></span>
+        `;
+        card.addEventListener("click", () => playRaag(index));
+        /* Keyboard: Enter/Space triggers click */
+        card.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); playRaag(index); }
+        });
+        raagGrid.appendChild(card);
+    });
+}
+
+function renderLibrary() {
+    if (!libraryList) return;
+    libraryList.innerHTML = "";
+    raagData.forEach((raag, index) => {
+        const item = document.createElement("button");
+        item.type = "button";
+        item.className = "library-item";
+        item.dataset.index = index;
+        item.tabIndex = 0;
+        item.innerHTML = `
+            <span class="library-item-number">${String(index + 1).padStart(2, "0")}</span>
+            <span class="library-item-name">${escapeHTML(raag.name)}</span>
+            <i class="fa-solid fa-chevron-right"></i>
+        `;
+        item.addEventListener("click", () => { playRaag(index); closeLibrary(); });
+        item.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); playRaag(index); closeLibrary(); } });
+        libraryList.appendChild(item);
+    });
+}
+
+/* ---------------------------------------------------------
+   PLAYER — show raag info
+--------------------------------------------------------- */
+function showRaag(index, animate = true) {
+    if (index < 0 || index >= TOTAL_TRACKS) return;
+    currentIndex = index;
+    const raag = raagData[index];
+    if (raagName) raagName.textContent = raag.name;
+    if (raagTime) raagTime.textContent = raag.time;
+    if (raagDesc) raagDesc.textContent = raag.desc;
+    if (trackCounterEl) trackCounterEl.textContent = `${String(index + 1).padStart(2, "0")} / ${TOTAL_TRACKS}`;
+    if (body) body.style.background = raagData[index] ? raagData[index].bg : var(--bg);
+    /* subtle fade */
+    if (animate) {
+        [raagName, raagTime, raagDesc].forEach(el => {
+            if (!el) return;
+            el.style.transition = "color 0.3s, background 0.3s";
+            el.style.opacity = "0.6";
+            el.style.transition = "";
+            el.style.opacity = "1";
+        });
+    }
+}
+
+/* ---------------------------------------------------------
+   PLAY / PAUSE
+--------------------------------------------------------- */
+function togglePlay() {
+    if (!youtubeReady || !player) return;
+    try { isPlaying ? player.pauseVideo() : player.playVideo(); } catch (e) { console.error(e); }
+}
+
+function updatePlayIcon(playing) {
+    if (!playBtn) return;
+    const icon = playBtn.querySelector("i");
+    if (icon) icon.className = playing ? "fa-solid fa-pause" : "fa-solid fa-play";
+}
+
+/* ---------------------------------------------------------
+   NAVIGATION / LIBRARY
+--------------------------------------------------------- */
+function openLibrary() { if (libraryPanel) libraryPanel.classList.add("open"); if (overlayEl) overlayEl.classList.add("active"); }
+function closeLibrary() { if (libraryPanel) libraryPanel.classList.remove("open"); if (overlayEl) overlayEl.classList.remove("active"); }
+
+if (libraryToggleBtn) libraryToggleBtn.addEventListener("click", openLibrary);
+if (libraryCloseBtn) libraryCloseBtn.addEventListener("click", closeLibrary);
+if (overlayEl) overlayEl.addEventListener("click", closeLibrary);
+
+/* Filter system */
+function applyFilter(filterKey) {
+    const map = { all: null, health: "health", mind: "mind", career: "career", relationships: "harmony" };
+    const target = map[filterKey] || filterKey.toLowerCase();
+    document.querySelectorAll(".raag-card").forEach(item => {
+        const raag = raagData[Number(item.dataset.index)];
+        if (!raag) return;
+        const visible = target === null || raag.category.toLowerCase() === target;
+        item.style.display = visible ? "" : "none";
+    });
+}
+
+function setupFilters() {
+    filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            activeFilter = button.dataset.filter || "all";
+            filterButtons.forEach(b => b.classList.remove("active"));
+            button.classList.add("active");
+            applyFilter(activeFilter);
+        });
+    });
+}
+
+/* Initialise filters on load */
+setupFilters();
+
+/* ---------------------------------------------------------
+   SEARCH — removed from UI, function kept internally if needed
+--------------------------------------------------------- */
+/* Search no longer part of visible UI. Function retained only if
+   any internal logic depends on it — but event listeners removed. */
+function searchRaags(query) {
+    // Search is removed from UI; this function is kept minimal
+    // and not attached to any event listener.
+    return [];
+}
+
+/* ---------------------------------------------------------
+   YOUTUBE PLAYER INTEGRATION
+--------------------------------------------------------- */
+function createPlayer() {
+    if (player) return;
+    try {
+        player = new YT.Player("youtube-player", {
+            width: 1, height: 1,
+            playerVars: { listType: "playlist", list: PLAYLIST_ID, autoplay: 0, controls: 0, rel: 0, modestbranding: 1, playsinline: 1, enablejsapi: 1, origin: window.location.origin },
+            events: { onReady: onPlayerReady, onStateChange: onPlayerStateChange, onError: onPlayerError }
+        });
+    } catch (e) { console.error("YouTube player creation error:", e); }
+}
+
+function onPlayerReady() {
+    youtubeReady = true;
+    if (pendingPlayIndex !== null) { playRaag(pendingPlayIndex); pendingPlayIndex = null; }
+    else { syncTrack(); }
+    waitForPlaylist();
+}
+
+function waitForPlaylist() {
+    if (!player || typeof player.getPlaylist !== "function") return;
+    const list = player.getPlaylist();
+    if (Array.isArray(list) && list.length > 0) {
+        playlistLoaded = true;
+        if (pendingPlayIndex !== null) { playRaag(pendingPlayIndex); pendingPlayIndex = null; }
+        else { syncTrack(); }
+        return;
+    }
+    // retry after short interval
+    setTimeout(waitForPlaylist, 500);
+}
+
+function onPlayerStateChange(event) {
+    if (!window.YT) return;
+    switch (event.data) {
+        case YT.PlayerState.PLAYING: isPlaying = true; updatePlayIcon(true); if (playerContainer) playerContainer.classList.add("playing"); startProgress(); break;
+        case YT.PlayerState.PAUSED: isPlaying = false; updatePlayIcon(false); if (playerContainer) playerContainer.classList.remove("playing"); stopProgress(); break;
+        case YT.PlayerState.ENDED: isPlaying = false; updatePlayIcon(false); if (playerContainer) playerContainer.classList.remove("playing"); stopProgress(); break;
+    }
+}
+
+function onPlayerError(e) { console.error("YouTube player error:", e); }
+function loadYouTubeAPI() {
+    if (window.YT && window.YT.Player) { createPlayer(); return; }
+    window.onYouTubeIframeAPIReady = function () { createPlayer(); };
+    const s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api"; s.async = true; document.head.appendChild(s);
+}
+
+/* ---------------------------------------------------------
+   PROGRESS SEEK + TIMER
+--------------------------------------------------------- */
+function seek(event) {
+    if (!player || !progressContainer) return;
+    const duration = Number(player.getDuration()) || 0;
+    if (!duration) return;
+    const rect = progressContainer.getBoundingClientRect();
+    if (!rect.width) return;
+    const percentage = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+    try { player.seekTo(duration * percentage, true); updateProgress(); } catch (e) { console.error(e); }
+}
+
+if (progressContainer) progressContainer.addEventListener("click", seek);
+
+function updateProgress() {
+    if (!player || typeof player.getCurrentTime !== "function" || typeof player.getDuration !== "function") return;
+    const current = Number(player.getCurrentTime()) || 0;
+    const duration = Number(player.getDuration()) || 0;
+    if (duration <= 0) return;
+    const percentage = Math.max(0, Math.min(100, (current / duration) * 100));
+    if (progressBar) progressBar.style.width = `${percentage}%`;
+    if (currentTimeEl) currentTimeEl.textContent = formatTime(current);
+    if (durationEl) durationEl.textContent = formatTime(duration);
+}
+
+function startProgress() { if (progressTimer) clearInterval(progressTimer); progressTimer = setInterval(updateProgress, 500); } /* reduced from 250ms */
+function stopProgress() { if (progressTimer) clearInterval(progressTimer); progressTimer = null; }
+
+/* ---------------------------------------------------------
+   VOLUME CONTROL
+--------------------------------------------------------- */
+function setVolumeIcon(value) {
+    if (!muteBtn) return;
+    const icon = muteBtn.querySelector("i");
+    if (!icon) return;
+    if (value <= 0) icon.className = "fa-solid fa-volume-mute";
+    else if (value < 50) icon.className = "fa-solid fa-volume-down";
+    else icon.className = "fa-solid fa-volume-up";
+}
+
+if (volumeSlider) {
+    volumeSlider.value = DEFAULT_VOLUME;
+    volumeSlider.addEventListener("input", (event) => {
+        const volume = Math.max(0, Math.min(100, Number(event.target.value)));
+        if (player) { try { player.unMute(); player.setVolume(volume); } catch (e) { } }
+        if (volume > 0) { preMuteVolume = volume; isMuted = false; }
+        else { isMuted = true; }
+        if (volumeValueEl) volumeValueEl.textContent = volume;
+        setVolumeIcon(volume);
+    });
+}
+
+if (muteBtn) {
+    muteBtn.addEventListener("click", () => {
+        if (!player) return;
+        try {
+            if (isMuted) {
+                const volume = preMuteVolume || DEFAULT_VOLUME;
+                player.unMute(); player.setVolume(volume);
+                if (volumeSlider) volumeSlider.value = volume;
+                if (volumeValueEl) volumeValueEl.textContent = volume;
+                isMuted = false; setVolumeIcon(volume);
+            } else {
+                if (volumeSlider) { preMuteVolume = Number(volumeSlider.value) || DEFAULT_VOLUME; volumeSlider.value = 0; }
+                if (volumeValueEl) volumeValueEl.textContent = 0;
+                player.mute(); isMuted = true; setVolumeIcon(0);
+            }
+        } catch (e) { }
+    });
+}
+
+/* ---------------------------------------------------------
+   TRACK COUNTER — FIXED: only references existing IDs
+--------------------------------------------------------- */
+function updateTrackCounter(index) {
+    if (trackCounterEl) trackCounterEl.textContent = `${String(index + 1).padStart(2, "0")} / ${TOTAL_TRACKS}`;
+}
+
+/* ---------------------------------------------------------
+   NEXT / PREVIOUS TRACK
+--------------------------------------------------------- */
+function nextTrack() {
+    if (!youtubeReady || !player || !playlistLoaded) return;
+    try { player.nextVideo(); setTimeout(syncTrack, 500); } catch (e) { console.error(e); }
+}
+
+function previousTrack() {
+    if (!youtubeReady || !player || !playlistLoaded) return;
+    try { player.previousVideo(); setTimeout(syncTrack, 500); } catch (e) { console.error(e); }
+}
+
+if (nextBtn) nextBtn.addEventListener("click", nextTrack);
+if (prevBtn) prevBtn.addEventListener("click", previousTrack);
+
+/* ---------------------------------------------------------
+   SYNC track info from YouTube player state
+--------------------------------------------------------- */
+function syncTrack() {
+    if (!player) return;
+    try { currentIndex = player.getPlaylistIndex(); } catch (e) { console.error(e); }
+    showRaag(currentIndex, false);
+}
+
+/* ---------------------------------------------------------
+   KEYBOARD SHORTCUTS
+--------------------------------------------------------- */
+document.addEventListener("keydown", (e) => {
+    // Skip if inside a form control
+    if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.tagName === "BUTTON") return;
+    
+    if (e.code === "Space") { e.preventDefault(); togglePlay(); }
+    if (e.key.toLowerCase() === "n") nextTrack();
+    if (e.key.toLowerCase() === "p") previousTrack();
+    if (e.key === "Escape") closeLibrary();
+});
+
+/* ---------------------------------------------------------
+   INITIALISE
+--------------------------------------------------------- */
+function initialiseRaagly() {
+    renderRaagCards();
+    renderLibrary();
+    loadYouTubeAPI();
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initialiseRaagly); 
+else initialiseRaagly();
